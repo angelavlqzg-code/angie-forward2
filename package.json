@@ -1,0 +1,8 @@
+{
+  "name": "angie-forward-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Angie — la fuerza de trabajo digital de Forward AI",
+  "type": "module",
+  "engines": { "node": ">=18" }
+}
