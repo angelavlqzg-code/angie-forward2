@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Angie · Forward AI Agents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0F1535; --navy-2:#151C42; --panel:#1A2150; --line:#2A3164;
+    --purple:#6C54FA; --purple-lt:#9B88FF; --teal:#02DCBE; --teal-lt:#5BEAD6;
+    --ink:#EDEFF7; --mute:#9AA0C0; --dim:#6E769E;
+    --display:"Space Grotesk","Segoe UI",system-ui,sans-serif;
+    --body:"Manrope","Segoe UI",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--navy); color:var(--ink); font-family:var(--body); display:flex; flex-direction:column; overflow:hidden}
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(650px 420px at 88% -8%, rgba(91,79,230,.30), transparent 65%),
+      radial-gradient(520px 380px at 4% 105%, rgba(15,166,151,.20), transparent 65%);
+  }
+  header{
+    position:relative; z-index:2; display:flex; align-items:center; gap:16px;
+    padding:14px 22px; border-bottom:1px solid var(--line); background:rgba(15,21,53,.86);
+    backdrop-filter:blur(8px); flex-shrink:0;
+  }
+  .brand{font-family:var(--display); font-weight:700; letter-spacing:.16em; font-size:12px; color:var(--teal)}
+  .brand span{color:var(--mute)}
+  .who{margin-left:auto; display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--mute)}
+  .beat{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 rgba(15,166,151,.55);animation:beat 2.4s infinite}
+  @keyframes beat{0%{box-shadow:0 0 0 0 rgba(15,166,151,.5)}70%{box-shadow:0 0 0 9px rgba(15,166,151,0)}100%{box-shadow:0 0 0 0 rgba(15,166,151,0)}}
+
+  main{position:relative; z-index:1; flex:1; display:grid; grid-template-columns:296px 1fr; min-height:0}
+  aside{border-right:1px solid var(--line); overflow-y:auto; padding:16px 12px 28px; background:rgba(21,28,66,.4)}
+  .rtitle{font-family:var(--display);font-size:11px;letter-spacing:.15em;color:var(--dim);padding:0 8px 10px;font-weight:700}
+  .blk{margin-bottom:14px}
+  .blk h3{font-family:var(--display); font-size:11.5px; font-weight:700; color:var(--purple-lt); letter-spacing:.06em; padding:6px 8px 7px}
+  .ag{display:flex; align-items:center; gap:9px; padding:7px 8px; border-radius:8px; font-size:12.5px; color:var(--mute); transition:background .2s, color .2s}
+  .code{font-family:var(--display); font-size:10px; font-weight:700; color:var(--dim); border:1px solid var(--line); border-radius:5px; padding:2px 5px; min-width:26px; text-align:center; transition:all .25s; flex-shrink:0}
+  .nm{flex:1; line-height:1.25}
+  .ag.on{background:rgba(15,166,151,.10); color:var(--ink)}
+  .ag.on .code{background:var(--teal); border-color:var(--teal); color:#04231F}
+  .ag.on .nm{font-weight:700}
+  .ag.work .code{animation:blink .85s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+  .stage{display:flex; flex-direction:column; min-height:0; position:relative}
+  .feed{flex:1; overflow-y:auto; padding:26px 30px 10px}
+  .wrap{max-width:760px; margin:0 auto}
+  .hero{padding:26px 0 6px}
+  .hero h1{font-family:var(--display); font-size:31px; font-weight:700; line-height:1.14; margin-bottom:12px}
+  .hero h1 em{font-style:normal; color:var(--teal)}
+  .hero p{color:var(--mute); font-size:14.5px; line-height:1.6; max-width:60ch}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:20px}
+  .chip{font-family:var(--body); font-size:12.5px; color:var(--ink); cursor:pointer; background:rgba(91,79,230,.13); border:1px solid rgba(91,79,230,.42); padding:8px 13px; border-radius:20px; transition:.18s; text-align:left}
+  .chip:hover{background:rgba(91,79,230,.28); border-color:var(--purple-lt)}
+  .chip:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid var(--teal-lt); outline-offset:2px}
+
+  .turn{margin:22px 0}
+  .ask{background:var(--purple); color:#fff; padding:12px 16px; border-radius:13px 13px 4px 13px; max-width:78%; margin-left:auto; font-size:14.5px; line-height:1.5; width:fit-content}
+  .askdocs{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;margin-top:7px}
+  .adoc{font-size:11px;color:var(--teal-lt);background:rgba(15,166,151,.12);border:1px solid rgba(15,166,151,.35);padding:3px 9px;border-radius:6px}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-top:6px}
+  .lab{font-family:var(--display); font-size:10px; font-weight:700; letter-spacing:.14em; color:var(--teal); margin-bottom:7px}
+  .sec{margin-bottom:16px} .sec:last-child{margin-bottom:0}
+  .sec p, .sec li{font-size:14.2px; line-height:1.62; color:var(--ink)}
+  .sec ul{padding-left:18px} .sec li{margin-bottom:5px}
+  .got{font-size:15px; line-height:1.5; color:var(--ink); font-weight:500}
+  .team{display:flex; flex-wrap:wrap; gap:6px}
+  .tag{font-family:var(--display); font-size:11px; font-weight:700; background:rgba(15,166,151,.14); color:var(--teal-lt); border:1px solid rgba(15,166,151,.4); padding:4px 9px; border-radius:6px}
+  .work{border-top:1px solid var(--line); padding-top:15px}
+  .work h4{font-family:var(--display);font-size:15px;margin:14px 0 7px;color:#fff}
+  .work h4:first-child{margin-top:0}
+  .work strong{color:var(--teal-lt)}
+  .appr{background:rgba(91,79,230,.13); border:1px solid rgba(91,79,230,.4); border-radius:11px; padding:14px 16px}
+  .appr .lab{color:var(--purple-lt)}
+  .next{color:var(--mute); font-size:13.5px; line-height:1.55}
+  .piece{border-top:1px solid var(--line); padding-top:15px}
+  .canvas{background:#0A0E24; border:1px solid var(--line); border-radius:11px; padding:12px; display:flex; justify-content:center}
+  .canvas svg{max-width:100%; height:auto; max-height:460px; border-radius:5px; display:block}
+  .dl{display:flex; gap:8px; margin-top:11px}
+  .db{
+    font-family:var(--display); font-weight:700; font-size:12px; cursor:pointer;
+    background:transparent; color:var(--teal-lt); border:1px solid rgba(15,166,151,.5);
+    padding:8px 14px; border-radius:8px; transition:.18s;
+  }
+  .db:hover{background:rgba(15,166,151,.15); border-color:var(--teal)}
+  .dl{flex-wrap:wrap}
+  .hint{font-size:12px; line-height:1.5; margin-top:9px; color:var(--teal-lt)}
+  .hint:empty{display:none}
+  .extra:empty{display:none}
+  .png-out{display:block; max-width:100%; height:auto; max-height:420px; margin-top:11px; border-radius:9px; border:1px solid var(--line)}
+  .shot{border-top:1px solid var(--line); padding-top:15px}
+  .shotbox{background:#0A0E24; border:1px solid var(--line); border-radius:11px; padding:12px; min-height:70px}
+  .shot-img{display:block; width:100%; height:auto; max-height:470px; object-fit:contain; border-radius:8px}
+  .linkout{display:inline-block; margin-top:11px; color:var(--teal-lt); font-size:12.5px; font-weight:700; text-decoration:underline}
+  .code-out{width:100%; height:130px; margin-top:11px; background:#0A0E24; color:var(--mute); border:1px solid var(--line); border-radius:9px; padding:10px; font-family:ui-monospace,monospace; font-size:11px; resize:vertical}
+  .think{display:flex;align-items:center;gap:10px;color:var(--mute);font-size:13.5px;padding:14px 2px}
+  .dots span{display:inline-block;width:6px;height:6px;margin-right:4px;border-radius:50%;background:var(--teal);animation:bb 1.3s infinite}
+  .dots span:nth-child(2){animation-delay:.18s}.dots span:nth-child(3){animation-delay:.36s}
+  @keyframes bb{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+  .err{background:rgba(214,84,84,.12);border:1px solid rgba(214,84,84,.45);color:#F2B8B8;padding:13px 16px;border-radius:11px;font-size:13.5px;line-height:1.55}
+
+  .bar{border-top:1px solid var(--line); padding:12px 30px; background:rgba(15,21,53,.9); flex-shrink:0}
+  .tray{max-width:760px;margin:0 auto 9px;display:flex;flex-wrap:wrap;gap:7px}
+  .tray:empty{display:none}
+  .doc{display:flex;align-items:center;gap:8px;background:var(--navy-2);border:1px solid var(--line);border-radius:9px;padding:7px 9px 7px 11px;font-size:12.5px;max-width:250px}
+  .doc .ic{color:var(--teal);flex-shrink:0;display:flex}
+  .doc .dn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+  .doc .sz{color:var(--dim);font-size:11px;flex-shrink:0}
+  .doc .x{background:none;border:none;color:var(--dim);cursor:pointer;font-size:15px;line-height:1;padding:0 2px;flex-shrink:0}
+  .doc .x:hover{color:#F2B8B8}
+  .box{max-width:760px;margin:0 auto;display:flex;gap:9px;align-items:flex-end}
+  .clip{background:var(--navy-2);border:1px solid var(--line);color:var(--mute);border-radius:12px;height:50px;width:50px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.18s}
+  .clip:hover{border-color:var(--teal);color:var(--teal)}
+  textarea{flex:1; resize:none; background:var(--navy-2); border:1px solid var(--line); color:var(--ink); border-radius:12px; padding:13px 15px; font-family:var(--body); font-size:14.5px; line-height:1.5; max-height:160px; min-height:50px}
+  textarea::placeholder{color:var(--dim)}
+  textarea:focus{border-color:var(--purple-lt)}
+  .send{background:var(--teal); color:#04231F; border:none; border-radius:12px; cursor:pointer; font-family:var(--display); font-weight:700; font-size:14px; padding:0 20px; height:50px; transition:.18s; flex-shrink:0}
+  .send:hover:not(:disabled){background:var(--teal-lt)}
+  .send:disabled{opacity:.4;cursor:not-allowed}
+  .foot{max-width:760px;margin:9px auto 0;font-size:11px;color:var(--dim);text-align:center}
+
+  .drop{position:absolute;inset:0;z-index:9;background:rgba(15,21,53,.93);border:2px dashed var(--teal);border-radius:14px;display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;pointer-events:none}
+  .drop.show{display:flex}
+  .drop b{font-family:var(--display);font-size:19px;color:var(--teal)}
+  .drop span{color:var(--mute);font-size:13px}
+
+  @media(max-width:860px){
+    main{grid-template-columns:1fr}
+    aside{display:none}
+    .feed{padding:20px 16px 8px} .bar{padding:12px 16px}
+    .hero h1{font-size:25px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">FORWARD AI <span>· AGENTS</span></div>
+  <div class="who"><span class="beat"></span> Angie está lista <span style="color:#6E769E;font-size:11px;margin-left:6px">1.0</span></div>
+</header>
+
+<main>
+  <aside>
+    <div class="rtitle">FUERZA DE TRABAJO</div>
+    <div id="roster"></div>
+  </aside>
+
+  <div class="stage">
+    <div class="drop" id="drop"><b>Suelta tus documentos</b><span>PDF, imágenes o texto</span></div>
+
+    <div class="feed" id="feed">
+      <div class="wrap" id="wrap">
+        <div class="hero" id="hero">
+          <h1>Dime qué quieres lograr.<br><em>Yo activo a quien lo resuelve.</em></h1>
+          <p>Soy Angie, coordino a los 24 especialistas de Forward. No me pidas agentes ni tácticas: háblame de tu objetivo, en tus palabras. Adjunta tus documentos —manual de marca, un caso, un brief, un reporte— y trabajo sobre ellos, no sobre suposiciones.</p>
+          <div class="chips" id="chips"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bar">
+      <div class="tray" id="tray"></div>
+      <div class="box">
+        <button class="clip" id="clip" title="Adjuntar documentos" aria-label="Adjuntar documentos">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+        </button>
+        <input type="file" id="file" multiple accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.txt,.md,.csv" hidden>
+        <textarea id="q" rows="1" placeholder="Ej. Diseña una placa para anunciar Forward AI en LinkedIn…"></textarea>
+        <button class="send" id="go">Enviar</button>
+      </div>
+      <div class="foot">Los humanos dirigen. Los agentes operan. La inversión, la publicación y los números siempre pasan por dirección.</div>
+    </div>
+  </div>
+</main>
+
+<script>
+const AGENTS = {
+  "A · Estrategia e inteligencia": [["A1","Estrategia de Marca y Mensajes"],["A2","Investigación de Mercado"],["A3","Competencia y Posicionamiento"],["A4","Priorización y Presupuesto"]],
+  "B · Audiencia, evidencia y oferta": [["B1","Audiencias y Compradores"],["B2","Casos y Evidencia"],["B3","Pipeline y Customer Journey"],["B4","Alianzas y Partnerships"]],
+  "C · Creación": [["C1","Creativo y Conceptos"],["C2","Contenido"],["C3","Video y Multimedia"],["C4","Diseño y Sistema Visual"]],
+  "D · Difusión": [["D1","Redes Sociales y Community"],["D2","Web, Landing y SEO"],["D3","Publicidad Digital"],["D4","Email y CRM"],["D5","Relaciones Públicas y Medios"]],
+  "E · Habilitación comercial": [["E1","Sales Enablement"],["E2","Eventos, Webinars y Demos"]],
+  "F · Medición, adopción y gobierno": [["F1","Analítica y Reportes"],["F2","Performance y Optimización"],["F3","Automatización"],["F4","Activación y Adopción"],["F5","Gobierno y Voz de Marca"]],
+};
+const roster = document.getElementById("roster");
+Object.entries(AGENTS).forEach(([block, list]) => {
+  const d = document.createElement("div"); d.className = "blk";
+  d.innerHTML = `<h3>${block}</h3>` + list.map(([c,n]) => `<div class="ag" data-c="${c}"><span class="code">${c}</span><span class="nm">${n}</span></div>`).join("");
+  roster.appendChild(d);
+});
+
+const SUGGESTIONS = [
+  "Anunciar que Forward ahora es Forward AI",
+  "Necesito tres casos con número para vender",
+  "Quiero más juntas con directores de gobierno",
+  "Diseña un post de LinkedIn para el lanzamiento",
+  "Revisa si esta pieza suena a Forward",
+  "¿Cómo va el lanzamiento?",
+];
+const chips = document.getElementById("chips");
+SUGGESTIONS.forEach(t => {
+  const b = document.createElement("button");
+  b.className = "chip"; b.textContent = t;
+  b.onclick = () => { q.value = t; send(); };
+  chips.appendChild(b);
+});
+
+const SYSTEM = `Eres Angie, el agente coordinador del ecosistema Forward AI Agents · Marketing.
+Orquestas 24 subagentes especializados. NO ejecutas el trabajo especializado: lo orquestas, integras y entregas.
+Tu interlocutora NO es experta en marketing: te habla de objetivos de negocio. Tú traduces y decides quién trabaja.
+
+ADN DE MARCA FORWARD AI (obedécelo sin excepción):
+- Promesa: "Inteligencia que trabaja contigo". De la demo a la acción.
+- Posición: la capa de implementación de IA operativa; el puente entre los modelos frontera y la operación real.
+- Columna vertebral de todo mensaje: el cambio -> la tensión -> la posición -> la prueba -> la promesa.
+- Regla de oro de venta: dolor -> resultado -> cómo -> nombre del producto (el nombre SIEMPRE al final).
+- Tono: sobrio y declarativo. Verbos de operación (ejecuta, integra, valida, despliega, mide).
+  PROHIBIDOS los verbos abstractos: potencia, transforma, revoluciona, empodera, disrumpe.
+- DISCIPLINA DE EVIDENCIA (la más importante): capacidad vs resultado. Si un número no está autorizado,
+  se habla de CAPACIDAD ("puede reducir tiempos"), nunca de RESULTADO ("redujo 40%").
+  NUNCA inventes un número. Si falta el dato, dilo y pídelo.
+- Regla rectora: "Si la IA no mueve un indicador, no está bien implementada."
+- Naming: productos = Forward AI [Capacidad]. Soluciones = Forward AI para [Vertical].
+- Regla de mando: los humanos dirigen, los agentes operan. La inversión, la publicación pública,
+  los números y el posicionamiento SIEMPRE pasan por dirección.
+
+DOCUMENTOS ADJUNTOS:
+Si la usuaria adjunta documentos, son tu FUENTE DE VERDAD: manual de marca, casos, briefs, reportes, piezas a revisar.
+Trabaja sobre lo que dicen, cítalos cuando sustenten una decisión y NO inventes lo que no está ahí.
+Si un documento trae números, trátalos con la disciplina capacidad vs resultado: mientras no estén
+autorizados para publicación, se enuncian como capacidad. Si el documento contradice el ADN de marca, avísalo.
+
+TU EQUIPO (usa estos códigos exactos):
+A1 Estrategia de Marca y Mensajes | A2 Investigación de Mercado | A3 Competencia y Posicionamiento | A4 Priorización y Presupuesto
+B1 Audiencias y Compradores | B2 Casos y Evidencia | B3 Pipeline y Customer Journey | B4 Alianzas y Partnerships
+C1 Creativo y Conceptos | C2 Contenido | C3 Video y Multimedia | C4 Diseño y Sistema Visual
+D1 Redes Sociales y Community | D2 Web, Landing y SEO | D3 Publicidad Digital | D4 Email y CRM | D5 Relaciones Públicas y Medios
+E1 Sales Enablement | E2 Eventos, Webinars y Demos
+F1 Analítica y Reportes | F2 Performance y Optimización | F3 Automatización | F4 Activación y Adopción | F5 Gobierno y Voz de Marca
+
+Activa solo los agentes que el encargo realmente necesita (normalmente entre 2 y 6).
+ENTREGA TRABAJO TERMINADO, no promesas de trabajo ni planes de lo que harías.
+SÉ BREVE: el entregable no pasa de 250 palabras. Concreto, sobrio, sin relleno.
+
+PIEZAS VISUALES:
+Cuando el encargo pida algo visual (post, portada, placa, card de cita, anuncio, one-pager),
+activa C4 (Diseño y Sistema Visual) y CONSTRUYE la pieza en SVG. No la describas: entrégala hecha.
+
+FILOSOFIA DE DISENO (Manual de Marca Forward AI 2026): la marca vive PRINCIPALMENTE EN CLARO.
+Limpia, legible, profesional. El fondo oscuro NO es el default: se reserva solo para portadas de alto
+impacto, cierres y piezas premium. La sensacion buscada: consultoria de alta gama, sobria, con aire.
+Principios: claridad, sobriedad, legibilidad. Nunca saturada, nunca pesada. "Nada pesado, nada saturado."
+
+REGLA DE FONDO (decide asi):
+- POR DEFECTO usa la PLANTILLA CLARA (fondo #FFFFFF u #F6F7FB). Sirve para casi todo: posts informativos,
+  datos, anuncios, citas, tips, one-pagers. Es lo que el manual pide de base.
+- Usa la PLANTILLA OSCURA (fondo #070920) SOLO si el encargo pide "portada", "premium", "impacto",
+  "cierre" o lo menciona explicito. Es la excepcion, no la regla.
+
+PALETA EXACTA DEL MANUAL (usa SOLO estos codigos, respetalos al pie de la letra):
+- Violeta Forward #6C54FA  (principal: marca, titulos de acento, botones)
+- Teal Avance #02DCBE      (acento: datos positivos, kicker, detalles, energia)
+- Azul muy oscuro #070920  (fondo premium; en claro solo como texto fuerte)
+- Blanco #FFFFFF · Off-white #F6F7FB · Gris claro cards #ECEEF5 · Linea #E2E5EF
+- Texto principal #0C1024 · Texto secundario #5B6479
+- Sobre oscuro: texto #FFFFFF · apoyo #9AA3BD · lineas #191E3E
+PROHIBIDO: cualquier color fuera de esta lista, degradados de arcoiris, mas de 2 acentos saturados,
+sombras pesadas, emojis, iconos genericos, y dibujar el logotipo (FORWARD AI siempre como <text>).
+Nada de <script>, <foreignObject>, ni imagenes externas.
+
+MEDIDAS: Post cuadrado viewBox="0 0 1080 1080" · LinkedIn "0 0 1200 627" · Historia "0 0 1080 1920".
+
+ESTRUCTURA (para las dos plantillas):
+- Margen de seguridad 90px. Ningun texto fuera de x=90..990.
+- Kicker: y=150, font-size 26, letter-spacing 5, mayusculas, fill #02DCBE, Manrope 700.
+- Linea de acento teal bajo el kicker: <rect x="90" y="180" width="70" height="4" fill="#02DCBE"/>
+- Titular: primer renglon y=430, font-size 78, weight 700, Space Grotesk. Puedes resaltar UNA palabra en #6C54FA.
+- Bajada: 95px bajo el titular, font-size 30, Manrope.
+- Firma: "FORWARD AI" en y=1035, font-size 24, letter-spacing 3, weight 700, con un punto #02DCBE al lado.
+
+SALTOS DE LINEA (critico): el SVG no corta el texto solo; cada renglon es un <text> aparte.
+A font-size 78 caben ~21 caracteres por renglon. Titular max 3 renglones (y=430, 520, 610).
+Bajada max 2 renglones. Cuenta los caracteres; si no cabe, acorta el copy, jamas encojas la letra.
+
+ELEMENTOS GRAFICOS (sutiles, elegantes; elige 1 o 2, no mas):
+- Reticula de puntos violeta en una esquina: <circle r="3" fill="#6C54FA" opacity="0.18"/> en malla 3x3 o 4x4.
+- Un aro fino saliendo por una esquina: <circle fill="none" stroke="#02DCBE" stroke-width="2" opacity="0.5"/>.
+- Palabra o numero "fantasma" grande detras: font-size 340, opacity 0.05 (en claro fill #6C54FA, en oscuro #FFFFFF).
+- Barra fina separadora sobre la firma.
+
+=== PLANTILLA CLARA (USALA POR DEFECTO) ===
+Colores: fondo #FFFFFF · kicker #02DCBE · titular #0C1024 (palabra de acento #6C54FA) · bajada #5B6479 ·
+firma #0C1024 · lineas #E2E5EF.
+Ejemplo exacto a imitar (cambia solo el contenido):
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
+  <rect width="1080" height="1080" fill="#FFFFFF"/>
+  <text x="640" y="880" font-family="Space Grotesk, sans-serif" font-size="340" font-weight="700" fill="#6C54FA" opacity="0.05">AI</text>
+  <g fill="#6C54FA" opacity="0.16">
+    <circle cx="850" cy="150" r="4"/><circle cx="910" cy="150" r="4"/><circle cx="970" cy="150" r="4"/>
+    <circle cx="850" cy="210" r="4"/><circle cx="910" cy="210" r="4"/><circle cx="970" cy="210" r="4"/>
+    <circle cx="850" cy="270" r="4"/><circle cx="910" cy="270" r="4"/><circle cx="970" cy="270" r="4"/>
+  </g>
+  <text x="90" y="150" font-family="Manrope, sans-serif" font-size="26" font-weight="700" letter-spacing="5" fill="#02DCBE">LA ERA DE LA DEMO TERMINO</text>
+  <rect x="90" y="180" width="70" height="4" fill="#02DCBE"/>
+  <text x="90" y="430" font-family="Space Grotesk, sans-serif" font-size="78" font-weight="700" fill="#0C1024">La IA que no</text>
+  <text x="90" y="520" font-family="Space Grotesk, sans-serif" font-size="78" font-weight="700" fill="#0C1024">mueve un indicador</text>
+  <text x="90" y="610" font-family="Space Grotesk, sans-serif" font-size="78" font-weight="700" fill="#6C54FA">no esta implementada.</text>
+  <text x="90" y="740" font-family="Manrope, sans-serif" font-size="30" fill="#5B6479">Implementamos, medimos y acompanamos</text>
+  <text x="90" y="780" font-family="Manrope, sans-serif" font-size="30" fill="#5B6479">la adopcion. De la demo a la accion.</text>
+  <line x1="90" y1="1000" x2="990" y2="1000" stroke="#E2E5EF" stroke-width="1.5"/>
+  <text x="90" y="1035" font-family="Manrope, sans-serif" font-size="24" font-weight="700" letter-spacing="3" fill="#0C1024">FORWARD AI</text>
+  <circle cx="965" cy="1028" r="6" fill="#02DCBE"/>
+</svg>
+
+=== PLANTILLA OSCURA (SOLO para portada / premium / impacto) ===
+Colores: fondo #070920 · un degradado sutil encima · kicker #02DCBE · titular #FFFFFF (acento #6C54FA o teal) ·
+bajada #9AA3BD · firma #FFFFFF · lineas #191E3E.
+Ejemplo exacto a imitar:
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
+  <defs><radialGradient id="g" cx="80%" cy="12%" r="75%">
+    <stop offset="0%" stop-color="#141A3A"/><stop offset="100%" stop-color="#070920"/>
+  </radialGradient></defs>
+  <rect width="1080" height="1080" fill="#070920"/>
+  <rect width="1080" height="1080" fill="url(#g)"/>
+  <circle cx="1015" cy="120" r="300" fill="#6C54FA" opacity="0.20"/>
+  <circle cx="150" cy="1120" r="260" fill="none" stroke="#02DCBE" stroke-width="2" opacity="0.4"/>
+  <text x="90" y="150" font-family="Manrope, sans-serif" font-size="26" font-weight="700" letter-spacing="5" fill="#02DCBE">FORWARD AI</text>
+  <rect x="90" y="180" width="70" height="4" fill="#02DCBE"/>
+  <text x="90" y="430" font-family="Space Grotesk, sans-serif" font-size="78" font-weight="700" fill="#FFFFFF">Inteligencia</text>
+  <text x="90" y="520" font-family="Space Grotesk, sans-serif" font-size="78" font-weight="700" fill="#FFFFFF">que trabaja</text>
+  <text x="90" y="610" font-family="Space Grotesk, sans-serif" font-size="78" font-weight="700" fill="#6C54FA">contigo.</text>
+  <text x="90" y="740" font-family="Manrope, sans-serif" font-size="30" fill="#9AA3BD">De la demo a la accion.</text>
+  <line x1="90" y1="1000" x2="990" y2="1000" stroke="#191E3E" stroke-width="1.5"/>
+  <text x="90" y="1035" font-family="Manrope, sans-serif" font-size="24" font-weight="700" letter-spacing="3" fill="#FFFFFF">FORWARD AI</text>
+  <circle cx="965" cy="1028" r="6" fill="#02DCBE"/>
+</svg>
+
+IMAGENES FOTOGRAFICAS O ILUSTRADAS:
+Si el encargo necesita una FOTOGRAFIA o una ILUSTRACION (un fondo, una escena, un ambiente, una
+textura, una portada con imagen), NO la dibujes en SVG: pidela con la etiqueta [IMAGEN].
+Escribe una descripcion visual rica en ingles, de una sola linea, describiendo la escena
+(sujeto, encuadre, luz, ambiente). No pidas texto ni logos dentro de la imagen.
+Al final de la linea agrega el formato entre parentesis: (cuadrado), (horizontal), (vertical) o (linkedin).
+
+Usa [PIEZA] (SVG) para: posts con texto, placas, citas, one-pagers, anuncios con mensaje.
+Usa [IMAGEN] para: fotografia, ambientes, escenas, fondos, ilustracion conceptual.
+Puedes usar las dos en una misma respuesta si la pieza necesita un fondo fotografico.
+
+FORMATO DE RESPUESTA (usa estas etiquetas, cada una en su propia línea, sin nada antes ni después.
+[PIEZA] es OPCIONAL: inclúyela solo si el encargo pide algo visual):
+
+[ENTENDI]
+El objetivo en una sola línea, en lenguaje de negocio.
+
+[AGENTES]
+B2, F1, F5
+
+[ENTREGABLE]
+El trabajo real, terminado y listo para usar. Markdown simple: ### subtítulos, - listas, **negritas**.
+Si hay pieza visual, aquí explicas brevemente la decisión de diseño (2 o 3 líneas), no la describes entera.
+
+[PIEZA]
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">...</svg>
+
+[IMAGEN]
+A modern government office at dawn, wide empty desk, soft directional light, deep navy tones (horizontal)
+
+[APROBACION]
+- Lo que requiere el visto bueno de dirección (una línea por punto).
+- Si no hay nada, escribe: Nada por ahora.
+
+[SIGUIENTE]
+El siguiente paso recomendado, en una línea.`;
+
+const feed = document.getElementById("feed"), wrap = document.getElementById("wrap"),
+      q = document.getElementById("q"), go = document.getElementById("go"), hero = document.getElementById("hero"),
+      clip = document.getElementById("clip"), fileIn = document.getElementById("file"),
+      tray = document.getElementById("tray"), drop = document.getElementById("drop"), stage = document.querySelector(".stage");
+let history = [], busy = false, pending = [];
+
+q.addEventListener("input", () => { q.style.height = "auto"; q.style.height = Math.min(q.scrollHeight, 160) + "px"; });
+q.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } });
+go.onclick = send;
+clip.onclick = () => fileIn.click();
+fileIn.onchange = e => { take([...e.target.files]); fileIn.value = ""; };
+
+let dragDepth = 0;
+stage.addEventListener("dragenter", e => { e.preventDefault(); if (++dragDepth === 1) drop.classList.add("show"); });
+stage.addEventListener("dragover", e => e.preventDefault());
+stage.addEventListener("dragleave", () => { if (--dragDepth <= 0) { dragDepth = 0; drop.classList.remove("show"); } });
+stage.addEventListener("drop", e => {
+  e.preventDefault(); dragDepth = 0; drop.classList.remove("show");
+  take([...e.dataTransfer.files]);
+});
+
+const KB = n => n < 1024*1024 ? Math.max(1, Math.round(n/1024)) + " KB" : (n/1048576).toFixed(1) + " MB";
+
+function take(files) {
+  files.forEach(f => {
+    const ext = f.name.split(".").pop().toLowerCase();
+    const isPdf = ext === "pdf";
+    const isImg = ["png","jpg","jpeg","gif","webp"].includes(ext);
+    const isTxt = ["txt","md","csv"].includes(ext);
+    if (!isPdf && !isImg && !isTxt) {
+      alert(`No puedo leer "${f.name}".\n\nAcepto PDF, imágenes (PNG/JPG) y texto (TXT/MD/CSV).\n\nSi es un Word o PowerPoint, guárdalo como PDF y vuelve a adjuntarlo.`);
+      return;
+    }
+    if (f.size > 9 * 1024 * 1024) { alert(`"${f.name}" pesa más de 9 MB. Comprímelo o divídelo.`); return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const item = { name: f.name, size: f.size, kind: isPdf ? "pdf" : isImg ? "img" : "txt" };
+      if (isTxt) item.text = reader.result;
+      else { item.b64 = reader.result.split(",")[1]; item.mime = f.type || (isPdf ? "application/pdf" : "image/png"); }
+      pending.push(item); paint();
+    };
+    if (isTxt) reader.readAsText(f); else reader.readAsDataURL(f);
+  });
+}
+
+function paint() {
+  tray.innerHTML = "";
+  pending.forEach((d, i) => {
+    const el = document.createElement("div");
+    el.className = "doc";
+    el.innerHTML = `<span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></span>
+      <span class="dn"></span><span class="sz">${KB(d.size)}</span><button class="x" aria-label="Quitar">×</button>`;
+    el.querySelector(".dn").textContent = d.name;
+    el.querySelector(".x").onclick = () => { pending.splice(i, 1); paint(); };
+    tray.appendChild(el);
+  });
+}
+
+function light(codes, working) {
+  document.querySelectorAll(".ag").forEach(el => {
+    const on = codes.includes(el.dataset.c);
+    el.classList.toggle("on", on);
+    el.classList.toggle("work", on && working);
+  });
+}
+function md(t) {
+  return t.replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/^### (.*)$/gm,"<h4>$1</h4>")
+    .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+    .replace(/^[-*] (.*)$/gm,"<li>$1</li>")
+    .replace(/(<li>[\s\S]*?<\/li>)(?!\s*<li>)/g,"<ul>$1</ul>")
+    .split(/\n{2,}/).map(b => /^<(h4|ul)/.test(b.trim()) ? b : `<p>${b.replace(/\n/g,"<br>")}</p>`).join("");
+}
+
+async function shoot(linea, box) {
+  const m = linea.match(/\((cuadrado|horizontal|vertical|linkedin)\)\s*$/i);
+  const formato = m ? m[1].toLowerCase() : "cuadrado";
+  const prompt = linea.replace(/\((cuadrado|horizontal|vertical|linkedin)\)\s*$/i, "").trim();
+
+  try {
+    const r = await fetch("/api/imagen", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt, formato }),
+    });
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+
+    box.innerHTML = "";
+    const im = document.createElement("img");
+    im.src = d.dataUrl; im.className = "shot-img"; im.alt = prompt;
+    box.appendChild(im);
+
+    const a = document.createElement("a");
+    a.href = d.dataUrl; a.download = "forward-ai-" + Date.now() + ".png";
+    a.className = "linkout"; a.textContent = "Descargar imagen";
+    box.appendChild(a);
+
+    const tip = document.createElement("div");
+    tip.className = "hint";
+    tip.textContent = "También puedes dar clic derecho sobre la imagen → Guardar imagen como…";
+    box.appendChild(tip);
+  } catch (e) {
+    box.innerHTML = "";
+    const err = document.createElement("div");
+    err.className = "err";
+    err.textContent = e.message;
+    box.appendChild(err);
+  }
+}
+
+function save(svg, kind, host) {
+  const note = (t, ok) => {
+    const n = host.querySelector(".hint");
+    n.textContent = t;
+    n.style.color = ok ? "var(--teal-lt)" : "#F2B8B8";
+  };
+  const stamp = "forward-ai-" + Date.now();
+
+  if (kind === "code") {
+    navigator.clipboard.writeText(svg)
+      .then(() => note("Codigo SVG copiado. Pegalo en Figma, Illustrator o Canva.", true))
+      .catch(() => {
+        const box = host.querySelector(".extra");
+        box.innerHTML = "";
+        const ta = document.createElement("textarea");
+        ta.value = svg; ta.className = "code-out"; ta.readOnly = true;
+        box.appendChild(ta); ta.select();
+        note("Selecciona el codigo de abajo y copialo con Ctrl+C.", true);
+      });
+    return;
+  }
+
+  // Clave del arreglo: data URL (no blob). El blob se trata como "otro origen"
+  // dentro de esta ventana protegida y bloquea la conversion a PNG.
+  const dataUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+
+  if (kind === "svg") {
+    const box = host.querySelector(".extra");
+    box.innerHTML = "";
+    const a = document.createElement("a");
+    a.href = dataUrl; a.download = stamp + ".svg";
+    a.className = "linkout"; a.textContent = "Clic aqui para guardar el .svg";
+    box.appendChild(a);
+    note("Si no se abrio la descarga, usa el enlace de abajo o el boton «Copiar codigo SVG».", true);
+    try { a.click(); } catch (e) {}
+    return;
+  }
+
+  const vb = (svg.match(/viewBox="([^"]+)"/i) || [])[1];
+  const nums = vb ? vb.trim().split(/[\s,]+/).map(Number) : [0, 0, 1080, 1080];
+  const vw = nums[2] || 1080, vh = nums[3] || 1080;
+
+  const img = new Image();
+  img.onload = () => {
+    const c = document.createElement("canvas");
+    c.width = vw * 2; c.height = vh * 2;
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#0F1535";
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.drawImage(img, 0, 0, c.width, c.height);
+
+    let png;
+    try { png = c.toDataURL("image/png"); }
+    catch (e) { note("Este navegador no dejo convertir a PNG. Usa «Copiar codigo SVG».", false); return; }
+
+    const box = host.querySelector(".extra");
+    box.innerHTML = "";
+
+    if (kind === "copy") {
+      c.toBlob(b => {
+        if (b && navigator.clipboard && window.ClipboardItem) {
+          navigator.clipboard.write([new ClipboardItem({ "image/png": b })])
+            .then(() => note("Imagen copiada. Pegala con Ctrl+V en PowerPoint, Canva o WhatsApp.", true))
+            .catch(() => { showImg(); note("El navegador no dejo copiar. Clic derecho sobre la imagen -> Guardar imagen como.", false); });
+        } else { showImg(); note("Clic derecho sobre la imagen -> Guardar imagen como.", false); }
+      }, "image/png");
+    } else {
+      const a = document.createElement("a");
+      a.href = png; a.download = stamp + ".png";
+      a.className = "linkout"; a.textContent = "Clic aqui para guardar el PNG";
+      box.appendChild(a);
+      try { a.click(); } catch (e) {}
+      showImg();
+      note("Si no se descargo sola: usa el enlace, o clic derecho sobre la imagen -> Guardar imagen como.", true);
+    }
+
+    function showImg() {
+      const im = document.createElement("img");
+      im.src = png; im.className = "png-out"; im.alt = "Pieza generada";
+      box.appendChild(im);
+    }
+  };
+  img.onerror = () => note("No pude leer la pieza. Usa «Copiar codigo SVG».", false);
+  img.src = dataUrl;
+}
+
+async function send() {
+  const text = q.value.trim();
+  if ((!text && !pending.length) || busy) return;
+  busy = true; go.disabled = true; hero.style.display = "none";
+
+  const docs = pending.slice();
+  pending = []; paint();
+  q.value = ""; q.style.height = "auto";
+
+  const turn = document.createElement("div");
+  turn.className = "turn";
+  turn.innerHTML = `<div class="ask"></div>
+    ${docs.length ? `<div class="askdocs">${docs.map(() => `<span class="adoc"></span>`).join("")}</div>` : ""}
+    <div class="think"><span class="dots"><span></span><span></span><span></span></span> Angie está leyendo y orquestando al equipo…</div>`;
+  turn.querySelector(".ask").textContent = text || "(documentos adjuntos)";
+  if (docs.length) turn.querySelectorAll(".adoc").forEach((el, i) => el.textContent = docs[i].name);
+  wrap.appendChild(turn);
+  feed.scrollTop = feed.scrollHeight;
+
+  const content = [];
+  docs.forEach(d => {
+    if (d.kind === "pdf") content.push({ type: "document", source: { type: "base64", media_type: "application/pdf", data: d.b64 } });
+    else if (d.kind === "img") content.push({ type: "image", source: { type: "base64", media_type: d.mime, data: d.b64 } });
+    else content.push({ type: "text", text: `Documento adjunto "${d.name}":\n\n${d.text}` });
+  });
+  content.push({ type: "text", text: text || "Trabaja con los documentos adjuntos." });
+  history.push({ role: "user", content });
+
+  try {
+    let res;
+    try {
+      res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ system: SYSTEM, messages: history }),
+      });
+    } catch (net) {
+      throw new Error("DIAGNÓSTICO: no hay conexión con el servidor de IA (error de red o CORS). " +
+        "Esto pasa cuando el archivo se abre descargado en tu computadora. Ábrelo desde Claude.");
+    }
+
+    const bodyText = await res.text();
+    if (!res.ok) {
+      throw new Error(`DIAGNÓSTICO: el servidor respondió ${res.status}. ${bodyText.slice(0, 300)}`);
+    }
+
+    let data;
+    try { data = JSON.parse(bodyText); }
+    catch (e) { throw new Error("DIAGNÓSTICO: respuesta ilegible del servidor. " + bodyText.slice(0, 300)); }
+
+    if (data.error) throw new Error(data.error);
+
+    const raw = (data.text || "").trim();
+    if (!raw) throw new Error("La respuesta llegó vacía. Intenta de nuevo.");
+    history.push({ role: "assistant", content: raw });
+
+    // Lectura tolerante: si la respuesta viene cortada, igual mostramos lo que sí llegó.
+    const grab = (tag, next) => {
+      const m = raw.match(new RegExp(`\\[${tag}\\]([\\s\\S]*?)(?=\\[(?:${next})\\]|$)`, "i"));
+      return m ? m[1].trim() : "";
+    };
+    const entendi    = grab("ENTENDI", "AGENTES|ENTREGABLE|PIEZA|IMAGEN|APROBACION|SIGUIENTE");
+    const agentesRaw = grab("AGENTES", "ENTREGABLE|PIEZA|IMAGEN|APROBACION|SIGUIENTE");
+    const entregable = grab("ENTREGABLE", "PIEZA|IMAGEN|APROBACION|SIGUIENTE");
+    const piezaRaw   = grab("PIEZA", "IMAGEN|APROBACION|SIGUIENTE|ENTENDI");
+    const imagenRaw  = grab("IMAGEN", "APROBACION|SIGUIENTE|ENTENDI|PIEZA");
+    const aprobRaw   = grab("APROBACION", "SIGUIENTE|PIEZA|IMAGEN");
+    const siguiente  = grab("SIGUIENTE", "ENTENDI|PIEZA|IMAGEN");
+
+    const codes = (agentesRaw.match(/\b[A-F][1-5]\b/g) || []);
+    light(codes, true);
+    setTimeout(() => light(codes, false), 1400);
+
+    const appr = aprobRaw.split("\n").map(l => l.replace(/^[-*]\s*/, "").trim())
+      .filter(l => l && !/^nada por ahora\.?$/i.test(l));
+
+    // La pieza solo se acepta si es un SVG completo y sin scripts.
+    let svg = "";
+    const mSvg = piezaRaw.match(/<svg[\s\S]*<\/svg>/i);
+    if (mSvg) {
+      const cand = mSvg[0].replace(/<script[\s\S]*?<\/script>/gi, "")
+                          .replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, "")
+                          .replace(/\son\w+="[^"]*"/gi, "");
+      if (/<svg[^>]*>/i.test(cand)) svg = cand;
+    }
+
+    const cuerpo = entregable || (svg ? "" : raw);
+
+    turn.querySelector(".think").outerHTML = `
+      <div class="card">
+        ${entendi ? `<div class="sec"><div class="lab">QUÉ ENTENDÍ</div><div class="got"></div></div>` : ""}
+        ${codes.length ? `<div class="sec"><div class="lab">A QUIÉN ACTIVÉ</div>
+          <div class="team">${codes.map(c => `<span class="tag">${c}</span>`).join("")}</div></div>` : ""}
+        ${cuerpo ? `<div class="sec work">${md(cuerpo)}</div>` : ""}
+        ${svg ? `<div class="sec piece">
+            <div class="lab">LA PIEZA</div>
+            <div class="canvas">${svg}</div>
+            <div class="dl">
+              <button class="db" data-t="png">Descargar PNG</button>
+              <button class="db" data-t="copy">Copiar imagen</button>
+              <button class="db" data-t="svg">Descargar SVG</button>
+              <button class="db" data-t="code">Copiar código SVG</button>
+            </div>
+            <div class="hint"></div>
+            <div class="extra"></div>
+          </div>` : ""}
+        ${imagenRaw ? `<div class="sec shot">
+            <div class="lab">LA IMAGEN</div>
+            <div class="shotbox"><div class="think"><span class="dots"><span></span><span></span><span></span></span> Generando la imagen…</div></div>
+          </div>` : ""}
+        ${appr.length ? `<div class="sec appr"><div class="lab">NECESITA TU APROBACIÓN</div><ul>${appr.map(() => `<li></li>`).join("")}</ul></div>` : ""}
+        ${siguiente ? `<div class="sec next"><strong>Qué sigue:</strong> <span class="nx"></span></div>` : ""}
+      </div>`;
+    if (entendi) turn.querySelector(".got").textContent = entendi;
+    if (appr.length) turn.querySelectorAll(".appr li").forEach((li, i) => li.textContent = appr[i]);
+    if (siguiente) turn.querySelector(".nx").textContent = siguiente;
+    if (svg) { const host = turn.querySelector(".piece"); turn.querySelectorAll(".db").forEach(b => b.onclick = () => save(svg, b.dataset.t, host)); }
+    if (imagenRaw) shoot(imagenRaw, turn.querySelector(".shotbox"));
+  } catch (err) {
+    const box = document.createElement("div");
+    box.className = "err";
+    box.textContent = (err && err.message) ? err.message : "Falla desconocida.";
+    turn.querySelector(".think").replaceWith(box);
+  }
+
+  busy = false; go.disabled = false;
+  feed.scrollTop = feed.scrollHeight;
+  q.focus();
+}
+</script>
+</body>
+</html>
