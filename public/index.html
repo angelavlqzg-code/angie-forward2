@@ -297,6 +297,65 @@
   .variants{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px;border-top:1px solid var(--bord);padding-top:13px}
   .variants::before{content:"Variar:";font-size:11px;color:var(--dim);align-self:center;margin-right:2px}
 
+  /* ── Form Wizard ── */
+  .wiz{background:var(--bg2);border:1px solid var(--bord2);border-radius:18px;width:100%;max-width:640px;margin:auto;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.5)}
+  .wiz-h{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--bord)}
+  .wiz-h .avatar{width:38px;height:38px}
+  .wiz-h .t{font-family:var(--disp);font-weight:700;font-size:16px;color:#fff}
+  .wiz-h .u{font-size:11.5px;color:var(--teal);margin-top:1px}
+  .wiz-h .x{margin-left:auto;background:var(--bg3);border:1px solid var(--bord2);color:var(--mut);width:34px;height:34px;border-radius:9px;font-size:19px;line-height:1}
+  .wiz-h .x:hover{color:#fff;border-color:var(--purple)}
+  .wiz-steps{display:flex;gap:5px;padding:14px 20px 0}
+  .wiz-dot{flex:1;height:4px;border-radius:3px;background:var(--bord2);transition:.2s}
+  .wiz-dot.done{background:var(--teal)} .wiz-dot.now{background:var(--purple)}
+  .wiz-b{padding:16px 20px 22px;max-height:62vh;overflow-y:auto}
+  .wiz-stitle{font-family:var(--disp);font-weight:700;font-size:18px;color:#fff;margin-bottom:2px}
+  .wiz-ssub{font-size:12.5px;color:var(--mut);margin-bottom:16px}
+  .wiz-b .field input[type=text],.wiz-b .field input[type=date]{width:100%;background:var(--bg3);border:1px solid var(--bord2);color:var(--ink);border-radius:11px;padding:12px 13px;font-family:var(--body);font-size:14px}
+  .wiz-b .field input:focus,.wiz-b .field textarea:focus{border-color:var(--purple);outline:none}
+  .wiz-b .field select{width:100%;background:var(--bg3);border:1px solid var(--bord2);color:var(--ink);border-radius:11px;padding:12px 13px;font-family:var(--body);font-size:14px}
+  .wiz-req{color:var(--amber);margin-left:3px}
+  .wiz-doc-row{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--bord);border-radius:11px;padding:10px 13px;margin-bottom:8px}
+  .wiz-doc-row .dl{flex:1;font-size:12.5px;color:var(--mut)}
+  .wiz-doc-row .dl b{color:var(--ink);display:block;font-size:13px}
+  .wiz-doc-row .dfiles{font-size:11.5px;color:var(--teal-lt)}
+  .wiz-doc-row input[type=file]{max-width:150px;font-size:11px;color:var(--mut)}
+  .wiz-nav{display:flex;gap:10px;padding:14px 20px 20px;border-top:1px solid var(--bord)}
+  .wiz-nav button{height:44px;border-radius:11px;font-family:var(--disp);font-weight:700;font-size:13.5px;flex:1;transition:.16s}
+  .wiz-nav .back{background:var(--bg3);border:1px solid var(--bord2);color:var(--mut)}
+  .wiz-nav .back:hover{color:#fff}
+  .wiz-nav .next{background:linear-gradient(92deg,var(--purple),#5646d6);border:none;color:#fff}
+  .wiz-nav .next:hover{filter:brightness(1.1)}
+  .wiz-nav .skip{background:none;border:none;color:var(--dim);flex:0;font-size:12px;text-decoration:underline}
+  .wiz-miss{background:rgba(242,200,121,.12);border:1px solid rgba(242,200,121,.4);color:var(--amber);border-radius:9px;padding:9px 12px;font-size:12px;margin-bottom:12px}
+  .wiz-summary{font-size:13px;line-height:1.7;color:var(--mut)}
+  .wiz-summary b{color:var(--ink)}
+  .wiz-summary .grp{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--bord)}
+  .wiz-preview{margin-top:14px;background:var(--bg3);border:1px solid var(--bord);border-radius:11px;padding:14px;font-size:13px;color:var(--ink);white-space:pre-wrap}
+  .wiz-agentspill{display:inline-flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--bord2);color:var(--mut);border-radius:20px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer}
+  .wiz-agentspill:hover{border-color:var(--purple);color:#fff}
+  .wiz-agentspill.set{color:var(--teal-lt);border-color:rgba(0,206,201,.4)}
+
+  /* ── Estado CRM + Aprobaciones ── */
+  .crm-pill{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--mut);border:1px solid var(--bord2);border-radius:20px;padding:6px 11px}
+  .crm-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--dim)}
+  .crm-pill.on .dot{background:var(--teal)} .crm-pill.on{color:var(--teal-lt)}
+  .crm-pill.off .dot{background:var(--amber)} .crm-pill.off{color:var(--amber)}
+  .apr-badge{position:relative}
+  .apr-count{position:absolute;top:-5px;right:-5px;background:var(--amber);color:#1a1200;font-size:10px;font-weight:800;border-radius:10px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+  .apr-list{display:flex;flex-direction:column;gap:10px}
+  .apr-item{background:var(--bg3);border:1px solid var(--bord);border-radius:12px;padding:13px 15px}
+  .apr-item .tx{font-size:13.5px;color:var(--ink);margin-bottom:9px;line-height:1.5}
+  .apr-item .meta{font-size:11px;color:var(--dim);margin-bottom:9px}
+  .apr-item .acts{display:flex;gap:8px}
+  .apr-item button{height:34px;padding:0 13px;border-radius:9px;font-size:12px;font-weight:700;font-family:var(--disp)}
+  .apr-item .ok{background:rgba(0,206,201,.16);border:1px solid rgba(0,206,201,.4);color:var(--teal-lt)}
+  .apr-item .adj{background:var(--bg2);border:1px solid var(--bord2);color:var(--mut)}
+  .apr-item .rej{background:rgba(242,184,184,.1);border:1px solid rgba(242,184,184,.35);color:#F2B8B8}
+  .apr-item.decided{opacity:.55}
+  .apr-item .st{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+  .apr-empty{color:var(--dim);font-size:13px;text-align:center;padding:30px 0}
+
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -319,7 +378,10 @@
     <b id="projName" contenteditable="true" spellcheck="false" data-tip="Clic para renombrar">Proyecto sin título</b>
   </div>
   <div class="h-right">
+    <div class="crm-pill off" id="crmPill" title="Estado de la integración con HubSpot"><span class="dot"></span><span id="crmPillTxt">CRM: revisando…</span></div>
     <div class="status"><span class="beat"></span> <span id="statusText">Angie está lista</span></div>
+    <button class="hbtn" id="wizBtn" aria-label="Configurar mi negocio" data-tip="Configurar mi negocio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span class="label">Mi negocio</span></button>
+    <button class="hbtn apr-badge" id="aprBtn" aria-label="Bandeja de aprobaciones" data-tip="Aprobaciones"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><span class="label">Aprobaciones</span><span class="apr-count" id="aprCount" style="display:none">0</span></button>
     <button class="hbtn" id="studioBtn" aria-label="Estudio de imagen" data-tip="Estudio de imagen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span class="label">Imagen</span></button>
     <button class="hbtn primary" id="newProj" aria-label="Nuevo proyecto" data-tip="Nuevo proyecto"><span class="label">Nuevo proyecto</span><span aria-hidden="true">+</span></button>
     <button class="hbtn icon toggle" id="orchToggle" aria-label="Ver orquestación" data-tip="Ver orquestación">◧</button>
@@ -408,7 +470,41 @@
   </div>
 </div>
 
-<script>
+<div class="modal" id="wizardModal" role="dialog" aria-label="Configurar mi negocio">
+  <div class="wiz">
+    <div class="wiz-h">
+      <img class="avatar" src="angie.png" alt="Angie">
+      <div><div class="t" id="wizTitle">Configura tu negocio</div><div class="u" id="wizSub">Paso 1</div></div>
+      <button class="x" id="wizClose" aria-label="Cerrar">×</button>
+    </div>
+    <div class="wiz-steps" id="wizDots"></div>
+    <div class="wiz-b" id="wizBody"></div>
+    <div class="wiz-nav" id="wizNav">
+      <button class="skip" id="wizSkip" type="button">Saltar por ahora</button>
+      <button class="back" id="wizBack" type="button">Atrás</button>
+      <button class="next" id="wizNext" type="button">Siguiente</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="aprModal" role="dialog" aria-label="Bandeja de aprobaciones">
+  <div class="wiz" style="max-width:560px">
+    <div class="wiz-h">
+      <img class="avatar" src="angie.png" alt="Angie">
+      <div><div class="t">Bandeja de aprobaciones</div><div class="u">Lo sensible siempre pasa por dirección</div></div>
+      <button class="x" id="aprClose" aria-label="Cerrar">×</button>
+    </div>
+    <div class="wiz-b" id="aprBody" style="max-height:70vh">
+      <div class="apr-list" id="aprList"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { WIZARD_STEPS, emptyWizardData, validateStep, validateAll, buildContextText, collectWizardFileContents, DOCUMENT_SLOTS } from "./wizard-core.js";
+import { createStore } from "./store.js";
+
+const store = createStore();
 const SYSTEM = `Eres Angie, el agente coordinador del ecosistema Forward AI Agents · Marketing.
 Orquestas 24 subagentes especializados. NO ejecutas el trabajo especializado: lo orquestas, integras y entregas.
 Tu interlocutora NO es experta en marketing: te habla de objetivos de negocio. Tú traduces y decides quién trabaja.
@@ -580,6 +676,17 @@ A modern government office at dawn, wide empty desk, soft directional light, dee
 [APROBACION]
 - Lo que requiere el visto bueno de dirección (una línea por punto).
 - Si no hay nada, escribe: Nada por ahora.
+
+[HUBSPOT] es OPCIONAL — inclúyela SOLO cuando el encargo produzca un lead, oportunidad o
+contacto real que tenga sentido registrar en el CRM (por ejemplo: activaste B2, B3, D4 o E1
+sobre un prospecto o cliente concreto). NUNCA inventes un correo, nombre o empresa que la
+usuaria no te dio. Si no hay nada real que registrar, OMITE esta etiqueta por completo.
+Cuando la incluyas, debe ser JSON válido en una sola línea con esta forma exacta (usa null
+en los campos que no tengas, nunca inventes valores):
+[HUBSPOT]
+{"contact":{"email":null,"firstName":null,"lastName":null,"jobTitle":null,"vertical":null},"company":{"name":null,"domain":null,"vertical":null},"deal":{"name":null,"stage":"nuevo_lead","amount":null,"nextAction":null,"recommendation":null,"owningAgent":null},"note":null}
+Los valores válidos de deal.stage son exactamente: nuevo_lead, lead_por_calificar, contacto_iniciado,
+reunion_programada, oportunidad_identificada, prueba_de_valor, propuesta, negociacion, ganado, perdido, expansion.
 
 [SIGUIENTE]
 El siguiente paso recomendado, en una línea.`;
@@ -997,17 +1104,26 @@ async function send(){
     if(!raw)throw new Error("La respuesta llegó vacía. Intenta de nuevo.");
     history.push({role:"assistant",content:raw});
 
-    const grab=(tag,next)=>{const m=raw.match(new RegExp(`\\[${tag}\\]([\\s\\S]*?)(?=\\[(?:${next})\\]|$)`,"i"));return m?m[1].trim():"";};
-    const entendi   =grab("ENTENDI","AGENTES|ENTREGABLE|PIEZA|IMAGEN|APROBACION|SIGUIENTE");
-    const agentesRaw=grab("AGENTES","ENTREGABLE|PIEZA|IMAGEN|APROBACION|SIGUIENTE");
-    const entregable=grab("ENTREGABLE","PIEZA|IMAGEN|APROBACION|SIGUIENTE");
-    const piezaRaw  =grab("PIEZA","IMAGEN|APROBACION|SIGUIENTE|ENTENDI");
-    const imagenRaw =grab("IMAGEN","APROBACION|SIGUIENTE|ENTENDI|PIEZA");
-    const aprobRaw  =grab("APROBACION","SIGUIENTE|PIEZA|IMAGEN");
-    const siguiente =grab("SIGUIENTE","ENTENDI|PIEZA|IMAGEN");
+    const ALLTAGS="ENTENDI|AGENTES|ENTREGABLE|PIEZA|IMAGEN|APROBACION|HUBSPOT|SIGUIENTE";
+    const grab=(tag,next)=>{const m=raw.match(new RegExp(`\\[${tag}\\]([\\s\\S]*?)(?=\\[(?:${next||ALLTAGS})\\]|$)`,"i"));return m?m[1].trim():"";};
+    const entendi   =grab("ENTENDI");
+    const agentesRaw=grab("AGENTES");
+    const entregable=grab("ENTREGABLE");
+    const piezaRaw  =grab("PIEZA");
+    const imagenRaw =grab("IMAGEN");
+    const aprobRaw  =grab("APROBACION");
+    const hubspotRaw=grab("HUBSPOT");
+    const siguiente =grab("SIGUIENTE");
 
     const codes=[...new Set((agentesRaw.match(/\b[A-F][1-5]\b/g)||[]))];
     const appr=aprobRaw.split("\n").map(l=>l.replace(/^[-*]\s*/,"").trim()).filter(l=>l&&!/^nada por ahora\.?$/i.test(l));
+    let hubspotPayload=null;
+    if(hubspotRaw){
+      try{
+        const parsed=JSON.parse(hubspotRaw.match(/\{[\s\S]*\}/)?.[0]||"null");
+        if(parsed && parsed.contact && parsed.contact.email) hubspotPayload=parsed;
+      }catch(e){ /* JSON inválido del modelo: se ignora, no se registra nada falso */ }
+    }
 
     // pieza SVG
     let svg="";
@@ -1064,10 +1180,23 @@ async function send(){
       <button class="dbtn" data-d="adjust">Solicitar ajustes</button>
       <button class="dbtn" data-d="export">Exportar</button>
       <button class="dbtn" data-d="pieces">Crear piezas</button>
+      ${hubspotPayload?`<button class="dbtn" id="hsBtn">Registrar en HubSpot</button>`:""}
     </div>`;
 
     card.innerHTML=html;
     turn.querySelector(".think").replaceWith(card);
+
+    // Bandeja de aprobaciones: cada aprobación pedida por el coordinador queda registrada,
+    // no solo mostrada en el turno — así sobrevive aunque cambies de proyecto.
+    if(appr.length){ store.addApprovals(appr); refreshAprCount(); }
+
+    // Registro de la ejecución (para trazabilidad e historial — ver bandeja/])
+    const runId="run-"+Date.now();
+    store.addRun({
+      id:runId, at:new Date().toISOString(), request:text||"(documentos adjuntos)",
+      agentCodes:codes, entendi, entregable, approvals:appr,
+      hubspot: hubspotPayload?{status:"pending"}:null,
+    });
 
     // wiring de módulos
     card.querySelectorAll(".mod-h").forEach(h=>h.onclick=e=>{if(e.target.closest(".mact"))return;h.parentElement.classList.toggle("closed");});
@@ -1088,6 +1217,16 @@ async function send(){
       else if(d==="export"){const txt=entendi+"\n\n"+entregable;const a=document.createElement("a");a.href="data:text/markdown;charset=utf-8,"+encodeURIComponent(txt);a.download="entregable-"+Date.now()+".md";a.click();}
       else if(d==="pieces"){q.value="Convierte este entregable en piezas visuales para redes.";q.focus();}
     });
+    // wiring del registro en HubSpot — va DESPUÉS del wiring genérico de .dacts .dbtn
+    // (hsBtn también trae la clase .dbtn para heredar el estilo; si fuera antes, el
+    // forEach genérico de arriba le pisaría el onclick).
+    if(hubspotPayload){
+      const hsBtn=card.querySelector("#hsBtn");
+      hsBtn.onclick=async()=>{
+        const result=await registerInHubspot(hubspotPayload,hsBtn);
+        if(result) store.updateRun(runId,{hubspot:{status:"registered",contactId:result.contact?.id,companyId:result.company?.id,dealId:result.deal?.id}});
+      };
+    }
 
     feed.scrollTop=feed.scrollHeight;
   }catch(err){
@@ -1135,6 +1274,226 @@ async function genStudio(extra){
 }
 document.getElementById("stGen").onclick=()=>genStudio("");
 document.getElementById("stTopic").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.metaKey||e.ctrlKey)){e.preventDefault();genStudio("");}});
+
+/* ══════════════════════════════════════════════════════════════
+   FORM WIZARD — configuración real del negocio, persistida, y
+   usada como contexto real de los agentes (no texto libre suelto).
+   ══════════════════════════════════════════════════════════════ */
+let wizardData = store.loadWizardData() || emptyWizardData();
+let wizStep = 0; // 0..WIZARD_STEPS.length-1, y WIZARD_STEPS.length = paso de resumen
+const TOTAL_WIZ_STEPS = WIZARD_STEPS.length + 1;
+
+const wizardModal=document.getElementById("wizardModal");
+const wizBody=document.getElementById("wizBody"), wizDots=document.getElementById("wizDots"),
+      wizTitle=document.getElementById("wizTitle"), wizSub=document.getElementById("wizSub"),
+      wizBack=document.getElementById("wizBack"), wizNext=document.getElementById("wizNext"), wizSkip=document.getElementById("wizSkip");
+
+function openWizard(){ wizStep=0; renderWizStep(); wizardModal.classList.add("open"); }
+function closeWizard(){ wizardModal.classList.remove("open"); }
+document.getElementById("wizBtn").onclick=openWizard;
+document.getElementById("wizClose").onclick=closeWizard;
+wizardModal.addEventListener("click",e=>{if(e.target===wizardModal)closeWizard();});
+wizSkip.onclick=closeWizard;
+
+function renderDots(){
+  wizDots.innerHTML="";
+  for(let i=0;i<TOTAL_WIZ_STEPS;i++){
+    const d=document.createElement("div");
+    d.className="wiz-dot"+(i<wizStep?" done":i===wizStep?" now":"");
+    wizDots.appendChild(d);
+  }
+}
+
+function fieldHTML(f,data){
+  const val=data[f.id];
+  const req=f.required?'<span class="wiz-req">*</span>':"";
+  if(f.type==="text")return `<div class="field"><label>${f.label}${req}</label><input type="text" data-f="${f.id}" value="${esc(val||"")}"></div>`;
+  if(f.type==="date")return `<div class="field"><label>${f.label}${req}</label><input type="date" data-f="${f.id}" value="${esc(val||"")}"></div>`;
+  if(f.type==="textarea")return `<div class="field"><label>${f.label}${req}</label><textarea data-f="${f.id}" rows="3">${esc(val||"")}</textarea></div>`;
+  if(f.type==="select"){
+    const opts=f.options.map(([v,l])=>`<option value="${v}" ${val===v?"selected":""}>${l}</option>`).join("");
+    return `<div class="field"><label>${f.label}${req}</label><select data-f="${f.id}"><option value="">Selecciona…</option>${opts}</select></div>`;
+  }
+  if(f.type==="chips"){
+    const chosen=val||[];
+    return `<div class="field"><label>${f.label}${req}</label><div class="opts" data-chips="${f.id}">${f.options.map(o=>`<button type="button" class="opt${chosen.includes(o)?" on":""}" data-v="${esc(o)}">${o}</button>`).join("")}</div></div>`;
+  }
+  if(f.type==="documents"){
+    return `<div class="field"><label>${f.label}</label>`+DOCUMENT_SLOTS.map(([slot,label])=>{
+      const files=(data.documents[slot]||[]).map(d=>d.name).join(", ");
+      return `<div class="wiz-doc-row"><div class="dl"><b>${label}</b>${files?`<span class="dfiles">${esc(files)}</span>`:'<span>Sin archivos</span>'}</div><input type="file" data-doc="${slot}" multiple accept=".pdf,.png,.jpg,.jpeg,.txt,.md,.csv"></div>`;
+    }).join("")+`</div>`;
+  }
+  return "";
+}
+
+function renderWizStep(){
+  renderDots();
+  if(wizStep<WIZARD_STEPS.length){
+    const step=WIZARD_STEPS[wizStep];
+    wizTitle.textContent=step.title;
+    wizSub.textContent=`Paso ${wizStep+1} de ${TOTAL_WIZ_STEPS} · ${step.subtitle}`;
+    wizBody.innerHTML=step.fields.map(f=>fieldHTML(f,wizardData)).join("");
+    wizBody.querySelectorAll("[data-f]").forEach(el=>{
+      el.addEventListener("input",()=>{wizardData[el.dataset.f]=el.value; store.saveWizardData(wizardData);});
+    });
+    wizBody.querySelectorAll("[data-chips]").forEach(box=>{
+      const fid=box.dataset.chips;
+      box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+        const v=b.dataset.v; const arr=wizardData[fid]||(wizardData[fid]=[]);
+        const i=arr.indexOf(v); if(i>=0)arr.splice(i,1); else arr.push(v);
+        b.classList.toggle("on"); store.saveWizardData(wizardData);
+      });
+    });
+    wizBody.querySelectorAll("[data-doc]").forEach(inp=>{
+      inp.addEventListener("change",e=>{
+        const slot=inp.dataset.doc; const files=[...e.target.files];
+        files.forEach(f=>{
+          if(f.size>9*1048576){alert(`"${f.name}" pesa más de 9 MB.`);return;}
+          const ext=f.name.split(".").pop().toLowerCase();
+          const isTxt=["txt","md","csv"].includes(ext);
+          const reader=new FileReader();
+          reader.onload=()=>{
+            const item={name:f.name,kind:isTxt?"txt":ext==="pdf"?"pdf":"img"};
+            if(isTxt)item.text=reader.result; else {item.b64=reader.result.split(",")[1];item.mime=f.type||"application/octet-stream";}
+            (wizardData.documents[slot]=wizardData.documents[slot]||[]).push(item);
+            store.saveWizardData(wizardData);
+            renderWizStep();
+          };
+          if(isTxt)reader.readAsText(f); else reader.readAsDataURL(f);
+        });
+      });
+    });
+    wizBack.style.visibility=wizStep===0?"hidden":"visible";
+    wizNext.textContent="Siguiente";
+    wizSkip.style.display="";
+  } else {
+    // paso de resumen
+    wizTitle.textContent="Resumen y vista previa";
+    wizSub.textContent=`Paso ${TOTAL_WIZ_STEPS} de ${TOTAL_WIZ_STEPS} · Revisa, corrige lo que quieras, y confirma`;
+    const v=validateAll(wizardData);
+    wizBody.innerHTML = (v.ok?"":`<div class="wiz-miss">Antes de activar, te falta: ${v.missing.join(", ")}.</div>`) +
+      `<div class="wiz-summary">${buildContextText(wizardData).split("\n").slice(1).map(l=>`<div>${esc(l)}</div>`).join("")}</div>
+       <button type="button" class="wiz-agentspill" id="wizPreviewBtn" style="margin-top:16px">✨ Generar vista previa de estrategia y agentes</button>
+       <div class="wiz-preview" id="wizPreviewBox" style="display:none"></div>`;
+    document.getElementById("wizPreviewBtn").onclick=generateWizPreview;
+    wizBack.style.visibility="visible";
+    wizNext.textContent="Confirmar y activar a Angie";
+    wizSkip.style.display="none";
+  }
+}
+
+async function generateWizPreview(){
+  const btn=document.getElementById("wizPreviewBtn"), box=document.getElementById("wizPreviewBox");
+  btn.disabled=true; btn.textContent="Angie está pensando…";
+  box.style.display="block"; box.textContent="Interpretando tu negocio…";
+  try{
+    const sys=SYSTEM+"\n\n"+buildContextText(wizardData);
+    const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      system:sys,
+      messages:[{role:"user",content:"Con el contexto de negocio de arriba, dame SOLO un adelanto breve (máximo 6 líneas): una columna vertebral tentativa en una frase, y qué códigos de agente (formato A1, B2, etc.) activarías para el primer encargo y por qué. No generes el entregable completo todavía, no uses las etiquetas [ENTENDI]/[AGENTES]/etc., solo texto corrido."}]
+    })});
+    const d=await r.json();
+    if(d.error)throw new Error(d.error);
+    box.textContent=(d.text||"").trim()||"Angie no devolvió nada. Intenta de nuevo.";
+  }catch(e){ box.textContent="No se pudo generar la vista previa: "+e.message; }
+  btn.disabled=false; btn.textContent="✨ Regenerar vista previa";
+}
+
+wizBack.onclick=()=>{ if(wizStep>0){wizStep--; renderWizStep();} };
+wizNext.onclick=()=>{
+  if(wizStep<WIZARD_STEPS.length){
+    const r=validateStep(WIZARD_STEPS[wizStep],wizardData);
+    if(!r.ok){ alert("Antes de seguir, completa: "+r.missing.join(", ")); return; }
+    wizStep++; renderWizStep();
+  } else {
+    const v=validateAll(wizardData);
+    if(!v.ok){ alert("Todavía falta: "+v.missing.join(", ")+". Puedes regresar a completarlo, o saltar por ahora."); return; }
+    confirmWizard();
+  }
+};
+
+function confirmWizard(){
+  store.saveWizardData(wizardData);
+  // Siembra el historial con el contexto de negocio + documentos, como un primer turno real,
+  // para que TODO lo que sigue (incluida la vista previa ya mostrada) parta de datos reales.
+  const ctx=buildContextText(wizardData);
+  const docs=collectWizardFileContents(wizardData);
+  const content=[];
+  docs.forEach(d=>{
+    if(d.kind==="pdf")content.push({type:"document",source:{type:"base64",media_type:"application/pdf",data:d.b64}});
+    else if(d.kind==="img")content.push({type:"image",source:{type:"base64",media_type:d.mime,data:d.b64}});
+    else content.push({type:"text",text:`Documento adjunto "${d.name}":\n\n${d.text}`});
+  });
+  content.push({type:"text",text:ctx});
+  history=[{role:"user",content},{role:"assistant",content:"Entendido. Ya tengo el contexto real de tu negocio y lo voy a usar en todo lo que hagamos, sin inventar datos que no me diste."}];
+  closeWizard();
+  setStatusText("Angie ya conoce tu negocio — lista para tu primer encargo");
+  updateCrmPill();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BANDEJA DE APROBACIONES
+   ══════════════════════════════════════════════════════════════ */
+const aprModal=document.getElementById("aprModal"), aprList=document.getElementById("aprList"), aprCount=document.getElementById("aprCount");
+document.getElementById("aprBtn").onclick=()=>{renderApprovals(); aprModal.classList.add("open");};
+document.getElementById("aprClose").onclick=()=>aprModal.classList.remove("open");
+aprModal.addEventListener("click",e=>{if(e.target===aprModal)aprModal.classList.remove("open");});
+
+function refreshAprCount(){
+  const pending=store.loadApprovals().filter(a=>a.status==="pending").length;
+  aprCount.style.display=pending?"flex":"none";
+  aprCount.textContent=pending;
+}
+function renderApprovals(){
+  const items=store.loadApprovals();
+  if(!items.length){ aprList.innerHTML=`<div class="apr-empty">No hay nada pendiente de aprobación todavía.</div>`; return; }
+  aprList.innerHTML=items.map(a=>`
+    <div class="apr-item ${a.status!=="pending"?"decided":""}" data-id="${a.id}">
+      <div class="tx">${esc(a.text)}</div>
+      <div class="meta">${new Date(a.createdAt).toLocaleString("es-MX")}${a.status!=="pending"?` · <span class="st">${({approved:"Aprobado",adjust:"Con ajustes",rejected:"Rechazado"})[a.status]}</span>`:""}</div>
+      ${a.status==="pending"?`<div class="acts"><button class="ok" data-a="approved">Aprobar</button><button class="adj" data-a="adjust">Solicitar ajustes</button><button class="rej" data-a="rejected">Rechazar</button></div>`:""}
+    </div>`).join("");
+  aprList.querySelectorAll(".apr-item button").forEach(b=>b.onclick=()=>{
+    const id=b.closest(".apr-item").dataset.id;
+    store.setApprovalStatus(id,b.dataset.a);
+    renderApprovals(); refreshAprCount();
+  });
+}
+refreshAprCount();
+
+/* ══════════════════════════════════════════════════════════════
+   ESTADO DE LA INTEGRACIÓN CON HUBSPOT
+   ══════════════════════════════════════════════════════════════ */
+const crmPill=document.getElementById("crmPill"), crmPillTxt=document.getElementById("crmPillTxt");
+let crmConfigured=false;
+async function updateCrmPill(){
+  try{
+    const r=await fetch("/api/hubspot"); const d=await r.json();
+    crmConfigured=!!d.configured;
+    crmPill.className="crm-pill "+(crmConfigured?"on":"off");
+    crmPillTxt.textContent=crmConfigured?"CRM: HubSpot conectado":"CRM no configurado";
+  }catch(e){ crmPill.className="crm-pill off"; crmPillTxt.textContent="CRM: sin verificar"; }
+}
+updateCrmPill();
+
+/** Registra en HubSpot lo que el entregable de un turno recomienda, si el turno trae [HUBSPOT]. */
+async function registerInHubspot(payload,btn){
+  const original=btn.textContent;
+  btn.disabled=true; btn.textContent="Registrando en HubSpot…";
+  try{
+    const r=await fetch("/api/hubspot",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"registerOpportunity",payload})});
+    const d=await r.json();
+    if(d.code==="CRM_NOT_CONFIGURED"){ btn.textContent="CRM no configurado"; alert(d.error); return; }
+    if(d.error){ btn.textContent="Error"; alert(d.error); return; }
+    btn.textContent="Registrado en HubSpot ✓"; btn.classList.add("ok");
+    return d;
+  }catch(e){ btn.textContent="Error de red"; alert(e.message); }
+  finally{ setTimeout(()=>{ if(!btn.classList.contains("ok")){btn.disabled=false; btn.textContent=original;} },1800); }
+}
+
+/* Auto-abre el wizard la primera vez que alguien entra sin configuración guardada. */
+if(!store.loadWizardData()) setTimeout(openWizard, 500);
 </script>
 </body>
 </html>

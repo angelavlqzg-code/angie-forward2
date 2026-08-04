@@ -4,5 +4,15 @@
   "private": true,
   "description": "Angie — la fuerza de trabajo digital de Forward AI",
   "type": "module",
-  "engines": { "node": ">=18" }
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "node dev-server.js",
+    "test": "node --test tests/hubspot-adapter.test.js tests/wizard-core.test.js tests/store.test.js",
+    "test:e2e": "node tests/e2e.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
 }
