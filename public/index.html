@@ -1487,6 +1487,7 @@ async function registerInHubspot(payload,btn){
     if(d.code==="CRM_NOT_CONFIGURED"){ btn.textContent="CRM no configurado"; alert(d.error); return; }
     if(d.error){ btn.textContent="Error"; alert(d.error); return; }
     btn.textContent="Registrado en HubSpot ✓"; btn.classList.add("ok");
+    if(d.noteWarning) alert(d.noteWarning);
     return d;
   }catch(e){ btn.textContent="Error de red"; alert(e.message); }
   finally{ setTimeout(()=>{ if(!btn.classList.contains("ok")){btn.disabled=false; btn.textContent=original;} },1800); }
