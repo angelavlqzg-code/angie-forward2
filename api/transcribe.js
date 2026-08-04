@@ -1,7 +1,7 @@
 // Transcribe un audio a texto usando Gemini (reutiliza tu misma GOOGLE_API_KEY).
 // La llave vive AQUÍ, en el servidor. El navegador nunca la ve.
 
-export const config = { maxDuration: 60 };
+export const config = { maxDuration: 120 };
 
 // Modelo de comprensión de audio de Gemini.
 const MODELO = "gemini-2.5-flash";

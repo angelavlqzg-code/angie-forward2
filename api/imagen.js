@@ -4,7 +4,7 @@
 // No mandamos el texto crudo al generador: lo enriquecemos con concepto, composición,
 // iluminación, paleta y un negative prompt, según un PRESET de estilo reutilizable.
 
-export const config = { maxDuration: 60 };
+export const config = { maxDuration: 120 };
 
 // ── MODELO ──
 // Por defecto: Nano Banana 2 (rápido, ~3-4¢). Para máxima calidad editorial cambia a:

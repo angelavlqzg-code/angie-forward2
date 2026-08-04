@@ -4,7 +4,7 @@
 // El cerebro (marca, agentes, formato y diseño) vive en public/index.html,
 // en la constante SYSTEM. Este archivo solo lo reenvía de forma segura.
 
-export const config = { maxDuration: 60 };
+export const config = { maxDuration: 120 };
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
