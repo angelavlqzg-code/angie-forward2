@@ -144,10 +144,12 @@
   .mod-body{padding:0 15px 15px}
   .mod.closed .mod-body,.mod.closed .mod-acts{display:none}
   .mod-body p,.mod-body li{font-size:13.8px;line-height:1.62;color:var(--ink)}
-  .mod-body ul{padding-left:18px;margin:6px 0} .mod-body li{margin-bottom:4px}
+  .mod-body ul,.mod-body ol{padding-left:18px;margin:6px 0} .mod-body li{margin-bottom:4px}
+  .mod-body ol{counter-reset:none}
   .mod-body h4{font-family:var(--disp);font-size:13px;font-weight:700;color:var(--purple-lt);margin:12px 0 6px}
   .mod-body strong{color:var(--teal-lt)} .mod-body em{color:var(--mut)}
   .mod-body code{background:var(--bg4);padding:1px 6px;border-radius:5px;font-size:12px}
+  .mod-body .callout{background:rgba(108,92,231,.1);border-left:3px solid var(--purple);border-radius:0 10px 10px 0;padding:10px 13px;margin:10px 0;font-size:13.5px;line-height:1.55;color:var(--ink)}
   .mod-acts{display:flex;gap:7px;flex-wrap:wrap;padding:0 15px 14px}
   .mact{font-size:11.5px;font-weight:600;color:var(--mut);background:transparent;border:1px solid var(--bord);border-radius:8px;padding:6px 11px;display:flex;align-items:center;gap:6px;transition:.15s}
   .mact:hover{color:#fff;border-color:var(--purple);background:var(--bg3)}
@@ -206,9 +208,16 @@
   .orow .oc{font-family:var(--disp);font-size:10px;font-weight:700;color:var(--teal-lt);background:rgba(0,206,201,.12);border:1px solid rgba(0,206,201,.3);border-radius:6px;padding:2px 6px}
   .orow .ost{margin-left:auto;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--purple-lt)}
   .orow.done .ost{color:var(--teal)}
+  .orow .oname{font-size:10px;color:var(--dim);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .orow .task{font-size:11.5px;color:var(--mut);line-height:1.4}
+  .orow .ometa{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--teal-lt);margin-top:6px;opacity:.85}
+  .orow .ometa svg{flex-shrink:0}
+  .orow .ometa.dep{color:var(--purple-lt)}
   .orow .pg{height:4px;border-radius:4px;background:var(--bord);margin-top:8px;overflow:hidden}
   .orow .pg i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--purple));transition:width .6s}
+  .orow .oresult{display:none;font-size:11px;color:var(--ink);background:rgba(0,206,201,.08);border-left:2px solid var(--teal);border-radius:0 6px 6px 0;padding:6px 9px;margin-top:8px;line-height:1.45}
+  .orow .otime{font-size:9.5px;color:var(--dim);margin-top:6px;text-align:right}
+  .orow.done{border-color:rgba(0,206,201,.3)}
   .orch-note{font-size:11px;color:var(--dim);line-height:1.5;margin-top:12px;border-top:1px solid var(--bord);padding-top:11px}
 
   /* ── COMPOSER ── */
@@ -252,7 +261,10 @@
   [data-tip]:hover::before{content:"";position:absolute;top:calc(100% + 3px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:var(--bg4);z-index:60}
   .h-right [data-tip]:hover::after{left:auto;right:0;transform:none}
   .h-right [data-tip]:hover::before{left:auto;right:13px;transform:none}
-  .scrim{display:none;position:fixed;inset:0;background:rgba(5,5,15,.6);z-index:20}
+  /* Empieza debajo del header (64px) para que el propio botón de menú siga siendo
+     clickeable con el drawer abierto — antes el scrim tapaba TODO el header (z-index
+     mayor) y la única forma de cerrar el menú era adivinar que había que tocar el fondo. */
+  .scrim{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:rgba(5,5,15,.6);z-index:20}
 
   /* ── RESPONSIVE ── */
   @media(max-width:1180px){
@@ -356,7 +368,52 @@
   .apr-item .st{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
   .apr-empty{color:var(--dim);font-size:13px;text-align:center;padding:30px 0}
 
+  /* ── Proyectos anteriores ── */
+  .proj-list{display:flex;flex-direction:column;gap:10px}
+  .proj-item{background:var(--bg3);border:1px solid var(--bord);border-radius:12px;padding:13px 15px;cursor:pointer;transition:.15s}
+  .proj-item:hover{border-color:var(--bord2)}
+  .proj-item .pt{font-size:13.5px;color:var(--ink);line-height:1.5;font-weight:600}
+  .proj-item .pmeta{font-size:11px;color:var(--dim);margin-top:6px;display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+  .proj-item .pmeta .hs{color:var(--teal-lt)}
+  .proj-item .pchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+  .proj-item .pbody{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--bord);font-size:13px;color:var(--ink);line-height:1.6}
+  .proj-item.open .pbody{display:block}
+  .proj-item .pbody .said{color:var(--mut);margin-bottom:8px;font-style:italic}
+  .proj-empty{color:var(--dim);font-size:13px;text-align:center;padding:30px 0}
+
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+  /* Celular: el header ya "cabía" en teoría (los labels se esconden desde los 900px), pero
+     el status ("Angie está lista") y el pill de CRM traen texto que nunca se ocultaba y
+     desbordaban una pantalla angosta — como body{overflow:hidden}, ese desborde no se veía
+     como una barra de scroll, se veía como botones cortados e imposibles de tocar.
+     Este bloque va al FINAL del CSS a propósito: son overrides de reglas que ya existen
+     arriba (.crm-pill, .status, .hero, etc.) y en un empate de especificidad gana la regla
+     que aparece después en el archivo — si esto se moviera más arriba, el navegador
+     ignoraría estos display:none silenciosamente. */
+  @media(max-width:560px){
+    header{gap:8px;padding:0 12px}
+    .lock .s{display:none}
+    .status{display:none}
+    .crm-pill{display:none}
+    .h-right{gap:5px}
+    .proj{display:none}
+    .hero{padding-top:18px}
+    .hero h1{font-size:21px}
+    .hero p{font-size:13.5px}
+    .qa{flex-direction:column}
+    .qa button{width:100%}
+    /* La caja de mensaje (clip + mic + textarea + enviar) no cabe en una sola fila en un
+       celular — el textarea quedaba comprimido a ~2 letras de ancho. Se fuerza a su propia
+       fila completa arriba, y los botones se acomodan en la fila de abajo. */
+    .box{flex-wrap:wrap}
+    textarea{flex-basis:100%;order:-1;min-width:0}
+    .send{margin-left:auto}
+    .dacts{gap:6px} .dbtn{padding:8px 11px;font-size:12px}
+    .wiz,.studio{max-width:100%;border-radius:14px}
+    .modal{padding:0} .modal.open{align-items:stretch}
+    .wiz-b{max-height:none}
+  }
 </style>
 </head>
 <body>
@@ -381,6 +438,7 @@
     <div class="crm-pill off" id="crmPill" title="Estado de la integración con HubSpot"><span class="dot"></span><span id="crmPillTxt">CRM: revisando…</span></div>
     <div class="status"><span class="beat"></span> <span id="statusText">Angie está lista</span></div>
     <button class="hbtn" id="wizBtn" aria-label="Configurar mi negocio" data-tip="Configurar mi negocio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span class="label">Mi negocio</span></button>
+    <button class="hbtn" id="projectsBtn" aria-label="Proyectos anteriores" data-tip="Proyectos anteriores"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span class="label">Proyectos</span></button>
     <button class="hbtn apr-badge" id="aprBtn" aria-label="Bandeja de aprobaciones" data-tip="Aprobaciones"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><span class="label">Aprobaciones</span><span class="apr-count" id="aprCount" style="display:none">0</span></button>
     <button class="hbtn" id="studioBtn" aria-label="Estudio de imagen" data-tip="Estudio de imagen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span class="label">Imagen</span></button>
     <button class="hbtn primary" id="newProj" aria-label="Nuevo proyecto" data-tip="Nuevo proyecto"><span class="label">Nuevo proyecto</span><span aria-hidden="true">+</span></button>
@@ -496,6 +554,19 @@
     </div>
     <div class="wiz-b" id="aprBody" style="max-height:70vh">
       <div class="apr-list" id="aprList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="projModal" role="dialog" aria-label="Proyectos anteriores">
+  <div class="wiz" style="max-width:640px">
+    <div class="wiz-h">
+      <img class="avatar" src="angie.png" alt="Angie">
+      <div><div class="t">Proyectos anteriores</div><div class="u">Lo que ya trabajaste con Angie, aunque hayas dado clic en "Nuevo proyecto"</div></div>
+      <button class="x" id="projClose" aria-label="Cerrar">×</button>
+    </div>
+    <div class="wiz-b" id="projBody" style="max-height:70vh">
+      <div class="proj-list" id="projList"></div>
     </div>
   </div>
 </div>
@@ -661,9 +732,26 @@ El objetivo en una sola línea, en lenguaje de negocio.
 [AGENTES]
 B2, F1, F5
 
+[PASOS]
+JSON válido en una sola línea: un array con un objeto por cada agente de [AGENTES], en el orden real
+en que trabajaste (el primero es el que arranca, los siguientes pueden depender de él).
+Forma exacta de cada objeto: {"code":"B2","accion":"...","documento":null,"resultado":"...","depende_de":null}
+- "accion": qué hizo ESE agente para ESTE encargo en concreto (verbo de operación + qué), nunca la
+  descripción genérica de su rol. Ejemplo: "Estructuró el caso Atizapán en formato one-pager con la
+  disciplina capacidad vs resultado" — no "Estructura casos con evidencia".
+- "documento": el nombre exacto del documento adjunto que usó, si usó alguno. Si no usó ninguno, null.
+  Nunca inventes que usó un documento que la usuaria no adjuntó.
+- "resultado": una línea con lo concreto que ese agente aportó al entregable final (no repitas "accion").
+- "depende_de": el code del agente anterior cuyo resultado tomó como insumo, si aplica. Si no depende
+  de ningún otro agente de este turno, null.
+Si por algún motivo no hay agentes en [AGENTES], deja un array vacío: [].
+
 [ENTREGABLE]
-El trabajo real, terminado y listo para usar. Usa Markdown: ## o ### para subtítulos, - para listas,
-**negritas** para resaltar, y tablas con | cuando compares cosas (por ejemplo mensajes por comprador).
+El trabajo real, terminado y listo para usar. Usa Markdown: ## o ### para subtítulos, - para listas
+sin orden, 1. 2. 3. para secuencias o pasos con orden (cronogramas, planes de acción), **negritas**
+para resaltar, tablas con | cuando compares cosas (se convierten en tarjetas, ideal para mensajes por
+comprador, comparativos, matrices), y > al inicio de un renglón para UN insight o recomendación que
+de verdad quieras destacar (úsalo con moderación, 1 o 2 por entregable, no para todo).
 Deja un renglón en blanco entre bloques para que el texto respire.
 Si hay pieza visual, aquí explicas brevemente la decisión de diseño (2 o 3 líneas), no la describes entera.
 
@@ -831,21 +919,47 @@ function orchStart(){
 }
 function orchAgents(list){
   const c=document.getElementById("orows"); if(!c)return;
-  c.innerHTML=list.map(a=>`
-    <div class="orow" data-c="${a.code}">
-      <div class="top"><span class="oc">${a.code}</span><span class="ost">Trabajando</span></div>
-      <div class="task">${a.task||byCode[a.code]?.name||""}</div>
+  const startedAt=Date.now();
+  c.innerHTML=list.map(a=>{
+    const s=a.step;
+    const depName=s&&s.depende_de?(byCode[s.depende_de]?.name||s.depende_de):"";
+    return `
+    <div class="orow" data-c="${a.code}" data-start="${startedAt}">
+      <div class="top"><span class="oc">${a.code}</span><span class="oname">${esc(byCode[a.code]?.name||"")}</span><span class="ost">Trabajando</span></div>
+      <div class="task">${esc((s&&s.accion)||a.task||byCode[a.code]?.name||"")}</div>
+      ${s&&s.documento?`<div class="ometa"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg> Usó: ${esc(s.documento)}</div>`:""}
+      ${depName?`<div class="ometa dep"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg> Depende de ${esc(depName)}</div>`:""}
       <div class="pg"><i></i></div>
-    </div>`).join("");
+      <div class="oresult"></div>
+      <div class="otime"></div>
+    </div>`;
+  }).join("");
   const ang=orch.querySelector(".orch-angie .u");
   if(ang)ang.innerHTML=`<span class="beat"></span> Coordinando ${list.length} especialista${list.length>1?"s":""}…`;
+  // Reloj real de "tiempo transcurrido" por fila (no decorativo: cuenta desde que esa fila apareció).
+  if(orchTimer)clearInterval(orchTimer);
+  orchTimer=setInterval(()=>{
+    c.querySelectorAll(".orow:not(.done)").forEach(row=>{
+      const secs=Math.max(0,Math.round((Date.now()-Number(row.dataset.start))/1000));
+      const t=row.querySelector(".otime"); if(t)t.textContent=secs+"s";
+    });
+  },500);
 }
-function orchDone(){
-  orch.querySelectorAll(".orow").forEach(r=>{r.classList.add("done");r.querySelector(".ost").textContent="Completado";r.querySelector(".pg i").style.width="100%";});
+function orchDone(steps){
+  if(orchTimer){clearInterval(orchTimer);orchTimer=null;}
+  orch.querySelectorAll(".orow").forEach(r=>{
+    r.classList.add("done");r.querySelector(".ost").textContent="Completado";r.querySelector(".pg i").style.width="100%";
+    const secs=Math.max(0,Math.round((Date.now()-Number(r.dataset.start))/1000));
+    const t=r.querySelector(".otime"); if(t)t.textContent="Listo en "+secs+"s";
+    const s=steps&&steps[r.dataset.c];
+    const rEl=r.querySelector(".oresult");
+    if(rEl&&s&&s.resultado){rEl.textContent=s.resultado;rEl.style.display="";}
+  });
   const ang=orch.querySelector(".orch-angie .u");
   if(ang)ang.innerHTML=`<span class="beat"></span> Integrado y listo para tu revisión`;
   if(!orch.querySelector(".orch-note")){const n=document.createElement("div");n.className="orch-note";n.textContent="Próximo paso: revisa y aprueba lo marcado. Angie queda lista para el siguiente encargo.";orch.appendChild(n);}
 }
+let orchTimer=null;
 
 /* ── Toggles responsive ── */
 const scrim=document.getElementById("scrim");
@@ -994,8 +1108,10 @@ function md(t){
     const h=line.match(/^\s*#{1,6}\s+(.*)$/); if(h){out.push(`<h4>${inline(h[1].trim())}</h4>`);i++;continue;}
     if(/^\s*([-*_])\1{2,}\s*$/.test(line)){out.push("<hr>");i++;continue;}
     if(/^\s*[-*]\s+/.test(line)){const items=[];while(i<lines.length&&/^\s*[-*]\s+/.test(lines[i])){items.push(`<li>${inline(lines[i].replace(/^\s*[-*]\s+/,""))}</li>`);i++;}out.push("<ul>"+items.join("")+"</ul>");continue;}
+    if(/^\s*\d+[.)]\s+/.test(line)){const items=[];while(i<lines.length&&/^\s*\d+[.)]\s+/.test(lines[i])){items.push(`<li>${inline(lines[i].replace(/^\s*\d+[.)]\s+/,""))}</li>`);i++;}out.push("<ol>"+items.join("")+"</ol>");continue;}
+    if(/^\s*>\s?/.test(line)){const items=[];while(i<lines.length&&/^\s*>\s?/.test(lines[i])){items.push(lines[i].replace(/^\s*>\s?/,""));i++;}out.push(`<div class="callout">${inline(items.join("<br>"))}</div>`);continue;}
     if(/^\s*$/.test(line)){i++;continue;}
-    const para=[]; while(i<lines.length&&!/^\s*$/.test(lines[i])&&!/^\s*#{1,6}\s+/.test(lines[i])&&!/^\s*[-*]\s+/.test(lines[i])&&!/^\s*\|.*\|\s*$/.test(lines[i])&&!/^\s*([-*_])\1{2,}\s*$/.test(lines[i])){para.push(lines[i]);i++;}
+    const para=[]; while(i<lines.length&&!/^\s*$/.test(lines[i])&&!/^\s*#{1,6}\s+/.test(lines[i])&&!/^\s*[-*]\s+/.test(lines[i])&&!/^\s*\d+[.)]\s+/.test(lines[i])&&!/^\s*>\s?/.test(lines[i])&&!/^\s*\|.*\|\s*$/.test(lines[i])&&!/^\s*([-*_])\1{2,}\s*$/.test(lines[i])){para.push(lines[i]);i++;}
     out.push(`<p>${inline(para.join("<br>"))}</p>`);
   }
   return out.join("");
@@ -1067,6 +1183,12 @@ async function send(){
   const text=q.value.trim();
   if((!text&&!pending.length)||busy)return;
   busy=true; go.disabled=true; hero.style.display="none";
+  // Todo lo que sigue va dentro de un try/finally amplio: si algo truena en cualquier
+  // punto (no solo en la llamada de red), "busy" siempre se libera al final. Antes, si
+  // algo fallaba en esta preparación (antes del try interno), "busy" se quedaba en true
+  // para siempre y todos los botones que dependen de él (incluido "Nuevo proyecto")
+  // dejaban de responder hasta recargar la página.
+  try{
   document.body.classList.remove("nav-open","orch-open");
   if(!projTitled&&projName.textContent.trim()==="Proyecto sin título"&&text)
     projName.textContent=text.slice(0,60);
@@ -1104,10 +1226,11 @@ async function send(){
     if(!raw)throw new Error("La respuesta llegó vacía. Intenta de nuevo.");
     history.push({role:"assistant",content:raw});
 
-    const ALLTAGS="ENTENDI|AGENTES|ENTREGABLE|PIEZA|IMAGEN|APROBACION|HUBSPOT|SIGUIENTE";
+    const ALLTAGS="ENTENDI|AGENTES|PASOS|ENTREGABLE|PIEZA|IMAGEN|APROBACION|HUBSPOT|SIGUIENTE";
     const grab=(tag,next)=>{const m=raw.match(new RegExp(`\\[${tag}\\]([\\s\\S]*?)(?=\\[(?:${next||ALLTAGS})\\]|$)`,"i"));return m?m[1].trim():"";};
     const entendi   =grab("ENTENDI");
     const agentesRaw=grab("AGENTES");
+    const pasosRaw  =grab("PASOS");
     const entregable=grab("ENTREGABLE");
     const piezaRaw  =grab("PIEZA");
     const imagenRaw =grab("IMAGEN");
@@ -1124,14 +1247,27 @@ async function send(){
         if(parsed && parsed.contact && parsed.contact.email) hubspotPayload=parsed;
       }catch(e){ /* JSON inválido del modelo: se ignora, no se registra nada falso */ }
     }
+    // Pasos reales por agente (para el panel de orquestación). Si el modelo no los trae en un
+    // formato válido, "steps" queda vacío y el panel cae de vuelta al modo simple (sin inventar
+    // acción/documento/resultado que Angie no dijo de verdad).
+    let steps=[];
+    if(pasosRaw){
+      try{
+        const arr=JSON.parse(pasosRaw.match(/\[[\s\S]*\]/)?.[0]||"null");
+        if(Array.isArray(arr)) steps=arr.filter(s=>s && typeof s.code==="string" && codes.includes(s.code));
+      }catch(e){ /* JSON inválido del modelo: se ignora, el panel usa el modo simple */ }
+    }
+    const stepByCode=Object.fromEntries(steps.map(s=>[s.code,s]));
 
     // pieza SVG
     let svg="";
     const mSvg=piezaRaw.match(/<svg[\s\S]*<\/svg>/i);
     if(mSvg){const cand=mSvg[0].replace(/<script[\s\S]*?<\/script>/gi,"").replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi,"").replace(/\son\w+="[^"]*"/gi,"");if(/<svg[^>]*>/i.test(cand))svg=cand;}
 
-    // ── Orquestación visible ──
-    const orchList=codes.map(c=>({code:c,task:byCode[c]?.name||""}));
+    // ── Orquestación visible: usa los [PASOS] reales que trajo Angie. Si un agente no tiene
+    // paso reportado (el modelo no lo trajo en PASOS), se degrada a mostrar solo su nombre —
+    // nunca se inventa una acción, documento o resultado que Angie no dijo de verdad.
+    const orchList=codes.map(c=>({code:c,task:byCode[c]?.name||"",step:stepByCode[c]||null}));
     orchAgents(orchList);
     const phaseState={brief:"done"};
     codes.forEach((c,idx)=>{
@@ -1142,7 +1278,7 @@ async function send(){
         if(p>=100){clearInterval(iv);setStatus(c,"done",100);}},260+idx*90);
     });
     renderPhases(phaseState);
-    setTimeout(()=>{codes.forEach(c=>{const ph=PHASE_OF[c[0]];if(ph)phaseState[ph]="done";});renderPhases(phaseState);orchDone();setStatusText("Angie está lista");},260*3+codes.length*90+400);
+    setTimeout(()=>{codes.forEach(c=>{const ph=PHASE_OF[c[0]];if(ph)phaseState[ph]="done";});renderPhases(phaseState);orchDone(stepByCode);setStatusText("Angie está lista");},260*3+codes.length*90+400);
 
     // ── Construir la respuesta modular ──
     const card=document.createElement("div");
@@ -1234,7 +1370,9 @@ async function send(){
     turn.querySelector(".think").replaceWith(box);
     resetAgents();renderPhases({brief:"active"});orchIdle();setStatusText("Angie está lista");
   }
-  busy=false; go.disabled=false; feed.scrollTop=feed.scrollHeight; q.focus();
+  }finally{
+    busy=false; go.disabled=false; feed.scrollTop=feed.scrollHeight; q.focus();
+  }
 }
 
 /* ── Estudio de imagen · Dirección de arte ── */
@@ -1461,6 +1599,42 @@ function renderApprovals(){
   });
 }
 refreshAprCount();
+
+/* ── Proyectos anteriores ──
+   "Nuevo proyecto" solo limpia la pantalla; no borra nada. Cada encargo real que Angie
+   contesta ya se guardaba en localStorage (store.addRun, ver send()) desde hace rato, pero
+   no había ninguna pantalla para volver a verlo — este panel lo muestra, reusando ese mismo
+   dato guardado (no inventa nada nuevo que no se hubiera registrado ya). */
+const projModal=document.getElementById("projModal"), projList=document.getElementById("projList");
+document.getElementById("projectsBtn").onclick=()=>{renderProjects(); projModal.classList.add("open");};
+document.getElementById("projClose").onclick=()=>projModal.classList.remove("open");
+projModal.addEventListener("click",e=>{if(e.target===projModal)projModal.classList.remove("open");});
+
+function renderProjects(){
+  const runs=store.loadRuns();
+  if(!runs.length){ projList.innerHTML=`<div class="proj-empty">Todavía no hay proyectos registrados. En cuanto le mandes un encargo real a Angie, va a aparecer aquí — aunque después le des clic a "Nuevo proyecto".</div>`; return; }
+  projList.innerHTML=runs.map(r=>{
+    const approved=(r.approvals||[]).length;
+    const hs=r.hubspot;
+    const hsLabel = hs?.status==="registered" ? `<span class="hs">✓ Registrado en HubSpot${hs.dealId?` (deal ${esc(String(hs.dealId))})`:""}</span>`
+      : hs?.status==="pending" ? `<span class="hs">Lead pendiente de registrar</span>` : "";
+    return `
+    <div class="proj-item" data-id="${esc(r.id)}">
+      <div class="pt">${esc((r.request||"").slice(0,140))}</div>
+      <div class="pmeta">
+        <span>${new Date(r.at).toLocaleString("es-MX")}</span>
+        ${approved?`<span>${approved} punto${approved===1?"":"s"} de aprobación</span>`:""}
+        ${hsLabel}
+      </div>
+      ${(r.agentCodes||[]).length?`<div class="pchips">${r.agentCodes.map(c=>`<span class="chip-ag">${esc(c)}</span>`).join("")}</div>`:""}
+      <div class="pbody">
+        ${r.entendi?`<div class="said">${esc(r.entendi)}</div>`:""}
+        ${r.entregable?md(r.entregable):"<p>Sin entregable guardado para este turno.</p>"}
+      </div>
+    </div>`;
+  }).join("");
+  projList.querySelectorAll(".proj-item").forEach(el=>el.onclick=()=>el.classList.toggle("open"));
+}
 
 /* ══════════════════════════════════════════════════════════════
    ESTADO DE LA INTEGRACIÓN CON HUBSPOT
