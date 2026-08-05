@@ -144,12 +144,10 @@
   .mod-body{padding:0 15px 15px}
   .mod.closed .mod-body,.mod.closed .mod-acts{display:none}
   .mod-body p,.mod-body li{font-size:13.8px;line-height:1.62;color:var(--ink)}
-  .mod-body ul,.mod-body ol{padding-left:18px;margin:6px 0} .mod-body li{margin-bottom:4px}
-  .mod-body ol{counter-reset:none}
+  .mod-body ul{padding-left:18px;margin:6px 0} .mod-body li{margin-bottom:4px}
   .mod-body h4{font-family:var(--disp);font-size:13px;font-weight:700;color:var(--purple-lt);margin:12px 0 6px}
   .mod-body strong{color:var(--teal-lt)} .mod-body em{color:var(--mut)}
   .mod-body code{background:var(--bg4);padding:1px 6px;border-radius:5px;font-size:12px}
-  .mod-body .callout{background:rgba(108,92,231,.1);border-left:3px solid var(--purple);border-radius:0 10px 10px 0;padding:10px 13px;margin:10px 0;font-size:13.5px;line-height:1.55;color:var(--ink)}
   .mod-acts{display:flex;gap:7px;flex-wrap:wrap;padding:0 15px 14px}
   .mact{font-size:11.5px;font-weight:600;color:var(--mut);background:transparent;border:1px solid var(--bord);border-radius:8px;padding:6px 11px;display:flex;align-items:center;gap:6px;transition:.15s}
   .mact:hover{color:#fff;border-color:var(--purple);background:var(--bg3)}
@@ -208,16 +206,9 @@
   .orow .oc{font-family:var(--disp);font-size:10px;font-weight:700;color:var(--teal-lt);background:rgba(0,206,201,.12);border:1px solid rgba(0,206,201,.3);border-radius:6px;padding:2px 6px}
   .orow .ost{margin-left:auto;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--purple-lt)}
   .orow.done .ost{color:var(--teal)}
-  .orow .oname{font-size:10px;color:var(--dim);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .orow .task{font-size:11.5px;color:var(--mut);line-height:1.4}
-  .orow .ometa{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--teal-lt);margin-top:6px;opacity:.85}
-  .orow .ometa svg{flex-shrink:0}
-  .orow .ometa.dep{color:var(--purple-lt)}
   .orow .pg{height:4px;border-radius:4px;background:var(--bord);margin-top:8px;overflow:hidden}
   .orow .pg i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--purple));transition:width .6s}
-  .orow .oresult{display:none;font-size:11px;color:var(--ink);background:rgba(0,206,201,.08);border-left:2px solid var(--teal);border-radius:0 6px 6px 0;padding:6px 9px;margin-top:8px;line-height:1.45}
-  .orow .otime{font-size:9.5px;color:var(--dim);margin-top:6px;text-align:right}
-  .orow.done{border-color:rgba(0,206,201,.3)}
   .orch-note{font-size:11px;color:var(--dim);line-height:1.5;margin-top:12px;border-top:1px solid var(--bord);padding-top:11px}
 
   /* ── COMPOSER ── */
@@ -261,10 +252,7 @@
   [data-tip]:hover::before{content:"";position:absolute;top:calc(100% + 3px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:var(--bg4);z-index:60}
   .h-right [data-tip]:hover::after{left:auto;right:0;transform:none}
   .h-right [data-tip]:hover::before{left:auto;right:13px;transform:none}
-  /* Empieza debajo del header (64px) para que el propio botón de menú siga siendo
-     clickeable con el drawer abierto — antes el scrim tapaba TODO el header (z-index
-     mayor) y la única forma de cerrar el menú era adivinar que había que tocar el fondo. */
-  .scrim{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:rgba(5,5,15,.6);z-index:20}
+  .scrim{display:none;position:fixed;inset:0;background:rgba(5,5,15,.6);z-index:20}
 
   /* ── RESPONSIVE ── */
   @media(max-width:1180px){
@@ -369,38 +357,6 @@
   .apr-empty{color:var(--dim);font-size:13px;text-align:center;padding:30px 0}
 
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-
-  /* Celular: el header ya "cabía" en teoría (los labels se esconden desde los 900px), pero
-     el status ("Angie está lista") y el pill de CRM traen texto que nunca se ocultaba y
-     desbordaban una pantalla angosta — como body{overflow:hidden}, ese desborde no se veía
-     como una barra de scroll, se veía como botones cortados e imposibles de tocar.
-     Este bloque va al FINAL del CSS a propósito: son overrides de reglas que ya existen
-     arriba (.crm-pill, .status, .hero, etc.) y en un empate de especificidad gana la regla
-     que aparece después en el archivo — si esto se moviera más arriba, el navegador
-     ignoraría estos display:none silenciosamente. */
-  @media(max-width:560px){
-    header{gap:8px;padding:0 12px}
-    .lock .s{display:none}
-    .status{display:none}
-    .crm-pill{display:none}
-    .h-right{gap:5px}
-    .proj{display:none}
-    .hero{padding-top:18px}
-    .hero h1{font-size:21px}
-    .hero p{font-size:13.5px}
-    .qa{flex-direction:column}
-    .qa button{width:100%}
-    /* La caja de mensaje (clip + mic + textarea + enviar) no cabe en una sola fila en un
-       celular — el textarea quedaba comprimido a ~2 letras de ancho. Se fuerza a su propia
-       fila completa arriba, y los botones se acomodan en la fila de abajo. */
-    .box{flex-wrap:wrap}
-    textarea{flex-basis:100%;order:-1;min-width:0}
-    .send{margin-left:auto}
-    .dacts{gap:6px} .dbtn{padding:8px 11px;font-size:12px}
-    .wiz,.studio{max-width:100%;border-radius:14px}
-    .modal{padding:0} .modal.open{align-items:stretch}
-    .wiz-b{max-height:none}
-  }
 </style>
 </head>
 <body>
@@ -705,26 +661,9 @@ El objetivo en una sola línea, en lenguaje de negocio.
 [AGENTES]
 B2, F1, F5
 
-[PASOS]
-JSON válido en una sola línea: un array con un objeto por cada agente de [AGENTES], en el orden real
-en que trabajaste (el primero es el que arranca, los siguientes pueden depender de él).
-Forma exacta de cada objeto: {"code":"B2","accion":"...","documento":null,"resultado":"...","depende_de":null}
-- "accion": qué hizo ESE agente para ESTE encargo en concreto (verbo de operación + qué), nunca la
-  descripción genérica de su rol. Ejemplo: "Estructuró el caso Atizapán en formato one-pager con la
-  disciplina capacidad vs resultado" — no "Estructura casos con evidencia".
-- "documento": el nombre exacto del documento adjunto que usó, si usó alguno. Si no usó ninguno, null.
-  Nunca inventes que usó un documento que la usuaria no adjuntó.
-- "resultado": una línea con lo concreto que ese agente aportó al entregable final (no repitas "accion").
-- "depende_de": el code del agente anterior cuyo resultado tomó como insumo, si aplica. Si no depende
-  de ningún otro agente de este turno, null.
-Si por algún motivo no hay agentes en [AGENTES], deja un array vacío: [].
-
 [ENTREGABLE]
-El trabajo real, terminado y listo para usar. Usa Markdown: ## o ### para subtítulos, - para listas
-sin orden, 1. 2. 3. para secuencias o pasos con orden (cronogramas, planes de acción), **negritas**
-para resaltar, tablas con | cuando compares cosas (se convierten en tarjetas, ideal para mensajes por
-comprador, comparativos, matrices), y > al inicio de un renglón para UN insight o recomendación que
-de verdad quieras destacar (úsalo con moderación, 1 o 2 por entregable, no para todo).
+El trabajo real, terminado y listo para usar. Usa Markdown: ## o ### para subtítulos, - para listas,
+**negritas** para resaltar, y tablas con | cuando compares cosas (por ejemplo mensajes por comprador).
 Deja un renglón en blanco entre bloques para que el texto respire.
 Si hay pieza visual, aquí explicas brevemente la decisión de diseño (2 o 3 líneas), no la describes entera.
 
@@ -892,47 +831,21 @@ function orchStart(){
 }
 function orchAgents(list){
   const c=document.getElementById("orows"); if(!c)return;
-  const startedAt=Date.now();
-  c.innerHTML=list.map(a=>{
-    const s=a.step;
-    const depName=s&&s.depende_de?(byCode[s.depende_de]?.name||s.depende_de):"";
-    return `
-    <div class="orow" data-c="${a.code}" data-start="${startedAt}">
-      <div class="top"><span class="oc">${a.code}</span><span class="oname">${esc(byCode[a.code]?.name||"")}</span><span class="ost">Trabajando</span></div>
-      <div class="task">${esc((s&&s.accion)||a.task||byCode[a.code]?.name||"")}</div>
-      ${s&&s.documento?`<div class="ometa"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg> Usó: ${esc(s.documento)}</div>`:""}
-      ${depName?`<div class="ometa dep"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg> Depende de ${esc(depName)}</div>`:""}
+  c.innerHTML=list.map(a=>`
+    <div class="orow" data-c="${a.code}">
+      <div class="top"><span class="oc">${a.code}</span><span class="ost">Trabajando</span></div>
+      <div class="task">${a.task||byCode[a.code]?.name||""}</div>
       <div class="pg"><i></i></div>
-      <div class="oresult"></div>
-      <div class="otime"></div>
-    </div>`;
-  }).join("");
+    </div>`).join("");
   const ang=orch.querySelector(".orch-angie .u");
   if(ang)ang.innerHTML=`<span class="beat"></span> Coordinando ${list.length} especialista${list.length>1?"s":""}…`;
-  // Reloj real de "tiempo transcurrido" por fila (no decorativo: cuenta desde que esa fila apareció).
-  if(orchTimer)clearInterval(orchTimer);
-  orchTimer=setInterval(()=>{
-    c.querySelectorAll(".orow:not(.done)").forEach(row=>{
-      const secs=Math.max(0,Math.round((Date.now()-Number(row.dataset.start))/1000));
-      const t=row.querySelector(".otime"); if(t)t.textContent=secs+"s";
-    });
-  },500);
 }
-function orchDone(steps){
-  if(orchTimer){clearInterval(orchTimer);orchTimer=null;}
-  orch.querySelectorAll(".orow").forEach(r=>{
-    r.classList.add("done");r.querySelector(".ost").textContent="Completado";r.querySelector(".pg i").style.width="100%";
-    const secs=Math.max(0,Math.round((Date.now()-Number(r.dataset.start))/1000));
-    const t=r.querySelector(".otime"); if(t)t.textContent="Listo en "+secs+"s";
-    const s=steps&&steps[r.dataset.c];
-    const rEl=r.querySelector(".oresult");
-    if(rEl&&s&&s.resultado){rEl.textContent=s.resultado;rEl.style.display="";}
-  });
+function orchDone(){
+  orch.querySelectorAll(".orow").forEach(r=>{r.classList.add("done");r.querySelector(".ost").textContent="Completado";r.querySelector(".pg i").style.width="100%";});
   const ang=orch.querySelector(".orch-angie .u");
   if(ang)ang.innerHTML=`<span class="beat"></span> Integrado y listo para tu revisión`;
   if(!orch.querySelector(".orch-note")){const n=document.createElement("div");n.className="orch-note";n.textContent="Próximo paso: revisa y aprueba lo marcado. Angie queda lista para el siguiente encargo.";orch.appendChild(n);}
 }
-let orchTimer=null;
 
 /* ── Toggles responsive ── */
 const scrim=document.getElementById("scrim");
@@ -1081,10 +994,8 @@ function md(t){
     const h=line.match(/^\s*#{1,6}\s+(.*)$/); if(h){out.push(`<h4>${inline(h[1].trim())}</h4>`);i++;continue;}
     if(/^\s*([-*_])\1{2,}\s*$/.test(line)){out.push("<hr>");i++;continue;}
     if(/^\s*[-*]\s+/.test(line)){const items=[];while(i<lines.length&&/^\s*[-*]\s+/.test(lines[i])){items.push(`<li>${inline(lines[i].replace(/^\s*[-*]\s+/,""))}</li>`);i++;}out.push("<ul>"+items.join("")+"</ul>");continue;}
-    if(/^\s*\d+[.)]\s+/.test(line)){const items=[];while(i<lines.length&&/^\s*\d+[.)]\s+/.test(lines[i])){items.push(`<li>${inline(lines[i].replace(/^\s*\d+[.)]\s+/,""))}</li>`);i++;}out.push("<ol>"+items.join("")+"</ol>");continue;}
-    if(/^\s*>\s?/.test(line)){const items=[];while(i<lines.length&&/^\s*>\s?/.test(lines[i])){items.push(lines[i].replace(/^\s*>\s?/,""));i++;}out.push(`<div class="callout">${inline(items.join("<br>"))}</div>`);continue;}
     if(/^\s*$/.test(line)){i++;continue;}
-    const para=[]; while(i<lines.length&&!/^\s*$/.test(lines[i])&&!/^\s*#{1,6}\s+/.test(lines[i])&&!/^\s*[-*]\s+/.test(lines[i])&&!/^\s*\d+[.)]\s+/.test(lines[i])&&!/^\s*>\s?/.test(lines[i])&&!/^\s*\|.*\|\s*$/.test(lines[i])&&!/^\s*([-*_])\1{2,}\s*$/.test(lines[i])){para.push(lines[i]);i++;}
+    const para=[]; while(i<lines.length&&!/^\s*$/.test(lines[i])&&!/^\s*#{1,6}\s+/.test(lines[i])&&!/^\s*[-*]\s+/.test(lines[i])&&!/^\s*\|.*\|\s*$/.test(lines[i])&&!/^\s*([-*_])\1{2,}\s*$/.test(lines[i])){para.push(lines[i]);i++;}
     out.push(`<p>${inline(para.join("<br>"))}</p>`);
   }
   return out.join("");
@@ -1199,11 +1110,10 @@ async function send(){
     if(!raw)throw new Error("La respuesta llegó vacía. Intenta de nuevo.");
     history.push({role:"assistant",content:raw});
 
-    const ALLTAGS="ENTENDI|AGENTES|PASOS|ENTREGABLE|PIEZA|IMAGEN|APROBACION|HUBSPOT|SIGUIENTE";
+    const ALLTAGS="ENTENDI|AGENTES|ENTREGABLE|PIEZA|IMAGEN|APROBACION|HUBSPOT|SIGUIENTE";
     const grab=(tag,next)=>{const m=raw.match(new RegExp(`\\[${tag}\\]([\\s\\S]*?)(?=\\[(?:${next||ALLTAGS})\\]|$)`,"i"));return m?m[1].trim():"";};
     const entendi   =grab("ENTENDI");
     const agentesRaw=grab("AGENTES");
-    const pasosRaw  =grab("PASOS");
     const entregable=grab("ENTREGABLE");
     const piezaRaw  =grab("PIEZA");
     const imagenRaw =grab("IMAGEN");
@@ -1220,27 +1130,14 @@ async function send(){
         if(parsed && parsed.contact && parsed.contact.email) hubspotPayload=parsed;
       }catch(e){ /* JSON inválido del modelo: se ignora, no se registra nada falso */ }
     }
-    // Pasos reales por agente (para el panel de orquestación). Si el modelo no los trae en un
-    // formato válido, "steps" queda vacío y el panel cae de vuelta al modo simple (sin inventar
-    // acción/documento/resultado que Angie no dijo de verdad).
-    let steps=[];
-    if(pasosRaw){
-      try{
-        const arr=JSON.parse(pasosRaw.match(/\[[\s\S]*\]/)?.[0]||"null");
-        if(Array.isArray(arr)) steps=arr.filter(s=>s && typeof s.code==="string" && codes.includes(s.code));
-      }catch(e){ /* JSON inválido del modelo: se ignora, el panel usa el modo simple */ }
-    }
-    const stepByCode=Object.fromEntries(steps.map(s=>[s.code,s]));
 
     // pieza SVG
     let svg="";
     const mSvg=piezaRaw.match(/<svg[\s\S]*<\/svg>/i);
     if(mSvg){const cand=mSvg[0].replace(/<script[\s\S]*?<\/script>/gi,"").replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi,"").replace(/\son\w+="[^"]*"/gi,"");if(/<svg[^>]*>/i.test(cand))svg=cand;}
 
-    // ── Orquestación visible: usa los [PASOS] reales que trajo Angie. Si un agente no tiene
-    // paso reportado (el modelo no lo trajo en PASOS), se degrada a mostrar solo su nombre —
-    // nunca se inventa una acción, documento o resultado que Angie no dijo de verdad.
-    const orchList=codes.map(c=>({code:c,task:byCode[c]?.name||"",step:stepByCode[c]||null}));
+    // ── Orquestación visible ──
+    const orchList=codes.map(c=>({code:c,task:byCode[c]?.name||""}));
     orchAgents(orchList);
     const phaseState={brief:"done"};
     codes.forEach((c,idx)=>{
@@ -1251,7 +1148,7 @@ async function send(){
         if(p>=100){clearInterval(iv);setStatus(c,"done",100);}},260+idx*90);
     });
     renderPhases(phaseState);
-    setTimeout(()=>{codes.forEach(c=>{const ph=PHASE_OF[c[0]];if(ph)phaseState[ph]="done";});renderPhases(phaseState);orchDone(stepByCode);setStatusText("Angie está lista");},260*3+codes.length*90+400);
+    setTimeout(()=>{codes.forEach(c=>{const ph=PHASE_OF[c[0]];if(ph)phaseState[ph]="done";});renderPhases(phaseState);orchDone();setStatusText("Angie está lista");},260*3+codes.length*90+400);
 
     // ── Construir la respuesta modular ──
     const card=document.createElement("div");
