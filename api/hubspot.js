@@ -55,29 +55,15 @@ export default async function handler(req, res) {
           contactId: contactResult.id,
           companyId: companyResult?.id,
         });
-        // La nota es "mejor esfuerzo": si tu portal no tiene el scope de notas habilitado
-        // (algunos portales de HubSpot no lo exponen ni siquiera en la lista de permisos de
-        // la app privada), el contacto/empresa/deal YA quedaron registrados de verdad y no
-        // deben reportarse como fallidos solo porque la nota no se pudo crear.
         let noteResult = null;
-        let noteWarning = null;
         if (note) {
-          try {
-            noteResult = await logNote("deals", dealResult.id, note);
-          } catch (noteErr) {
-            noteWarning =
-              "El contacto, la empresa y el deal sí se registraron en HubSpot. La nota de " +
-              "contexto no se pudo crear (probablemente falta el scope de notas en tu app " +
-              "privada de HubSpot) — puedes agregarla manualmente en el deal si quieres: " +
-              noteErr.message;
-          }
+          noteResult = await logNote("deals", dealResult.id, note);
         }
         return res.status(200).json({
           contact: contactResult,
           company: companyResult,
           deal: dealResult,
           note: noteResult,
-          noteWarning,
         });
       }
       case "updateDealStage": {

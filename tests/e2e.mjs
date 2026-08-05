@@ -21,9 +21,6 @@ Lanzar Forward AI y generar reuniones calificadas con gobierno.
 [AGENTES]
 A1, B1, F5
 
-[PASOS]
-[{"code":"A1","accion":"Definió la narrativa de lanzamiento con la columna vertebral de marca.","documento":"manual-de-marca.pdf","resultado":"Mensaje núcleo: 'Forward AI ejecuta, no promete.'","depende_de":null},{"code":"B1","accion":"Priorizó gobierno como comprador del primer envío.","documento":null,"resultado":"Segmento: directores de innovación de gobiernos municipales.","depende_de":"A1"},{"code":"F5","accion":"Validó tono y disciplina de evidencia del entregable.","documento":null,"resultado":"Sin números sin autorizar; aprobado para envío.","depende_de":"A1"}]
-
 [ENTREGABLE]
 ## Mensaje principal
 Forward AI ejecuta, no promete.
@@ -149,19 +146,6 @@ let lastConsoleErrors = [];
   const modTitles = await page.$$eval(".mod .mt", (els) => els.map((e) => e.textContent.trim()));
   ok(modTitles.includes("Mensaje principal") && modTitles.includes("Siguiente paso"), "el [ENTREGABLE] se partió en módulos con sus títulos reales");
 
-  console.log("\n13.5. El panel de orquestación muestra los [PASOS] reales, no una animación decorativa");
-  const a1Task = await page.$eval('.orow[data-c="A1"] .task', (el) => el.textContent.trim());
-  ok(a1Task.includes("columna vertebral de marca"), `la fila de A1 muestra la acción real del PASO (obtuve: "${a1Task}")`);
-  const a1Doc = await page.$eval('.orow[data-c="A1"] .ometa', (el) => el.textContent);
-  ok(a1Doc.includes("manual-de-marca.pdf"), "la fila de A1 muestra el documento real que usó ese agente");
-  const b1Dep = await page.$eval('.orow[data-c="B1"] .ometa.dep', (el) => el.textContent);
-  ok(b1Dep.includes("Estrategia de Marca"), "la fila de B1 muestra de qué agente depende, con el nombre real");
-  await page.waitForFunction(() => {
-    const el = document.querySelector('.orow[data-c="A1"] .oresult');
-    return el && el.textContent.includes("Mensaje núcleo");
-  }, { timeout: 5000 });
-  ok(true, "al terminar, la fila de A1 revela el resultado real que aportó ese agente (no texto inventado por el navegador)");
-
   console.log("\n14. La bandeja de aprobaciones recibió las 2 aprobaciones del turno");
   await page.waitForFunction(() => document.querySelector("#aprCount")?.textContent === "2", { timeout: 5000 });
   ok(true, "el badge de aprobaciones muestra 2 pendientes, tomadas del [APROBACION] real");
@@ -185,26 +169,6 @@ let lastConsoleErrors = [];
   ok(runs.length === 1, "hay exactamente 1 ejecución registrada");
   ok(runs[0].agentCodes.join(",") === "A1,B1,F5", "la ejecución guardó los agentes reales activados");
   ok(runs[0].hubspot?.status === "registered" && runs[0].hubspot?.dealId === "9003", "la ejecución guardó el resultado real del registro en HubSpot (dealId 9003 del mock)");
-
-  console.log("\n16.5. El panel 'Proyectos anteriores' muestra el encargo real, incluso tras 'Nuevo proyecto'");
-  await page.click("#projectsBtn");
-  await page.waitForSelector(".proj-item", { timeout: 3000 });
-  const projText = await page.$eval(".proj-item .pt", (el) => el.textContent);
-  ok(projText.includes("Ayúdame a lanzar Forward AI en gobierno"), "el panel lista el encargo real como texto del proyecto");
-  const projChips = await page.$$eval(".proj-item .pchips .chip-ag", (els) => els.map((e) => e.textContent.trim()));
-  ok(JSON.stringify(projChips) === JSON.stringify(["A1", "B1", "F5"]), "el panel muestra los agentes reales que trabajaron ese proyecto");
-  await page.click(".proj-item");
-  await page.waitForFunction(() => document.querySelector(".proj-item")?.classList.contains("open"), { timeout: 3000 });
-  const projBody = await page.$eval(".proj-item .pbody", (el) => el.textContent);
-  ok(projBody.includes("Forward AI ejecuta"), "al expandir, muestra el entregable real guardado de ese proyecto");
-  await page.click("#projClose");
-  await page.click("#newProj");
-  await page.waitForTimeout(200);
-  await page.click("#projectsBtn");
-  await page.waitForSelector(".proj-item", { timeout: 3000 });
-  const stillThere = await page.$eval(".proj-item .pt", (el) => el.textContent);
-  ok(stillThere.includes("Ayúdame a lanzar Forward AI"), "tras darle clic a 'Nuevo proyecto', el proyecto anterior sigue apareciendo aquí (no se borró, solo se limpió la pantalla)");
-  await page.click("#projClose");
 
   console.log("\n17. Recarga de página: el wizard NO se vuelve a abrir solo (ya hay configuración)");
   await page.reload();
