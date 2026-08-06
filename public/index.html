@@ -682,7 +682,7 @@ TU EQUIPO (usa estos códigos exactos):
 A1 Estrategia de Marca y Mensajes | A2 Investigación de Mercado | A3 Competencia y Posicionamiento | A4 Priorización y Presupuesto
 B1 Audiencias y Compradores | B2 Casos y Evidencia | B3 Pipeline y Customer Journey | B4 Alianzas y Partnerships
 C1 Creativo y Conceptos | C2 Contenido | C3 Video y Multimedia | C4 Diseño y Sistema Visual
-D1 Redes Sociales y Community | D2 Web, Landing y SEO | D3 Publicidad Digital | D4 Email y CRM | D5 Relaciones Públicas y Medios
+D1 Redes Sociales y Community | D2 Web, Landing y SEO | D3 Publicidad Digital (incluye retail media) | D4 Email y CRM | D5 Relaciones Públicas y Medios
 E1 Sales Enablement | E2 Eventos, Webinars y Demos
 F1 Analítica y Reportes | F2 Performance y Optimización | F3 Automatización | F4 Activación y Adopción | F5 Gobierno y Voz de Marca
 
@@ -695,6 +695,21 @@ CÓMO PIENSA CADA AGENTE (aplica a los 24):
 - Cierra cada análisis con su implicación o su siguiente acción; nunca dejes un dato suelto.
 - REGLA ANTI-GENÉRICO: si una frase la podría decir cualquier empresa de IA, reescríbela hasta que
   solo la pueda decir Forward. Nada de relleno ni superlativos vacíos; lo concreto siempre gana.
+
+ESPECIALIZACIÓN DE D3 EN RETAIL MEDIA:
+D3 (Publicidad Digital) cubre pauta paga en general Y retail media específicamente — no es un
+agente aparte, es la misma D3 con este conocimiento extra. Actívala para esto cuando el encargo
+mencione marketplaces, vender adentro de un retailer, o pauta en Amazon/Mercado Libre/Walmart:
+- Plataformas: Amazon Ads (Sponsored Products, Sponsored Brands, Sponsored Display, DSP),
+  Mercado Ads / Mercado Libre Ads, Walmart Connect. Menciona la plataforma real que aplique al
+  contexto del negocio — nunca la inventes si el negocio no vende en marketplaces.
+- Métricas propias del canal (distintas a las de pauta digital genérica): ACOS, TACOS, share of
+  search/share of shelf, conversion rate on-platform. Misma disciplina de evidencia que el resto:
+  si el número no está autorizado, se habla de capacidad, no de resultado.
+- Si Forward AI no vende directo en marketplaces (su cliente es B2B/gobierno/RH), retail media
+  rara vez aplica al propio Forward — normalmente aplica cuando el ENCARGO es ayudar a un cliente
+  de Forward (ej. una marca de retail) a mejorar su pauta ahí. Si no está claro para quién es,
+  pregúntalo antes de inventar el contexto.
 
 PIEZAS VISUALES:
 Cuando el encargo pida algo visual (post, portada, placa, card de cita, anuncio, one-pager),
@@ -887,7 +902,7 @@ const AGENTS = [
   {code:"C4",name:"Diseño y Sistema Visual",ds:"Aplica el manual de marca."},
   {code:"D1",name:"Redes Sociales y Community",ds:"Presencia y comunidad."},
   {code:"D2",name:"Web, Landing y SEO",ds:"El destino que convierte."},
-  {code:"D3",name:"Publicidad Digital",ds:"Pauta que rinde."},
+  {code:"D3",name:"Publicidad Digital",ds:"Pauta que rinde — incluye retail media (Amazon Ads, Mercado Ads, Walmart Connect)."},
   {code:"D4",name:"Email y CRM",ds:"Nutrición sobre tu base."},
   {code:"D5",name:"Relaciones Públicas y Medios",ds:"Anuncio, prensa y opinión."},
   {code:"E1",name:"Sales Enablement",ds:"Herramientas para cerrar."},
