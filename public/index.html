@@ -373,6 +373,29 @@
   .crm-pill.off .dot{background:var(--amber)} .crm-pill.off{color:var(--amber)}
   .crm-pill.clickable{cursor:pointer;font:inherit;background:var(--bg2)}
   .crm-pill.clickable:hover{border-color:var(--purple)}
+  .crm-list{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .crm-opt{background:var(--bg2);border:1px solid var(--bord2);color:var(--ink);border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:7px}
+  .crm-opt.on{border-color:var(--purple);color:var(--purple-lt);background:rgba(108,92,231,.08)}
+  .crm-opt.soon{color:var(--dim)}
+  .soon-tag{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:var(--bg3);border:1px solid var(--bord2);border-radius:20px;padding:2px 7px;color:var(--dim)}
+  .crm-soon{background:var(--bg3);border:1px solid var(--bord);border-radius:11px;padding:14px;font-size:12.5px;color:var(--mut)}
+  .crm-status{font-size:12.5px;color:var(--mut);margin-bottom:14px}
+  .crm-acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .crm-hint{font-size:11.5px;color:var(--dim);margin-top:10px;line-height:1.5}
+  #authGate{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px}
+  #authCard{width:100%;max-width:340px;background:var(--white);border:1px solid var(--bord);border-radius:16px;padding:32px 26px;text-align:center;box-shadow:0 12px 40px rgba(12,16,36,.08)}
+  #authCard input{width:100%;background:var(--bg2);border:1px solid var(--bord2);color:var(--ink);border-radius:11px;padding:12px 13px;font-family:var(--body);font-size:14px;margin-bottom:10px;text-align:left}
+  #authCard input:focus{border-color:var(--purple);outline:none}
+  .role-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--mut);border:1px solid var(--bord2);border-radius:20px;padding:5px 11px;background:var(--bg2)}
+  .role-badge.invitada{color:var(--amber);border-color:rgba(184,121,15,.35)}
+  .role-badge button{background:none;border:none;color:var(--purple-lt);font-weight:600;font-size:11px;padding:0;margin-left:4px;text-decoration:underline}
+  /* Invitada (tester): sin Canva ni "Mi negocio" — son integraciones/config real de la
+     administradora. CRM, aprobaciones y medición sí quedan (datos ya aislados por namespace,
+     y CRM porque invitada conecta SU PROPIA llave — ver api/hubspot.js). */
+  body[data-role="invitada"] #wizBtn,
+  body[data-role="invitada"] #adminBtn,
+  body[data-role="invitada"] #canvaPill,
+  body[data-role="invitada"] .canva-btn{display:none!important}
   .apr-filter{margin-bottom:12px}
   .apr-filter select{width:100%;background:var(--bg3);border:1px solid var(--bord2);color:var(--ink);border-radius:11px;padding:10px 12px;font-family:var(--body);font-size:13px}
   .apr-filter select:focus{border-color:var(--purple);outline:none}
@@ -480,6 +503,13 @@
 </head>
 <body>
 
+<div id="authGate">
+  <div id="authCard">
+    <img class="avatar" src="angie.png" alt="Angie" style="width:52px;height:52px;margin-bottom:14px">
+    <div style="font-size:13px;color:var(--mut)">Cargando…</div>
+  </div>
+</div>
+
 <div class="scrim" id="scrim"></div>
 
 <header>
@@ -497,10 +527,12 @@
     <b id="projName" contenteditable="true" spellcheck="false" data-tip="Clic para renombrar">Proyecto sin título</b>
   </div>
   <div class="h-right">
-    <div class="crm-pill off" id="crmPill" title="Estado de la integración con HubSpot"><span class="dot"></span><span id="crmPillTxt">CRM: revisando…</span></div>
+    <div class="role-badge" id="roleBadge" style="display:none"></div>
+    <button type="button" class="crm-pill clickable off" id="crmPill" title="Conexión con CRM — clic para conectar o cambiar tu llave"><span class="dot"></span><span id="crmPillTxt">CRM: revisando…</span></button>
     <button type="button" class="crm-pill clickable off" id="canvaPill" title="Conexión con Canva — clic para conectar"><span class="dot"></span><span id="canvaPillTxt">Canva: revisando…</span></button>
     <div class="status"><span class="beat"></span> <span id="statusText">Angie está lista</span></div>
     <button class="hbtn" id="wizBtn" aria-label="Configurar mi negocio" data-tip="Configurar mi negocio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span class="label">Mi negocio</span></button>
+    <button class="hbtn" id="adminBtn" aria-label="Panel de administración" data-tip="Panel de administración"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span class="label">Admin</span></button>
     <button class="hbtn" id="projectsBtn" aria-label="Proyectos anteriores" data-tip="Proyectos anteriores"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span class="label">Proyectos</span></button>
     <button class="hbtn" id="measureBtn" aria-label="Medición y resultados" data-tip="Medición y resultados"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg><span class="label">Medición</span></button>
     <button class="hbtn apr-badge" id="aprBtn" aria-label="Bandeja de aprobaciones" data-tip="Aprobaciones"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><span class="label">Aprobaciones</span><span class="apr-count" id="aprCount" style="display:none">0</span></button>
@@ -651,11 +683,98 @@
   </div>
 </div>
 
+<div class="modal" id="crmModal" role="dialog" aria-label="Conectar CRM">
+  <div class="wiz" style="max-width:560px">
+    <div class="wiz-h">
+      <img class="avatar" src="angie.png" alt="Angie">
+      <div><div class="t">Conectar CRM</div><div class="u">Tu propia llave, sin tocar Vercel</div></div>
+      <button class="x" id="crmClose" aria-label="Cerrar">×</button>
+    </div>
+    <div class="wiz-b" id="crmBody" style="max-height:70vh"></div>
+  </div>
+</div>
+
+<div class="modal" id="adminModal" role="dialog" aria-label="Panel de administración">
+  <div class="wiz" style="max-width:640px">
+    <div class="wiz-h">
+      <img class="avatar" src="angie.png" alt="Angie">
+      <div><div class="t">Panel de administración</div><div class="u">La foto completa, con datos reales — nada inventado</div></div>
+      <button class="x" id="adminClose" aria-label="Cerrar">×</button>
+    </div>
+    <div class="wiz-b" id="adminBody" style="max-height:70vh"></div>
+  </div>
+</div>
+
 <script type="module">
 import { WIZARD_STEPS, emptyWizardData, validateStep, validateAll, buildContextText, collectWizardFileContents, DOCUMENT_SLOTS } from "./wizard-core.js";
 import { createStore } from "./store.js";
 
-const store = createStore();
+/* ══════════════════════════════════════════════════════════════
+   ACCESO — 2 contraseñas compartidas (admin / invitada), sin cuentas individuales.
+   Se resuelve ANTES de crear el store: así sabemos qué namespace usar desde el primer
+   render y nadie ve un parpadeo de la app real antes de entrar. `await` a nivel de módulo
+   está soportado por los navegadores modernos en <script type="module"> — el resto del
+   script (todo lo que sigue) simplemente se pausa hasta que esto resuelve.
+   ══════════════════════════════════════════════════════════════ */
+const authGate=document.getElementById("authGate"), authCard=document.getElementById("authCard");
+
+async function checkAuth(){
+  try{ const r=await fetch("/api/auth"); return await r.json(); }
+  catch(e){ return {authenticated:false, role:null, configured:false, networkError:true}; }
+}
+
+function renderLoginForm(onOk, errorMsg){
+  authCard.innerHTML=`
+    <img class="avatar" src="angie.png" alt="Angie" style="width:52px;height:52px;margin-bottom:14px">
+    <div style="font-family:var(--disp);font-weight:700;font-size:19px;color:var(--ink);margin-bottom:6px">Entra a Angie</div>
+    <div style="font-size:12.5px;color:var(--mut);margin-bottom:18px">Pide tu contraseña a quien administra esta app.</div>
+    <input type="password" id="authPw" placeholder="Contraseña" autocomplete="current-password">
+    ${errorMsg?`<div style="color:#A8362B;font-size:12px;margin:-2px 0 10px;text-align:left">${esc(errorMsg)}</div>`:""}
+    <button type="button" id="authSubmit" class="hbtn primary" style="width:100%;justify-content:center;margin-top:2px">Entrar</button>`;
+  const pwInput=document.getElementById("authPw"), submitBtn=document.getElementById("authSubmit");
+  pwInput.focus();
+  const submit=async()=>{
+    const pw=pwInput.value;
+    if(!pw)return;
+    submitBtn.disabled=true; submitBtn.textContent="Entrando…";
+    try{
+      const r=await fetch("/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pw})});
+      const d=await r.json();
+      if(d.code==="AUTH_NOT_CONFIGURED"){ onOk("admin"); return; }
+      if(d.error){ renderLoginForm(onOk,d.error); return; }
+      onOk(d.role);
+    }catch(e){ renderLoginForm(onOk,"Error de red: "+e.message); }
+  };
+  submitBtn.onclick=submit;
+  pwInput.addEventListener("keydown",e=>{ if(e.key==="Enter")submit(); });
+}
+
+async function resolveRole(){
+  const initial=await checkAuth();
+  if(initial.authenticated) return initial.role||"admin";
+  return new Promise(resolve=>renderLoginForm(resolve, initial.networkError?"No se pudo verificar el acceso — revisa tu conexión.":null));
+}
+
+const currentRole=await resolveRole();
+authGate.style.display="none";
+document.body.dataset.role=currentRole; // CSS oculta lo admin-only cuando es "invitada" (ver regla body[data-role="invitada"])
+
+const store=createStore(localStorage, currentRole==="invitada"?"guest_":"");
+
+/* Indicador de rol en el header + cerrar sesión (si el acceso con contraseña está activo). */
+(async()=>{
+  const badge=document.getElementById("roleBadge");
+  const st=await checkAuth();
+  if(!st.configured) return; // modo abierto (sin contraseñas puestas todavía): no se muestra nada
+  badge.style.display="inline-flex";
+  badge.className="role-badge"+(currentRole==="invitada"?" invitada":"");
+  badge.innerHTML=(currentRole==="invitada"?"👋 Invitada":"🔑 Admin")+` <button type="button" id="logoutBtn">Salir</button>`;
+  document.getElementById("logoutBtn").onclick=async()=>{
+    await fetch("/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"logout"})});
+    location.reload();
+  };
+})();
+
 const SYSTEM = `Eres Angie, el agente coordinador del ecosistema Forward AI Agents · Marketing.
 Orquestas 24 subagentes especializados. NO ejecutas el trabajo especializado: lo orquestas, integras y entregas.
 Tu interlocutora NO es experta en marketing: te habla de objetivos de negocio. Tú traduces y decides quién trabaja.
@@ -1989,26 +2108,103 @@ function renderMeasure(){
 }
 
 /* ══════════════════════════════════════════════════════════════
-   ESTADO DE LA INTEGRACIÓN CON HUBSPOT
+   ESTADO DE LA INTEGRACIÓN CON HUBSPOT + PANEL "CONECTAR CRM"
+   Dos formas de estar conectado: el token que puso quien desplegó la app en Vercel
+   (HUBSPOT_ACCESS_TOKEN), o el que la propia usuaria pega aquí — vive SOLO en su
+   localStorage y viaja únicamente en el header x-hubspot-token de cada llamada, nunca se
+   guarda en el servidor. Si hay llave propia, gana sobre la de Vercel.
    ══════════════════════════════════════════════════════════════ */
 const crmPill=document.getElementById("crmPill"), crmPillTxt=document.getElementById("crmPillTxt");
-let crmConfigured=false;
+const crmModal=document.getElementById("crmModal"), crmBody=document.getElementById("crmBody");
+let crmConfigured=false, crmSource=null;
+
+// CRMs que la app puede llegar a soportar. Solo "hubspot" tiene adaptador real hoy — el
+// resto se lista para que se vea el camino, pero NUNCA se simula una conexión que no existe:
+// si se seleccionan, se dice honestamente "todavía no está construido".
+const CRM_CATALOG=[
+  {id:"hubspot",name:"HubSpot",ready:true},
+  {id:"salesforce",name:"Salesforce",ready:false},
+  {id:"pipedrive",name:"Pipedrive",ready:false},
+  {id:"zoho",name:"Zoho CRM",ready:false},
+];
+let crmPanelSelected="hubspot";
+
+function crmToken(){ return (store.loadCrmKeys().hubspot||{}).apiKey || null; }
+function hubspotHeaders(isJson){
+  const h=isJson?{"Content-Type":"application/json"}:{};
+  const t=crmToken();
+  if(t) h["x-hubspot-token"]=t;
+  return h;
+}
+
 async function updateCrmPill(){
   try{
-    const r=await fetch("/api/hubspot"); const d=await r.json();
-    crmConfigured=!!d.configured;
-    crmPill.className="crm-pill "+(crmConfigured?"on":"off");
-    crmPillTxt.textContent=crmConfigured?"CRM: HubSpot conectado":"CRM no configurado";
-  }catch(e){ crmPill.className="crm-pill off"; crmPillTxt.textContent="CRM: sin verificar"; }
+    const r=await fetch("/api/hubspot",{headers:hubspotHeaders(false)}); const d=await r.json();
+    crmConfigured=!!d.configured; crmSource=d.source||null;
+    crmPill.className="crm-pill clickable "+(crmConfigured?"on":"off");
+    crmPillTxt.textContent=!crmConfigured?"CRM: conectar"
+      :crmSource==="cliente"?"CRM: HubSpot (tu llave)"
+      :"CRM: HubSpot conectado";
+  }catch(e){ crmPill.className="crm-pill clickable off"; crmPillTxt.textContent="CRM: sin verificar"; }
 }
 updateCrmPill();
+
+function renderCrmPanel(){
+  const keys=store.loadCrmKeys();
+  const hasClientKey=!!(keys.hubspot&&keys.hubspot.apiKey);
+  crmBody.innerHTML=`
+    <div class="crm-list">${CRM_CATALOG.map(c=>`
+      <button type="button" class="crm-opt${c.id===crmPanelSelected?" on":""}${c.ready?"":" soon"}" data-crm="${c.id}">
+        ${c.name}${c.ready?"":'<span class="soon-tag">Próximamente</span>'}
+      </button>`).join("")}</div>
+    <div id="crmDetail"></div>`;
+  crmBody.querySelectorAll(".crm-opt").forEach(b=>b.onclick=()=>{ crmPanelSelected=b.dataset.crm; renderCrmPanel(); });
+
+  const detail=document.getElementById("crmDetail");
+  const crm=CRM_CATALOG.find(c=>c.id===crmPanelSelected);
+  if(!crm.ready){
+    detail.innerHTML=`<div class="crm-soon">${crm.name} todavía no tiene un adaptador construido en Angie — solo HubSpot funciona hoy. Si lo necesitas pronto, dile a quien administra la app.</div>`;
+    return;
+  }
+  const statusLine=!crmConfigured?"No hay ninguna conexión activa."
+    :crmSource==="cliente"?"Conectado con la llave que pegaste tú, desde este navegador."
+    :"Conectado con la llave puesta en Vercel (compartida por quien administra la app).";
+  detail.innerHTML=`
+    <div class="crm-status">${esc(statusLine)}</div>
+    <div class="field">
+      <label>Tu API key de HubSpot (app privada)</label>
+      <input type="password" id="crmKeyInput" placeholder="pat-..." value="${hasClientKey?esc(keys.hubspot.apiKey):""}" autocomplete="off">
+    </div>
+    <div class="crm-acts">
+      <button type="button" class="dbtn go" id="crmSaveBtn">Guardar</button>
+      ${hasClientKey?'<button type="button" class="dbtn" id="crmClearBtn">Quitar mi llave</button>':""}
+    </div>
+    <div class="crm-hint">Se guarda solo en este navegador — nunca la mandamos a ningún lado excepto a HubSpot mismo, cuando uses el CRM. Para generarla: HubSpot → Configuración → Integraciones → Apps privadas.</div>`;
+
+  document.getElementById("crmSaveBtn").onclick=async()=>{
+    const val=document.getElementById("crmKeyInput").value.trim();
+    if(!val){ alert("Pega tu API key primero."); return; }
+    store.saveCrmKey("hubspot",val);
+    await updateCrmPill();
+    renderCrmPanel();
+  };
+  const clearBtn=document.getElementById("crmClearBtn");
+  if(clearBtn)clearBtn.onclick=async()=>{
+    store.clearCrmKey("hubspot");
+    await updateCrmPill();
+    renderCrmPanel();
+  };
+}
+crmPill.onclick=()=>{ crmPanelSelected="hubspot"; renderCrmPanel(); crmModal.classList.add("open"); };
+document.getElementById("crmClose").onclick=()=>crmModal.classList.remove("open");
+crmModal.addEventListener("click",e=>{if(e.target===crmModal)crmModal.classList.remove("open");});
 
 /** Registra en HubSpot lo que el entregable de un turno recomienda, si el turno trae [HUBSPOT]. */
 async function registerInHubspot(payload,btn){
   const original=btn.textContent;
   btn.disabled=true; btn.textContent="Registrando en HubSpot…";
   try{
-    const r=await fetch("/api/hubspot",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"registerOpportunity",payload})});
+    const r=await fetch("/api/hubspot",{method:"POST",headers:hubspotHeaders(true),body:JSON.stringify({action:"registerOpportunity",payload})});
     const d=await r.json();
     if(d.code==="CRM_NOT_CONFIGURED"){ btn.textContent="CRM no configurado"; alert(d.error); return; }
     if(d.error){ btn.textContent="Error"; alert(d.error); return; }
@@ -2126,8 +2322,66 @@ async function createInCanva(entendi,btn){
   }
 })();
 
-/* Auto-abre el wizard la primera vez que alguien entra sin configuración guardada. */
-if(!store.loadWizardData()) setTimeout(openWizard, 500);
+/* ══════════════════════════════════════════════════════════════
+   PANEL DE ADMINISTRACIÓN — solo admin (oculto por CSS para invitada).
+   Números reales agregados desde el store namespaced de admin: nunca mezcla datos de
+   invitada (viven en otro namespace) y nunca inventa nada — si algo no está conectado,
+   lo dice tal cual.
+   ══════════════════════════════════════════════════════════════ */
+const adminModal=document.getElementById("adminModal"), adminBody=document.getElementById("adminBody");
+const adminBtn=document.getElementById("adminBtn");
+if(adminBtn){
+  adminBtn.onclick=()=>{ renderAdminPanel(); adminModal.classList.add("open"); };
+  document.getElementById("adminClose").onclick=()=>adminModal.classList.remove("open");
+  adminModal.addEventListener("click",e=>{if(e.target===adminModal)adminModal.classList.remove("open");});
+}
+
+async function renderAdminPanel(){
+  const runs=store.loadRuns();
+  const approvals=store.loadApprovals();
+  const worked=runs.filter(r=>r.measurement&&r.measurement.feedback==="funciono").length;
+  const notWorked=runs.filter(r=>r.measurement&&r.measurement.feedback==="no_funciono").length;
+  const unrated=runs.length-worked-notWorked;
+  const pendingAppr=approvals.filter(a=>a.status==="pending").length;
+  const decidedAppr=approvals.length-pendingAppr;
+  const hubspotRegs=runs.filter(r=>r.hubspot&&r.hubspot.status==="registered").length;
+
+  adminBody.innerHTML=`
+    <div class="meas-stats">
+      <div class="mstat"><b>${runs.length}</b><span>Proyectos</span></div>
+      <div class="mstat ok"><b>${worked}</b><span>Funcionaron</span></div>
+      <div class="mstat bad"><b>${notWorked}</b><span>No funcionaron</span></div>
+      <div class="mstat"><b>${unrated}</b><span>Sin evaluar</span></div>
+    </div>
+    <div class="meas-stats" style="margin-top:10px">
+      <div class="mstat"><b>${pendingAppr}</b><span>Aprob. pendientes</span></div>
+      <div class="mstat"><b>${decidedAppr}</b><span>Aprob. decididas</span></div>
+      <div class="mstat"><b>${hubspotRegs}</b><span>Registros en HubSpot</span></div>
+      <div class="mstat" id="adminClickStat"><b>…</b><span>Clics reales totales</span></div>
+    </div>
+    <div class="crm-hint" style="margin-top:14px;font-size:12.5px">
+      <b>CRM:</b> ${crmConfigured?(crmSource==="cliente"?"conectado con tu llave":"conectado por Vercel"):"no conectado"}<br>
+      <b>Canva:</b> ${canvaConfigured?"configurado":"no configurado"}${canvaConfigured&&canvaConnectedUntil>Date.now()?" — conexión activa ahora":""}
+    </div>`;
+
+  // Clics reales: suma los conteos de todos los proyectos que tengan link de rastreo,
+  // vía /api/track-stats — si Upstash no está configurado, se dice honestamente.
+  const trackedIds=runs.filter(r=>r.measurement&&r.measurement.trackUrl).map(r=>r.id);
+  const clickEl=document.getElementById("adminClickStat");
+  if(!trackedIds.length){ clickEl.querySelector("b").textContent="0"; return; }
+  try{
+    const r=await fetch("/api/track-stats?ids="+encodeURIComponent(trackedIds.join(",")));
+    const d=await r.json();
+    if(!d.configured){ clickEl.innerHTML=`<b>—</b><span>Clics reales (conecta Upstash)</span>`; return; }
+    const total=trackedIds.reduce((sum,id)=>sum+((d.counts&&d.counts[id])||0),0);
+    clickEl.querySelector("b").textContent=String(total);
+  }catch(e){ clickEl.querySelector("b").textContent="—"; }
+}
+
+/* Auto-abre el wizard la primera vez que alguien entra sin configuración guardada — solo
+   para admin. "Mi negocio" es configuración real del negocio; invitada no lo necesita para
+   probar la app (puede chatear directo, sin ese paso). */
+if(currentRole==="admin" && !store.loadWizardData()) setTimeout(openWizard, 500);
 </script>
 </body>
 </html>

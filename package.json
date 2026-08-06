@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "node dev-server.js",
-    "test": "node --test tests/hubspot-adapter.test.js tests/wizard-core.test.js tests/store.test.js",
+    "test": "node --test tests/hubspot-adapter.test.js tests/wizard-core.test.js tests/store.test.js tests/session.test.js",
     "test:e2e": "node tests/e2e.mjs"
   },
   "devDependencies": {

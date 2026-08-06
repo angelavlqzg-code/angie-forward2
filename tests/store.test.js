@@ -53,3 +53,60 @@ test("sin storage disponible (Node sin localStorage inyectado): no truena, devue
   assert.deepEqual(store.loadRuns(), []);
   store.saveWizardData({ x: 1 }); // no debe lanzar
 });
+
+test("crmKeys: vacío por default", () => {
+  const store = createStore(makeMemoryStorage());
+  assert.deepEqual(store.loadCrmKeys(), {});
+});
+
+test("crmKeys: saveCrmKey guarda por CRM sin pisar otros CRMs", () => {
+  const store = createStore(makeMemoryStorage());
+  store.saveCrmKey("hubspot", "pat-abc123");
+  store.saveCrmKey("pipedrive", "pd-xyz789");
+  const keys = store.loadCrmKeys();
+  assert.equal(keys.hubspot.apiKey, "pat-abc123");
+  assert.equal(keys.pipedrive.apiKey, "pd-xyz789");
+});
+
+test("crmKeys: saveCrmKey vuelto a llamar sobreescribe solo ese CRM", () => {
+  const store = createStore(makeMemoryStorage());
+  store.saveCrmKey("hubspot", "pat-viejo");
+  store.saveCrmKey("hubspot", "pat-nuevo");
+  assert.equal(store.loadCrmKeys().hubspot.apiKey, "pat-nuevo");
+});
+
+test("crmKeys: clearCrmKey quita solo ese CRM", () => {
+  const store = createStore(makeMemoryStorage());
+  store.saveCrmKey("hubspot", "pat-abc123");
+  store.saveCrmKey("pipedrive", "pd-xyz789");
+  store.clearCrmKey("hubspot");
+  const keys = store.loadCrmKeys();
+  assert.equal(keys.hubspot, undefined);
+  assert.equal(keys.pipedrive.apiKey, "pd-xyz789");
+});
+
+test("namespace: dos stores con distinto namespace sobre el MISMO storage no se mezclan", () => {
+  const backend = makeMemoryStorage();
+  const admin = createStore(backend, "");
+  const invitada = createStore(backend, "guest_");
+
+  admin.addRun({ id: "1", request: "proyecto real de la administradora" });
+  invitada.addRun({ id: "1", request: "proyecto de prueba de la invitada" });
+
+  assert.equal(admin.loadRuns().length, 1);
+  assert.equal(admin.loadRuns()[0].request, "proyecto real de la administradora");
+  assert.equal(invitada.loadRuns().length, 1);
+  assert.equal(invitada.loadRuns()[0].request, "proyecto de prueba de la invitada");
+
+  admin.saveCrmKey("hubspot", "pat-de-admin");
+  invitada.saveCrmKey("hubspot", "pat-de-invitada");
+  assert.equal(admin.loadCrmKeys().hubspot.apiKey, "pat-de-admin");
+  assert.equal(invitada.loadCrmKeys().hubspot.apiKey, "pat-de-invitada");
+});
+
+test("namespace: vacío (\"\") sigue usando las llaves de siempre, sin prefijo (retrocompatible)", () => {
+  const backend = makeMemoryStorage();
+  const store = createStore(backend, "");
+  store.saveWizardData({ companyName: "Forward AI" });
+  assert.deepEqual(JSON.parse(backend.getItem("forwardai_wizard_v1")), { companyName: "Forward AI" });
+});

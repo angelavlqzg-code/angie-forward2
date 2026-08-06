@@ -97,6 +97,9 @@ configurado" en vez de fallar o simular algo.
   listo): `CANVA_CLIENT_ID`, `CANVA_CLIENT_SECRET`, `CANVA_REDIRECT_URI`.
 - **Upstash** (conteo real de clics en el tablero de medición): `UPSTASH_REDIS_REST_URL`,
   `UPSTASH_REDIS_REST_TOKEN`.
+- **Acceso con contraseña** (para compartir la liga con alguien más, con permisos
+  distintos a los tuyos): `ANGIE_ADMIN_PASSWORD`, `ANGIE_GUEST_PASSWORD`,
+  `ANGIE_SESSION_SECRET`. Sin esto, la liga sigue abierta para cualquiera, como hasta hoy.
 
 Los pasos exactos para conseguir cada llave están explicados uno por uno en el archivo
 `.env.example` de la carpeta del proyecto — ábrelo con el Bloc de notas, ahí dice todo.
