@@ -41,6 +41,9 @@
     background:var(--bg2);border:1px solid var(--bord);border-radius:20px;padding:6px 14px;max-width:38vw}
   .proj b{color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .h-right{margin-left:auto;display:flex;align-items:center;gap:9px}
+  .conn-group{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--bord);border-radius:20px;padding:4px 6px}
+  .conn-group .role-badge{border:none;background:none;padding:2px 4px}
+  .conn-group .crm-pill{border:none;background:none;padding:2px 6px}
   .status{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--mut);padding-right:4px}
   .beat{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 rgba(0,179,174,.6);animation:beat 2.4s infinite}
   @keyframes beat{0%{box-shadow:0 0 0 0 rgba(0,179,174,.5)}70%{box-shadow:0 0 0 8px rgba(0,179,174,0)}100%{box-shadow:0 0 0 0 rgba(0,179,174,0)}}
@@ -50,6 +53,17 @@
   .hbtn.primary:hover{filter:brightness(1.08)}
   .hbtn.icon{width:38px;justify-content:center;padding:0}
   .toggle{display:none}
+
+  /* ── SUBNAV (herramientas: Proyectos, Medición, Aprobaciones, Imagen, Mi negocio, Admin) ── */
+  .subnav{position:relative;z-index:4;border-bottom:1px solid var(--bord);background:rgba(246,247,251,.7);flex-shrink:0}
+  .subnav-in{display:flex;align-items:center;gap:8px;padding:9px 18px;overflow-x:auto;scrollbar-width:none}
+  .subnav-in::-webkit-scrollbar{display:none}
+  .subnav-sep{width:1px;align-self:stretch;min-height:22px;background:var(--bord2);flex-shrink:0;margin:0 2px}
+  .sbtn{height:36px;flex-shrink:0;border:1px solid transparent;background:none;color:var(--mut);border-radius:9px;padding:0 12px;
+    font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:7px;transition:.16s}
+  .sbtn:hover{color:var(--ink);background:var(--bg3);border-color:var(--bord2)}
+  .sbtn.active{color:var(--purple-lt);background:rgba(108,92,231,.1);border-color:rgba(108,92,231,.35)}
+  .sbtn.apr-badge{position:relative}
 
   /* ── PHASE BAR ── */
   .phases{position:relative;z-index:4;display:flex;gap:8px;align-items:center;padding:9px 18px;border-bottom:1px solid var(--bord);
@@ -395,7 +409,8 @@
   body[data-role="invitada"] #wizBtn,
   body[data-role="invitada"] #adminBtn,
   body[data-role="invitada"] #canvaPill,
-  body[data-role="invitada"] .canva-btn{display:none!important}
+  body[data-role="invitada"] .canva-btn,
+  body[data-role="invitada"] .subnav-sep{display:none!important}
   .apr-filter{margin-bottom:12px}
   .apr-filter select{width:100%;background:var(--bg3);border:1px solid var(--bord2);color:var(--ink);border-radius:11px;padding:10px 12px;font-family:var(--body);font-size:13px}
   .apr-filter select:focus{border-color:var(--purple);outline:none}
@@ -476,6 +491,8 @@
     .lock .s{display:none}
     .status{display:none}
     .crm-pill{display:none}
+    .conn-group{background:none;border:none;padding:0}
+    .subnav-in{padding:8px 12px}
     /* Con "Medición" se sumó un botón más al header — en 390px ya no caben todos los
        íconos aunque los labels estén ocultos. En vez de esconder alguno (perderías acceso
        a esa función en celular), se deja la fila deslizable: nada se pierde, solo se desliza. */
@@ -527,20 +544,28 @@
     <b id="projName" contenteditable="true" spellcheck="false" data-tip="Clic para renombrar">Proyecto sin título</b>
   </div>
   <div class="h-right">
-    <div class="role-badge" id="roleBadge" style="display:none"></div>
-    <button type="button" class="crm-pill clickable off" id="crmPill" title="Conexión con CRM — clic para conectar o cambiar tu llave"><span class="dot"></span><span id="crmPillTxt">CRM: revisando…</span></button>
-    <button type="button" class="crm-pill clickable off" id="canvaPill" title="Conexión con Canva — clic para conectar"><span class="dot"></span><span id="canvaPillTxt">Canva: revisando…</span></button>
     <div class="status"><span class="beat"></span> <span id="statusText">Angie está lista</span></div>
-    <button class="hbtn" id="wizBtn" aria-label="Configurar mi negocio" data-tip="Configurar mi negocio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span class="label">Mi negocio</span></button>
-    <button class="hbtn" id="adminBtn" aria-label="Panel de administración" data-tip="Panel de administración"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span class="label">Admin</span></button>
-    <button class="hbtn" id="projectsBtn" aria-label="Proyectos anteriores" data-tip="Proyectos anteriores"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span class="label">Proyectos</span></button>
-    <button class="hbtn" id="measureBtn" aria-label="Medición y resultados" data-tip="Medición y resultados"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg><span class="label">Medición</span></button>
-    <button class="hbtn apr-badge" id="aprBtn" aria-label="Bandeja de aprobaciones" data-tip="Aprobaciones"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><span class="label">Aprobaciones</span><span class="apr-count" id="aprCount" style="display:none">0</span></button>
-    <button class="hbtn" id="studioBtn" aria-label="Estudio de imagen" data-tip="Estudio de imagen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span class="label">Imagen</span></button>
+    <div class="conn-group" id="connGroup">
+      <div class="role-badge" id="roleBadge" style="display:none"></div>
+      <button type="button" class="crm-pill clickable off" id="crmPill" title="Conexión con CRM — clic para conectar o cambiar tu llave"><span class="dot"></span><span id="crmPillTxt">CRM: revisando…</span></button>
+      <button type="button" class="crm-pill clickable off" id="canvaPill" title="Conexión con Canva — clic para conectar"><span class="dot"></span><span id="canvaPillTxt">Canva: revisando…</span></button>
+    </div>
     <button class="hbtn primary" id="newProj" aria-label="Nuevo proyecto" data-tip="Nuevo proyecto"><span class="label">Nuevo proyecto</span><span aria-hidden="true">+</span></button>
     <button class="hbtn icon toggle" id="orchToggle" aria-label="Ver orquestación" data-tip="Ver orquestación">◧</button>
   </div>
 </header>
+
+<nav class="subnav" id="subnav" aria-label="Navegación de herramientas">
+  <div class="subnav-in">
+    <button class="sbtn" id="projectsBtn" aria-label="Proyectos anteriores" data-tip="Proyectos anteriores"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span class="label">Proyectos</span></button>
+    <button class="sbtn" id="measureBtn" aria-label="Medición y resultados" data-tip="Medición y resultados"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg><span class="label">Medición</span></button>
+    <button class="sbtn apr-badge" id="aprBtn" aria-label="Bandeja de aprobaciones" data-tip="Aprobaciones"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><span class="label">Aprobaciones</span><span class="apr-count" id="aprCount" style="display:none">0</span></button>
+    <button class="sbtn" id="studioBtn" aria-label="Estudio de imagen" data-tip="Estudio de imagen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span class="label">Imagen</span></button>
+    <span class="subnav-sep" aria-hidden="true"></span>
+    <button class="sbtn" id="wizBtn" aria-label="Configurar mi negocio" data-tip="Configurar mi negocio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span class="label">Mi negocio</span></button>
+    <button class="sbtn" id="adminBtn" aria-label="Panel de administración" data-tip="Panel de administración"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span class="label">Admin</span></button>
+  </div>
+</nav>
 
 <div class="phases" id="phases"></div>
 
