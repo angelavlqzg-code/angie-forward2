@@ -85,6 +85,24 @@ Vercel es quien pone tu app en internet. Gratis.
 
 ---
 
+## Conexiones opcionales (agrégalas cuando quieras — no bloquean nada)
+
+Todas se activan igual: Vercel → tu proyecto → **Settings → Environment Variables** →
+agregas las llaves → **Deployments → el último → ⋯ → Redeploy** (1 minuto). Sin ellas,
+Angie sigue funcionando normal — cada botón que las necesita simplemente avisa "no
+configurado" en vez de fallar o simular algo.
+
+- **HubSpot** (registrar contactos/deals desde el entregable): `HUBSPOT_ACCESS_TOKEN`.
+- **Canva** (botón "Crear en Canva" — abre un diseño nuevo en tu cuenta con el título
+  listo): `CANVA_CLIENT_ID`, `CANVA_CLIENT_SECRET`, `CANVA_REDIRECT_URI`.
+- **Upstash** (conteo real de clics en el tablero de medición): `UPSTASH_REDIS_REST_URL`,
+  `UPSTASH_REDIS_REST_TOKEN`.
+
+Los pasos exactos para conseguir cada llave están explicados uno por uno en el archivo
+`.env.example` de la carpeta del proyecto — ábrelo con el Bloc de notas, ahí dice todo.
+
+---
+
 ## Cómo cambiarle cosas después
 
 Todo el "cerebro" de Angie es texto. Está en `public/index.html`, en la parte que empieza

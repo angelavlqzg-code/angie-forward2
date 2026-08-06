@@ -49,9 +49,23 @@ const server = http.createServer(async (req, res) => {
       const vReq = { method: req.method, body, headers: req.headers, query: Object.fromEntries(url.searchParams) };
       const vRes = {
         _status: 200,
+        _headers: {},
+        _sent: false,
         status(code) { this._status = code; return this; },
-        json(obj) { res.writeHead(this._status, { "content-type": "application/json" }); res.end(JSON.stringify(obj)); },
-        end(v) { res.writeHead(this._status); res.end(v); },
+        setHeader(k, v) { this._headers[k] = v; return this; },
+        getHeader(k) { return this._headers[k]; },
+        json(obj) {
+          this.setHeader("content-type", "application/json");
+          res.writeHead(this._status, this._headers);
+          res.end(JSON.stringify(obj));
+          this._sent = true;
+        },
+        end(v) {
+          if (this._sent) return; // evita doble writeHead si json()/end() ya se llamó
+          res.writeHead(this._status, this._headers);
+          res.end(v);
+          this._sent = true;
+        },
       };
       await handler(vReq, vRes);
     } catch (err) {
