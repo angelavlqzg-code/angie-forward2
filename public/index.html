@@ -342,6 +342,9 @@
   .wiz-b .field input:focus,.wiz-b .field textarea:focus{border-color:var(--purple);outline:none}
   .wiz-b .field select{width:100%;background:var(--bg3);border:1px solid var(--bord2);color:var(--ink);border-radius:11px;padding:12px 13px;font-family:var(--body);font-size:14px}
   .wiz-req{color:var(--amber);margin-left:3px}
+  .wiz-express{margin-top:14px;background:rgba(0,179,174,.08);border:1px solid rgba(0,179,174,.3);border-radius:11px;padding:11px 13px;font-size:12.5px;color:var(--teal-lt);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .wiz-express button{background:none;border:none;color:var(--purple-lt);font-weight:600;font-size:12.5px;text-decoration:underline;padding:0}
+  .wiz-express button:hover{color:var(--purple)}
   .wiz-doc-row{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--bord);border-radius:11px;padding:10px 13px;margin-bottom:8px}
   .wiz-doc-row .dl{flex:1;font-size:12.5px;color:var(--mut)}
   .wiz-doc-row .dl b{color:var(--ink);display:block;font-size:13px}
@@ -1555,8 +1558,18 @@ document.getElementById("stTopic").addEventListener("keydown",e=>{if(e.key==="En
    usada como contexto real de los agentes (no texto libre suelto).
    ══════════════════════════════════════════════════════════════ */
 let wizardData = store.loadWizardData() || emptyWizardData();
-let wizStep = 0; // 0..WIZARD_STEPS.length-1, y WIZARD_STEPS.length = paso de resumen
-const TOTAL_WIZ_STEPS = WIZARD_STEPS.length + 1;
+let wizStep = 0; // 0..visibleSteps().length-1, y visibleSteps().length = paso de resumen
+
+/* ── Onboarding menos abrumador (feedback real de David: la primera vez se siente pesado) ──
+   El wizard completo son 8 pasos + resumen. Para quien nunca ha usado IA de marketing,
+   3 de esos pasos (restricciones, columna vertebral, tono/documentos) son 100% opcionales
+   y las más abstractas — nada ahí es requerido para activar a Angie. En "modo exprés" se
+   saltan por default y quedan disponibles después desde "Mi negocio" si quiere afinar más.
+   No cambia nada para quien ya tiene experiencia — mismo wizard completo de siempre. */
+const EXPRESS_SKIP_IDS = ["restricciones","columna","marca"];
+function isExpressMode(){ return wizardData.experience==="nueva" && wizardData.wizFullMode!==true; }
+function visibleSteps(){ return isExpressMode() ? WIZARD_STEPS.filter(s=>!EXPRESS_SKIP_IDS.includes(s.id)) : WIZARD_STEPS; }
+function totalWizSteps(){ return visibleSteps().length+1; }
 
 /* ── Modo de UX por nivel de experiencia ──
    El paso 1 del wizard ya preguntaba "¿qué tanto has usado IA para marketing?", pero solo
@@ -1607,7 +1620,8 @@ wizSkip.onclick=closeWizard;
 
 function renderDots(){
   wizDots.innerHTML="";
-  for(let i=0;i<TOTAL_WIZ_STEPS;i++){
+  const total=totalWizSteps();
+  for(let i=0;i<total;i++){
     const d=document.createElement("div");
     d.className="wiz-dot"+(i<wizStep?" done":i===wizStep?" now":"");
     wizDots.appendChild(d);
@@ -1639,13 +1653,23 @@ function fieldHTML(f,data){
 
 function renderWizStep(){
   renderDots();
-  if(wizStep<WIZARD_STEPS.length){
-    const step=WIZARD_STEPS[wizStep];
+  const steps=visibleSteps();
+  if(wizStep<steps.length){
+    const step=steps[wizStep];
     wizTitle.textContent=step.title;
-    wizSub.textContent=`Paso ${wizStep+1} de ${TOTAL_WIZ_STEPS} · ${step.subtitle}`;
+    wizSub.textContent=`Paso ${wizStep+1} de ${totalWizSteps()} · ${step.subtitle}`;
     wizBody.innerHTML=step.fields.map(f=>fieldHTML(f,wizardData)).join("");
+    if(step.id==="bienvenida"){
+      if(wizardData.experience==="nueva"){
+        const note=wizardData.wizFullMode===true
+          ? `<div class="wiz-express">Vas a ver todas las preguntas. <button type="button" id="wizFullToggle">Mejor solo lo esencial</button></div>`
+          : `<div class="wiz-express">✓ Como es tu primera vez, te voy a preguntar solo lo esencial (${totalWizSteps()} pasos en vez de ${WIZARD_STEPS.length+1}). <button type="button" id="wizFullToggle">Prefiero ver todas las preguntas</button></div>`;
+        wizBody.insertAdjacentHTML("beforeend",note);
+        document.getElementById("wizFullToggle").onclick=()=>{ wizardData.wizFullMode=!(wizardData.wizFullMode===true); store.saveWizardData(wizardData); renderWizStep(); };
+      }
+    }
     wizBody.querySelectorAll("[data-f]").forEach(el=>{
-      el.addEventListener("input",()=>{wizardData[el.dataset.f]=el.value; store.saveWizardData(wizardData); if(el.dataset.f==="experience")applyUxMode();});
+      el.addEventListener("input",()=>{wizardData[el.dataset.f]=el.value; store.saveWizardData(wizardData); if(el.dataset.f==="experience"){applyUxMode();renderWizStep();}});
     });
     wizBody.querySelectorAll("[data-chips]").forEach(box=>{
       const fid=box.dataset.chips;
@@ -1680,7 +1704,7 @@ function renderWizStep(){
   } else {
     // paso de resumen
     wizTitle.textContent="Resumen y vista previa";
-    wizSub.textContent=`Paso ${TOTAL_WIZ_STEPS} de ${TOTAL_WIZ_STEPS} · Revisa, corrige lo que quieras, y confirma`;
+    wizSub.textContent=`Paso ${totalWizSteps()} de ${totalWizSteps()} · Revisa, corrige lo que quieras, y confirma`;
     const v=validateAll(wizardData);
     wizBody.innerHTML = (v.ok?"":`<div class="wiz-miss">Antes de activar, te falta: ${v.missing.join(", ")}.</div>`) +
       `<div class="wiz-summary">${buildContextText(wizardData).split("\n").slice(1).map(l=>`<div>${esc(l)}</div>`).join("")}</div>
@@ -1712,8 +1736,9 @@ async function generateWizPreview(){
 
 wizBack.onclick=()=>{ if(wizStep>0){wizStep--; renderWizStep();} };
 wizNext.onclick=()=>{
-  if(wizStep<WIZARD_STEPS.length){
-    const r=validateStep(WIZARD_STEPS[wizStep],wizardData);
+  const steps=visibleSteps();
+  if(wizStep<steps.length){
+    const r=validateStep(steps[wizStep],wizardData);
     if(!r.ok){ alert("Antes de seguir, completa: "+r.missing.join(", ")); return; }
     wizStep++; renderWizStep();
   } else {
