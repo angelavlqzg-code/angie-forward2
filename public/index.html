@@ -52,6 +52,11 @@
   .hbtn.primary{background:linear-gradient(92deg,var(--purple),#5646d6);border-color:transparent;color:#fff}
   .hbtn.primary:hover{filter:brightness(1.08)}
   .hbtn.icon{width:38px;justify-content:center;padding:0}
+  /* Mientras Angie está trabajando, "Nuevo proyecto" se desactiva a propósito (para no
+     interrumpir a medio entregable) — pero antes no se veía distinto de un botón normal,
+     así que dar clic "no hacía nada" sin explicación. Ahora se ve apagado de verdad. */
+  .hbtn:disabled{opacity:.5;cursor:not-allowed}
+  .hbtn:disabled:hover{filter:none}
   .toggle{display:none}
 
   /* ── SUBNAV (herramientas: Proyectos, Medición, Aprobaciones, Imagen, Mi negocio, Admin) ── */
@@ -1217,8 +1222,15 @@ const scrim=document.getElementById("scrim");
 document.getElementById("navToggle").onclick=()=>document.body.classList.toggle("nav-open");
 document.getElementById("orchToggle").onclick=()=>document.body.classList.toggle("orch-open");
 scrim.onclick=()=>document.body.classList.remove("nav-open","orch-open");
-document.getElementById("newProj").onclick=()=>{
-  if(busy)return;
+const newProjBtn=document.getElementById("newProj");
+newProjBtn.onclick=()=>{
+  if(busy){
+    // Antes esto simplemente no hacía nada — con el botón viéndose igual de "activo",
+    // parecía roto. Ahora, mientras Angie trabaja, el botón se ve apagado (ver CSS
+    // .hbtn:disabled) y si aun así le dan clic, se los decimos en vez de quedarnos callados.
+    toast(newProjBtn,"Angie sigue trabajando…");
+    return;
+  }
   history=[];pending=[];paint();resetAgents();renderPhases({brief:"active"});orchIdle();
   projTitled=false; projName.textContent="Proyecto sin título";
   currentProjectId="proj-"+Date.now(); // nuevo proyecto = nuevo id para clasificar sus aprobaciones aparte
@@ -1437,7 +1449,7 @@ function toast(btn,txt){const o=btn.innerHTML;btn.innerHTML=txt;btn.classList.ad
 async function send(){
   const text=q.value.trim();
   if((!text&&!pending.length)||busy)return;
-  busy=true; go.disabled=true; hero.style.display="none";
+  busy=true; go.disabled=true; newProjBtn.disabled=true; hero.style.display="none";
   // Todo lo que sigue va dentro de un try/finally amplio: si algo truena en cualquier
   // punto (no solo en la llamada de red), "busy" siempre se libera al final. Antes, si
   // algo fallaba en esta preparación (antes del try interno), "busy" se quedaba en true
@@ -1656,7 +1668,7 @@ async function send(){
     resetAgents();renderPhases({brief:"active"});orchIdle();setStatusText("Angie está lista");
   }
   }finally{
-    busy=false; go.disabled=false; feed.scrollTop=feed.scrollHeight; q.focus();
+    busy=false; go.disabled=false; newProjBtn.disabled=false; feed.scrollTop=feed.scrollHeight; q.focus();
   }
 }
 
