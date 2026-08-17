@@ -41,6 +41,9 @@
     background:var(--bg2);border:1px solid var(--bord);border-radius:20px;padding:6px 14px;max-width:38vw}
   .proj b{color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .h-right{margin-left:auto;display:flex;align-items:center;gap:9px}
+  .conn-group{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--bord);border-radius:20px;padding:4px 6px}
+  .conn-group .role-badge{border:none;background:none;padding:2px 4px}
+  .conn-group .crm-pill{border:none;background:none;padding:2px 6px}
   .status{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--mut);padding-right:4px}
   .beat{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 rgba(0,179,174,.6);animation:beat 2.4s infinite}
   @keyframes beat{0%{box-shadow:0 0 0 0 rgba(0,179,174,.5)}70%{box-shadow:0 0 0 8px rgba(0,179,174,0)}100%{box-shadow:0 0 0 0 rgba(0,179,174,0)}}
@@ -49,7 +52,23 @@
   .hbtn.primary{background:linear-gradient(92deg,var(--purple),#5646d6);border-color:transparent;color:#fff}
   .hbtn.primary:hover{filter:brightness(1.08)}
   .hbtn.icon{width:38px;justify-content:center;padding:0}
+  /* Mientras Angie está trabajando, "Nuevo proyecto" se desactiva a propósito (para no
+     interrumpir a medio entregable) — pero antes no se veía distinto de un botón normal,
+     así que dar clic "no hacía nada" sin explicación. Ahora se ve apagado de verdad. */
+  .hbtn:disabled{opacity:.5;cursor:not-allowed}
+  .hbtn:disabled:hover{filter:none}
   .toggle{display:none}
+
+  /* ── SUBNAV (herramientas: Proyectos, Medición, Aprobaciones, Imagen, Mi negocio, Admin) ── */
+  .subnav{position:relative;z-index:4;border-bottom:1px solid var(--bord);background:rgba(246,247,251,.7);flex-shrink:0}
+  .subnav-in{display:flex;align-items:center;gap:8px;padding:9px 18px;overflow-x:auto;scrollbar-width:none}
+  .subnav-in::-webkit-scrollbar{display:none}
+  .subnav-sep{width:1px;align-self:stretch;min-height:22px;background:var(--bord2);flex-shrink:0;margin:0 2px}
+  .sbtn{height:36px;flex-shrink:0;border:1px solid transparent;background:none;color:var(--mut);border-radius:9px;padding:0 12px;
+    font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:7px;transition:.16s}
+  .sbtn:hover{color:var(--ink);background:var(--bg3);border-color:var(--bord2)}
+  .sbtn.active{color:var(--purple-lt);background:rgba(108,92,231,.1);border-color:rgba(108,92,231,.35)}
+  .sbtn.apr-badge{position:relative}
 
   /* ── PHASE BAR ── */
   .phases{position:relative;z-index:4;display:flex;gap:8px;align-items:center;padding:9px 18px;border-bottom:1px solid var(--bord);
@@ -69,6 +88,7 @@
   .left{border-right:1px solid var(--bord);padding:14px 12px 30px}
   .right{border-left:1px solid var(--bord);padding:14px 13px 30px}
   .side-h{font-family:var(--disp);font-size:11px;letter-spacing:.14em;color:var(--dim);font-weight:700;text-transform:uppercase;margin:2px 4px 11px}
+  .side-hint{font-size:11.5px;line-height:1.5;color:var(--mut);background:var(--bg2);border:1px solid var(--bord);border-radius:10px;padding:9px 11px;margin:0 4px 14px}
 
   /* agent sidebar */
   .search{width:100%;background:var(--bg2);border:1px solid var(--bord);border-radius:10px;color:var(--ink);padding:9px 11px;font-family:var(--body);font-size:12.5px;margin-bottom:9px}
@@ -175,6 +195,15 @@
   .appr .lab{font-family:var(--disp);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:7px;display:flex;align-items:center;gap:7px}
   .appr ul{padding-left:17px} .appr li{font-size:13px;line-height:1.5;color:var(--ink);margin-bottom:3px}
 
+  /* crítica constructiva: una idea de un especialista, no una aprobación pendiente */
+  .critica{background:rgba(108,92,231,.06);border:1px solid rgba(108,92,231,.28);border-radius:12px;padding:13px 15px;margin-top:12px}
+  .critica .lab{font-family:var(--disp);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple-lt);margin-bottom:7px;display:flex;align-items:center;gap:7px}
+  .critica .ctext{font-size:13px;line-height:1.55;color:var(--ink);margin-bottom:11px}
+  .critica .cacts{display:flex;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--mut)}
+  .critica .cacts button{font-size:12.5px;font-weight:600;border-radius:9px;padding:8px 13px;border:1px solid var(--bord2);background:var(--bg2);color:var(--ink);transition:.16s}
+  .critica .cacts button:hover{border-color:var(--purple);background:var(--bg3)}
+  .critica .cacts button.go{background:linear-gradient(92deg,var(--purple),#5646d6);color:#fff;border-color:transparent;font-weight:700}
+
   /* piece / image */
   .media{background:var(--bg2);border:1px solid var(--bord);border-radius:var(--r);padding:14px;margin-top:12px}
   .media .lab{font-family:var(--disp);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
@@ -219,6 +248,11 @@
   .orow .otime{font-size:9.5px;color:var(--dim);margin-top:6px;text-align:right}
   .orow.done{border-color:rgba(0,179,174,.3)}
   .orch-note{font-size:11px;color:var(--dim);line-height:1.5;margin-top:12px;border-top:1px solid var(--bord);padding-top:11px}
+
+  /* Modo principiante: menos jerga técnica (sin códigos de agente ni metadatos de
+     documento/dependencia) — se queda con lo que sí importa: qué se hizo y el resultado. */
+  body[data-uxmode="principiante"] .orow .oc{display:none}
+  body[data-uxmode="principiante"] .orow .ometa{display:none}
 
   /* ── COMPOSER ── */
   .bar{border-top:1px solid var(--bord);padding:12px 28px 14px;background:rgba(255,255,255,.92);flex-shrink:0}
@@ -293,6 +327,7 @@
   .studio-b{padding:18px 20px 22px}
   .field{margin-bottom:15px}
   .field>label{display:block;font-family:var(--disp);font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+  .field-hint{font-size:12px;color:var(--dim);line-height:1.4;margin:-4px 0 8px}
   .field textarea{width:100%;background:var(--bg3);border:1px solid var(--bord2);color:var(--ink);border-radius:11px;padding:12px 13px;font-family:var(--body);font-size:14px;line-height:1.5;resize:vertical;min-height:56px}
   .field textarea:focus{border-color:var(--purple);outline:none}
   .opts{display:flex;flex-wrap:wrap;gap:7px}
@@ -327,6 +362,9 @@
   .wiz-b .field input:focus,.wiz-b .field textarea:focus{border-color:var(--purple);outline:none}
   .wiz-b .field select{width:100%;background:var(--bg3);border:1px solid var(--bord2);color:var(--ink);border-radius:11px;padding:12px 13px;font-family:var(--body);font-size:14px}
   .wiz-req{color:var(--amber);margin-left:3px}
+  .wiz-express{margin-top:14px;background:rgba(0,179,174,.08);border:1px solid rgba(0,179,174,.3);border-radius:11px;padding:11px 13px;font-size:12.5px;color:var(--teal-lt);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .wiz-express button{background:none;border:none;color:var(--purple-lt);font-weight:600;font-size:12.5px;text-decoration:underline;padding:0}
+  .wiz-express button:hover{color:var(--purple)}
   .wiz-doc-row{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--bord);border-radius:11px;padding:10px 13px;margin-bottom:8px}
   .wiz-doc-row .dl{flex:1;font-size:12.5px;color:var(--mut)}
   .wiz-doc-row .dl b{color:var(--ink);display:block;font-size:13px}
@@ -353,6 +391,35 @@
   .crm-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--dim)}
   .crm-pill.on .dot{background:var(--teal)} .crm-pill.on{color:var(--teal-lt)}
   .crm-pill.off .dot{background:var(--amber)} .crm-pill.off{color:var(--amber)}
+  .crm-pill.clickable{cursor:pointer;font:inherit;background:var(--bg2)}
+  .crm-pill.clickable:hover{border-color:var(--purple)}
+  .crm-list{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .crm-opt{background:var(--bg2);border:1px solid var(--bord2);color:var(--ink);border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:7px}
+  .crm-opt.on{border-color:var(--purple);color:var(--purple-lt);background:rgba(108,92,231,.08)}
+  .crm-opt.soon{color:var(--dim)}
+  .soon-tag{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:var(--bg3);border:1px solid var(--bord2);border-radius:20px;padding:2px 7px;color:var(--dim)}
+  .crm-soon{background:var(--bg3);border:1px solid var(--bord);border-radius:11px;padding:14px;font-size:12.5px;color:var(--mut)}
+  .crm-status{font-size:12.5px;color:var(--mut);margin-bottom:14px}
+  .crm-acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .crm-hint{font-size:11.5px;color:var(--dim);margin-top:10px;line-height:1.5}
+  #authGate{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px}
+  #authCard{width:100%;max-width:340px;background:var(--white);border:1px solid var(--bord);border-radius:16px;padding:32px 26px;text-align:center;box-shadow:0 12px 40px rgba(12,16,36,.08)}
+  #authCard input{width:100%;background:var(--bg2);border:1px solid var(--bord2);color:var(--ink);border-radius:11px;padding:12px 13px;font-family:var(--body);font-size:14px;margin-bottom:10px;text-align:left}
+  #authCard input:focus{border-color:var(--purple);outline:none}
+  .role-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--mut);border:1px solid var(--bord2);border-radius:20px;padding:5px 11px;background:var(--bg2)}
+  .role-badge.invitada{color:var(--amber);border-color:rgba(184,121,15,.35)}
+  .role-badge button{background:none;border:none;color:var(--purple-lt);font-weight:600;font-size:11px;padding:0;margin-left:4px;text-decoration:underline}
+  /* Invitada (tester): sin Canva ni "Mi negocio" — son integraciones/config real de la
+     administradora. CRM, aprobaciones y medición sí quedan (datos ya aislados por namespace,
+     y CRM porque invitada conecta SU PROPIA llave — ver api/hubspot.js). */
+  body[data-role="invitada"] #wizBtn,
+  body[data-role="invitada"] #adminBtn,
+  body[data-role="invitada"] #canvaPill,
+  body[data-role="invitada"] .canva-btn,
+  body[data-role="invitada"] .subnav-sep{display:none!important}
+  .apr-filter{margin-bottom:12px}
+  .apr-filter select{width:100%;background:var(--bg3);border:1px solid var(--bord2);color:var(--ink);border-radius:11px;padding:10px 12px;font-family:var(--body);font-size:13px}
+  .apr-filter select:focus{border-color:var(--purple);outline:none}
   .apr-badge{position:relative}
   .apr-count{position:absolute;top:-5px;right:-5px;background:var(--amber);color:#1a1200;font-size:10px;font-weight:800;border-radius:10px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 3px}
   .apr-list{display:flex;flex-direction:column;gap:10px}
@@ -381,6 +448,40 @@
   .proj-item .pbody .said{color:var(--mut);margin-bottom:8px;font-style:italic}
   .proj-empty{color:var(--dim);font-size:13px;text-align:center;padding:30px 0}
 
+  /* ── Medición y resultados ── */
+  .meas-stats{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+  .mstat{flex:1;min-width:80px;background:var(--bg3);border:1px solid var(--bord);border-radius:11px;padding:11px;text-align:center}
+  .mstat b{display:block;font-family:var(--disp);font-size:20px;color:var(--ink)}
+  .mstat span{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.04em}
+  .mstat.ok b{color:var(--teal-lt)} .mstat.bad b{color:#A8362B}
+  .meas-item{background:var(--bg3);border:1px solid var(--bord);border-radius:12px;padding:13px 15px;margin-bottom:10px}
+  .meas-fb{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}
+  .fbpill{font-size:11.5px;font-weight:600;color:var(--mut);background:var(--bg2);border:1px solid var(--bord2);border-radius:16px;padding:6px 12px;transition:.15s}
+  .fbpill.on{color:var(--ink);border-color:var(--purple)}
+  .fbpill.on.ok{color:var(--teal-lt);border-color:var(--teal);background:rgba(0,179,174,.1)}
+  .fbpill.on.bad{color:#A8362B;border-color:#E06A6A;background:rgba(224,96,96,.08)}
+  .meas-metrics{margin-top:10px;border-top:1px solid var(--bord);padding-top:10px}
+  .mrow{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink);padding:5px 0}
+  .mrow .ml{color:var(--mut);flex:1}
+  .mrow .mv{font-weight:600}
+  .mrow .mx{background:none;border:none;color:var(--dim);font-size:15px;line-height:1;padding:0 2px}
+  .mrow .mx:hover{color:#A8362B}
+  .madd-row{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}
+  .madd-row .mtxt{flex:1;min-width:100px;background:var(--bg2);border:1px solid var(--bord2);color:var(--ink);border-radius:9px;padding:8px 10px;font-family:var(--body);font-size:12.5px}
+  .madd-row .mtxt:focus{border-color:var(--purple);outline:none}
+  .madd-row .madd{font-size:12px;font-weight:600;color:var(--purple-lt);background:var(--bg2);border:1px solid var(--bord2);border-radius:9px;padding:8px 13px}
+  .madd-row .madd:hover{border-color:var(--purple)}
+  .meas-track{margin-top:10px;border-top:1px solid var(--bord);padding-top:10px}
+  .mt-lab{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px}
+  .mt-row{display:flex;gap:7px;flex-wrap:wrap}
+  .mt-row .mtxt{flex:1;min-width:140px;background:var(--bg2);border:1px solid var(--bord2);color:var(--ink);border-radius:9px;padding:8px 10px;font-family:var(--body);font-size:12.5px}
+  .mt-row .mtxt:focus{border-color:var(--purple);outline:none}
+  .mt-row .mtxt[readonly]{color:var(--mut);cursor:text}
+  .mt-row button{font-size:12px;font-weight:600;color:var(--purple-lt);background:var(--bg2);border:1px solid var(--bord2);border-radius:9px;padding:8px 13px;white-space:nowrap}
+  .mt-row button:hover{border-color:var(--purple)}
+  .mt-count{margin-top:8px;font-size:12.5px;color:var(--ink)}
+  .mt-noconf{color:var(--dim);font-style:italic}
+
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
   /* Celular: el header ya "cabía" en teoría (los labels se esconden desde los 900px), pero
@@ -396,7 +497,14 @@
     .lock .s{display:none}
     .status{display:none}
     .crm-pill{display:none}
-    .h-right{gap:5px}
+    .conn-group{background:none;border:none;padding:0}
+    .subnav-in{padding:8px 12px}
+    /* Con "Medición" se sumó un botón más al header — en 390px ya no caben todos los
+       íconos aunque los labels estén ocultos. En vez de esconder alguno (perderías acceso
+       a esa función en celular), se deja la fila deslizable: nada se pierde, solo se desliza. */
+    .h-right{gap:5px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+    .h-right::-webkit-scrollbar{display:none}
+    .h-right .hbtn{flex-shrink:0}
     .proj{display:none}
     .hero{padding-top:18px}
     .hero h1{font-size:21px}
@@ -418,6 +526,13 @@
 </head>
 <body>
 
+<div id="authGate">
+  <div id="authCard">
+    <img class="avatar" src="angie.png" alt="Angie" style="width:52px;height:52px;margin-bottom:14px">
+    <div style="font-size:13px;color:var(--mut)">Cargando…</div>
+  </div>
+</div>
+
 <div class="scrim" id="scrim"></div>
 
 <header>
@@ -435,22 +550,35 @@
     <b id="projName" contenteditable="true" spellcheck="false" data-tip="Clic para renombrar">Proyecto sin título</b>
   </div>
   <div class="h-right">
-    <div class="crm-pill off" id="crmPill" title="Estado de la integración con HubSpot"><span class="dot"></span><span id="crmPillTxt">CRM: revisando…</span></div>
     <div class="status"><span class="beat"></span> <span id="statusText">Angie está lista</span></div>
-    <button class="hbtn" id="wizBtn" aria-label="Configurar mi negocio" data-tip="Configurar mi negocio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span class="label">Mi negocio</span></button>
-    <button class="hbtn" id="projectsBtn" aria-label="Proyectos anteriores" data-tip="Proyectos anteriores"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span class="label">Proyectos</span></button>
-    <button class="hbtn apr-badge" id="aprBtn" aria-label="Bandeja de aprobaciones" data-tip="Aprobaciones"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><span class="label">Aprobaciones</span><span class="apr-count" id="aprCount" style="display:none">0</span></button>
-    <button class="hbtn" id="studioBtn" aria-label="Estudio de imagen" data-tip="Estudio de imagen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span class="label">Imagen</span></button>
+    <div class="conn-group" id="connGroup">
+      <div class="role-badge" id="roleBadge" style="display:none"></div>
+      <button type="button" class="crm-pill clickable off" id="crmPill" title="Conexión con CRM — clic para conectar o cambiar tu llave"><span class="dot"></span><span id="crmPillTxt">CRM: revisando…</span></button>
+      <button type="button" class="crm-pill clickable off" id="canvaPill" title="Conexión con Canva — clic para conectar"><span class="dot"></span><span id="canvaPillTxt">Canva: revisando…</span></button>
+    </div>
     <button class="hbtn primary" id="newProj" aria-label="Nuevo proyecto" data-tip="Nuevo proyecto"><span class="label">Nuevo proyecto</span><span aria-hidden="true">+</span></button>
     <button class="hbtn icon toggle" id="orchToggle" aria-label="Ver orquestación" data-tip="Ver orquestación">◧</button>
   </div>
 </header>
+
+<nav class="subnav" id="subnav" aria-label="Navegación de herramientas">
+  <div class="subnav-in">
+    <button class="sbtn" id="projectsBtn" aria-label="Proyectos anteriores" data-tip="Proyectos anteriores"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span class="label">Proyectos</span></button>
+    <button class="sbtn" id="measureBtn" aria-label="Medición y resultados" data-tip="Medición y resultados"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg><span class="label">Medición</span></button>
+    <button class="sbtn apr-badge" id="aprBtn" aria-label="Bandeja de aprobaciones" data-tip="Aprobaciones"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><span class="label">Aprobaciones</span><span class="apr-count" id="aprCount" style="display:none">0</span></button>
+    <button class="sbtn" id="studioBtn" aria-label="Estudio de imagen" data-tip="Estudio de imagen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span class="label">Imagen</span></button>
+    <span class="subnav-sep" aria-hidden="true"></span>
+    <button class="sbtn" id="wizBtn" aria-label="Configurar mi negocio" data-tip="Configurar mi negocio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span class="label">Mi negocio</span></button>
+    <button class="sbtn" id="adminBtn" aria-label="Panel de administración" data-tip="Panel de administración"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span class="label">Admin</span></button>
+  </div>
+</nav>
 
 <div class="phases" id="phases"></div>
 
 <main>
   <aside class="left" id="leftPanel">
     <div class="side-h">Equipo de agentes</div>
+    <div class="side-hint" id="sideHint" style="display:none">Angie elige sola quién trabaja en tu proyecto — no necesitas escoger agentes tú misma. Esta lista es solo para que veas quién está disponible.</div>
     <input class="search" id="agSearch" placeholder="Buscar agente…" aria-label="Buscar agente">
     <div class="filters" id="filters">
       <button class="fbtn on" data-f="all">Todos</button>
@@ -553,6 +681,7 @@
       <button class="x" id="aprClose" aria-label="Cerrar">×</button>
     </div>
     <div class="wiz-b" id="aprBody" style="max-height:70vh">
+      <div class="apr-filter"><select id="aprFilter" aria-label="Filtrar por proyecto"></select></div>
       <div class="apr-list" id="aprList"></div>
     </div>
   </div>
@@ -571,11 +700,112 @@
   </div>
 </div>
 
+<div class="modal" id="measureModal" role="dialog" aria-label="Medición y resultados">
+  <div class="wiz" style="max-width:640px">
+    <div class="wiz-h">
+      <img class="avatar" src="angie.png" alt="Angie">
+      <div><div class="t">Medición y resultados</div><div class="u">Cierra el ciclo: ¿funcionó o no?</div></div>
+      <button class="x" id="measureClose" aria-label="Cerrar">×</button>
+    </div>
+    <div class="wiz-b" id="measureBody" style="max-height:70vh">
+      <div id="measureSummary"></div>
+      <div class="proj-list" id="measureList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="crmModal" role="dialog" aria-label="Conectar CRM">
+  <div class="wiz" style="max-width:560px">
+    <div class="wiz-h">
+      <img class="avatar" src="angie.png" alt="Angie">
+      <div><div class="t">Conectar CRM</div><div class="u">Tu propia llave, sin tocar Vercel</div></div>
+      <button class="x" id="crmClose" aria-label="Cerrar">×</button>
+    </div>
+    <div class="wiz-b" id="crmBody" style="max-height:70vh"></div>
+  </div>
+</div>
+
+<div class="modal" id="adminModal" role="dialog" aria-label="Panel de administración">
+  <div class="wiz" style="max-width:640px">
+    <div class="wiz-h">
+      <img class="avatar" src="angie.png" alt="Angie">
+      <div><div class="t">Panel de administración</div><div class="u">La foto completa, con datos reales — nada inventado</div></div>
+      <button class="x" id="adminClose" aria-label="Cerrar">×</button>
+    </div>
+    <div class="wiz-b" id="adminBody" style="max-height:70vh"></div>
+  </div>
+</div>
+
 <script type="module">
-import { WIZARD_STEPS, emptyWizardData, validateStep, validateAll, buildContextText, collectWizardFileContents, DOCUMENT_SLOTS } from "./wizard-core.js";
+import { WIZARD_STEPS, emptyWizardData, validateStep, validateAll, buildContextText, collectWizardFileContents, DOCUMENT_SLOTS, estimateDocumentsBytes, DOCUMENTS_SAFE_LIMIT_BYTES } from "./wizard-core.js";
 import { createStore } from "./store.js";
 
-const store = createStore();
+/* ══════════════════════════════════════════════════════════════
+   ACCESO — 2 contraseñas compartidas (admin / invitada), sin cuentas individuales.
+   Se resuelve ANTES de crear el store: así sabemos qué namespace usar desde el primer
+   render y nadie ve un parpadeo de la app real antes de entrar. `await` a nivel de módulo
+   está soportado por los navegadores modernos en <script type="module"> — el resto del
+   script (todo lo que sigue) simplemente se pausa hasta que esto resuelve.
+   ══════════════════════════════════════════════════════════════ */
+const authGate=document.getElementById("authGate"), authCard=document.getElementById("authCard");
+
+async function checkAuth(){
+  try{ const r=await fetch("/api/auth"); return await r.json(); }
+  catch(e){ return {authenticated:false, role:null, configured:false, networkError:true}; }
+}
+
+function renderLoginForm(onOk, errorMsg){
+  authCard.innerHTML=`
+    <img class="avatar" src="angie.png" alt="Angie" style="width:52px;height:52px;margin-bottom:14px">
+    <div style="font-family:var(--disp);font-weight:700;font-size:19px;color:var(--ink);margin-bottom:6px">Entra a Angie</div>
+    <div style="font-size:12.5px;color:var(--mut);margin-bottom:18px">Pide tu contraseña a quien administra esta app.</div>
+    <input type="password" id="authPw" placeholder="Contraseña" autocomplete="current-password">
+    ${errorMsg?`<div style="color:#A8362B;font-size:12px;margin:-2px 0 10px;text-align:left">${esc(errorMsg)}</div>`:""}
+    <button type="button" id="authSubmit" class="hbtn primary" style="width:100%;justify-content:center;margin-top:2px">Entrar</button>`;
+  const pwInput=document.getElementById("authPw"), submitBtn=document.getElementById("authSubmit");
+  pwInput.focus();
+  const submit=async()=>{
+    const pw=pwInput.value;
+    if(!pw)return;
+    submitBtn.disabled=true; submitBtn.textContent="Entrando…";
+    try{
+      const r=await fetch("/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pw})});
+      const d=await r.json();
+      if(d.code==="AUTH_NOT_CONFIGURED"){ onOk("admin"); return; }
+      if(d.error){ renderLoginForm(onOk,d.error); return; }
+      onOk(d.role);
+    }catch(e){ renderLoginForm(onOk,"Error de red: "+e.message); }
+  };
+  submitBtn.onclick=submit;
+  pwInput.addEventListener("keydown",e=>{ if(e.key==="Enter")submit(); });
+}
+
+async function resolveRole(){
+  const initial=await checkAuth();
+  if(initial.authenticated) return initial.role||"admin";
+  return new Promise(resolve=>renderLoginForm(resolve, initial.networkError?"No se pudo verificar el acceso — revisa tu conexión.":null));
+}
+
+const currentRole=await resolveRole();
+authGate.style.display="none";
+document.body.dataset.role=currentRole; // CSS oculta lo admin-only cuando es "invitada" (ver regla body[data-role="invitada"])
+
+const store=createStore(localStorage, currentRole==="invitada"?"guest_":"");
+
+/* Indicador de rol en el header + cerrar sesión (si el acceso con contraseña está activo). */
+(async()=>{
+  const badge=document.getElementById("roleBadge");
+  const st=await checkAuth();
+  if(!st.configured) return; // modo abierto (sin contraseñas puestas todavía): no se muestra nada
+  badge.style.display="inline-flex";
+  badge.className="role-badge"+(currentRole==="invitada"?" invitada":"");
+  badge.innerHTML=(currentRole==="invitada"?"👋 Invitada":"🔑 Admin")+` <button type="button" id="logoutBtn">Salir</button>`;
+  document.getElementById("logoutBtn").onclick=async()=>{
+    await fetch("/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"logout"})});
+    location.reload();
+  };
+})();
+
 const SYSTEM = `Eres Angie, el agente coordinador del ecosistema Forward AI Agents · Marketing.
 Orquestas 24 subagentes especializados. NO ejecutas el trabajo especializado: lo orquestas, integras y entregas.
 Tu interlocutora NO es experta en marketing: te habla de objetivos de negocio. Tú traduces y decides quién trabaja.
@@ -605,7 +835,7 @@ TU EQUIPO (usa estos códigos exactos):
 A1 Estrategia de Marca y Mensajes | A2 Investigación de Mercado | A3 Competencia y Posicionamiento | A4 Priorización y Presupuesto
 B1 Audiencias y Compradores | B2 Casos y Evidencia | B3 Pipeline y Customer Journey | B4 Alianzas y Partnerships
 C1 Creativo y Conceptos | C2 Contenido | C3 Video y Multimedia | C4 Diseño y Sistema Visual
-D1 Redes Sociales y Community | D2 Web, Landing y SEO | D3 Publicidad Digital | D4 Email y CRM | D5 Relaciones Públicas y Medios
+D1 Redes Sociales y Community | D2 Web, Landing y SEO | D3 Publicidad Digital (incluye retail media) | D4 Email y CRM | D5 Relaciones Públicas y Medios
 E1 Sales Enablement | E2 Eventos, Webinars y Demos
 F1 Analítica y Reportes | F2 Performance y Optimización | F3 Automatización | F4 Activación y Adopción | F5 Gobierno y Voz de Marca
 
@@ -618,6 +848,21 @@ CÓMO PIENSA CADA AGENTE (aplica a los 24):
 - Cierra cada análisis con su implicación o su siguiente acción; nunca dejes un dato suelto.
 - REGLA ANTI-GENÉRICO: si una frase la podría decir cualquier empresa de IA, reescríbela hasta que
   solo la pueda decir Forward. Nada de relleno ni superlativos vacíos; lo concreto siempre gana.
+
+ESPECIALIZACIÓN DE D3 EN RETAIL MEDIA:
+D3 (Publicidad Digital) cubre pauta paga en general Y retail media específicamente — no es un
+agente aparte, es la misma D3 con este conocimiento extra. Actívala para esto cuando el encargo
+mencione marketplaces, vender adentro de un retailer, o pauta en Amazon/Mercado Libre/Walmart:
+- Plataformas: Amazon Ads (Sponsored Products, Sponsored Brands, Sponsored Display, DSP),
+  Mercado Ads / Mercado Libre Ads, Walmart Connect. Menciona la plataforma real que aplique al
+  contexto del negocio — nunca la inventes si el negocio no vende en marketplaces.
+- Métricas propias del canal (distintas a las de pauta digital genérica): ACOS, TACOS, share of
+  search/share of shelf, conversion rate on-platform. Misma disciplina de evidencia que el resto:
+  si el número no está autorizado, se habla de capacidad, no de resultado.
+- Si Forward AI no vende directo en marketplaces (su cliente es B2B/gobierno/RH), retail media
+  rara vez aplica al propio Forward — normalmente aplica cuando el ENCARGO es ayudar a un cliente
+  de Forward (ej. una marca de retail) a mejorar su pauta ahí. Si no está claro para quién es,
+  pregúntalo antes de inventar el contexto.
 
 PIEZAS VISUALES:
 Cuando el encargo pida algo visual (post, portada, placa, card de cita, anuncio, one-pager),
@@ -765,6 +1010,17 @@ A modern government office at dawn, wide empty desk, soft directional light, dee
 - Lo que requiere el visto bueno de dirección (una línea por punto).
 - Si no hay nada, escribe: Nada por ahora.
 
+[CRITICA] es OPCIONAL — inclúyela SOLO cuando de verdad detectas una alternativa mejor, un riesgo
+real, o algo que no cuadra en lo que se está pidiendo (no la fuerces en cada turno; la mayoría de
+las veces NO debe aparecer). No es una objeción vacía: es la opinión honesta de un especialista que
+ya vio el encargo completo. Estructura en máximo 4 líneas: (1) qué mejorarías o qué riesgo ves,
+(2) la alternativa concreta que propones, (3) termina preguntando directamente si la usuaria está
+de acuerdo en aplicarla. Nunca inventes un riesgo que no puedas sustentar con lo que sabes del
+negocio, el ADN de marca o los documentos adjuntos. Si no hay nada real que señalar, OMITE esta
+etiqueta por completo — no escribas "Nada por ahora" aquí, simplemente no la incluyas.
+[CRITICA]
+Lo que mejorarías o el riesgo que ves, la alternativa concreta, y la pregunta de si aplicarla.
+
 [HUBSPOT] es OPCIONAL — inclúyela SOLO cuando el encargo produzca un lead, oportunidad o
 contacto real que tenga sentido registrar en el CRM (por ejemplo: activaste B2, B3, D4 o E1
 sobre un prospecto o cliente concreto). NUNCA inventes un correo, nombre o empresa que la
@@ -799,7 +1055,7 @@ const AGENTS = [
   {code:"C4",name:"Diseño y Sistema Visual",ds:"Aplica el manual de marca."},
   {code:"D1",name:"Redes Sociales y Community",ds:"Presencia y comunidad."},
   {code:"D2",name:"Web, Landing y SEO",ds:"El destino que convierte."},
-  {code:"D3",name:"Publicidad Digital",ds:"Pauta que rinde."},
+  {code:"D3",name:"Publicidad Digital",ds:"Pauta que rinde — incluye retail media (Amazon Ads, Mercado Ads, Walmart Connect)."},
   {code:"D4",name:"Email y CRM",ds:"Nutrición sobre tu base."},
   {code:"D5",name:"Relaciones Públicas y Medios",ds:"Anuncio, prensa y opinión."},
   {code:"E1",name:"Sales Enablement",ds:"Herramientas para cerrar."},
@@ -966,10 +1222,18 @@ const scrim=document.getElementById("scrim");
 document.getElementById("navToggle").onclick=()=>document.body.classList.toggle("nav-open");
 document.getElementById("orchToggle").onclick=()=>document.body.classList.toggle("orch-open");
 scrim.onclick=()=>document.body.classList.remove("nav-open","orch-open");
-document.getElementById("newProj").onclick=()=>{
-  if(busy)return;
+const newProjBtn=document.getElementById("newProj");
+newProjBtn.onclick=()=>{
+  if(busy){
+    // Antes esto simplemente no hacía nada — con el botón viéndose igual de "activo",
+    // parecía roto. Ahora, mientras Angie trabaja, el botón se ve apagado (ver CSS
+    // .hbtn:disabled) y si aun así le dan clic, se los decimos en vez de quedarnos callados.
+    toast(newProjBtn,"Angie sigue trabajando…");
+    return;
+  }
   history=[];pending=[];paint();resetAgents();renderPhases({brief:"active"});orchIdle();
   projTitled=false; projName.textContent="Proyecto sin título";
+  currentProjectId="proj-"+Date.now(); // nuevo proyecto = nuevo id para clasificar sus aprobaciones aparte
   wrap.querySelectorAll(".turn").forEach(t=>t.remove());
   hero.style.display=""; setStatusText("Angie está lista");
 };
@@ -977,6 +1241,9 @@ function setStatusText(t){document.getElementById("statusText").textContent=t;}
 
 /* ── Nombre de proyecto editable ── */
 let projTitled=false;
+// Identifica el proyecto activo (todo lo que pasa entre un "Nuevo proyecto" y el siguiente),
+// para poder clasificar aprobaciones y ejecuciones por proyecto en vez de un solo montón.
+let currentProjectId="proj-"+Date.now();
 const projName=document.getElementById("projName");
 projName.addEventListener("focus",()=>{ if(projName.textContent.trim()==="Proyecto sin título"){ const r=document.createRange();r.selectNodeContents(projName);const s=getSelection();s.removeAllRanges();s.addRange(r);} });
 projName.addEventListener("input",()=>{ projTitled=projName.textContent.trim().length>0 && projName.textContent.trim()!=="Proyecto sin título"; });
@@ -1182,7 +1449,7 @@ function toast(btn,txt){const o=btn.innerHTML;btn.innerHTML=txt;btn.classList.ad
 async function send(){
   const text=q.value.trim();
   if((!text&&!pending.length)||busy)return;
-  busy=true; go.disabled=true; hero.style.display="none";
+  busy=true; go.disabled=true; newProjBtn.disabled=true; hero.style.display="none";
   // Todo lo que sigue va dentro de un try/finally amplio: si algo truena en cualquier
   // punto (no solo en la llamada de red), "busy" siempre se libera al final. Antes, si
   // algo fallaba en esta preparación (antes del try interno), "busy" se quedaba en true
@@ -1200,10 +1467,21 @@ async function send(){
   const turn=document.createElement("div"); turn.className="turn";
   turn.innerHTML=`<div class="ask"></div>
     ${docs.length?`<div class="askdocs">${docs.map(()=>`<span class="adoc"></span>`).join("")}</div>`:""}
-    <div class="think">${AV}<span class="dots"><span></span><span></span><span></span></span> Angie está leyendo y orquestando al equipo…</div>`;
+    <div class="think">${AV}<span class="dots"><span></span><span></span><span></span></span> <span id="thinkMsg">Angie está leyendo y orquestando al equipo…</span></div>`;
   turn.querySelector(".ask").textContent=text||"(documentos adjuntos)";
   if(docs.length)turn.querySelectorAll(".adoc").forEach((el,i)=>el.textContent=docs[i].name);
   wrap.appendChild(turn); feed.scrollTop=feed.scrollHeight;
+
+  // Peticiones reales a la IA (con documentos, contexto largo, etc.) a veces tardan más de
+  // lo que cualquier prueba automatizada simula. Sin este aviso y sin límite, la persona ve
+  // el mismo mensaje fijo por minutos y no sabe si Angie sigue trabajando o si algo se rompió
+  // — es exactamente el patrón "se ve roto pero no lo está" que ya causó dos reportes. Ahora:
+  // a los 20s el mensaje cambia para avisar que puede tardar, y a los 100s se cancela solita
+  // con una explicación clara (en vez de quedarse pegada para siempre sin decir nada).
+  const thinkEl=turn.querySelector("#thinkMsg");
+  const reassureTimer=setTimeout(()=>{ if(thinkEl)thinkEl.textContent="Sigue trabajando — las peticiones complejas pueden tardar hasta un par de minutos…"; },20000);
+  const ctrl=new AbortController();
+  const abortTimer=setTimeout(()=>ctrl.abort(),100000);
 
   const content=[];
   docs.forEach(d=>{
@@ -1216,8 +1494,11 @@ async function send(){
 
   try{
     let res;
-    try{res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:SYSTEM,messages:history})});}
-    catch(net){throw new Error("DIAGNÓSTICO: no hay conexión con el servidor de IA (red o CORS). Ábrelo desde tu liga de Vercel.");}
+    try{res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:SYSTEM,messages:history}),signal:ctrl.signal});}
+    catch(net){
+      if(net&&net.name==="AbortError")throw new Error("Angie tardó más de lo normal (más de 100 segundos) y se canceló la petición para no dejarte esperando sin explicación. Puede ser una petición muy compleja, muchos documentos adjuntos, o el servidor con mucha carga en ese momento — intenta de nuevo, o parte tu encargo en partes más chicas.");
+      throw new Error("DIAGNÓSTICO: no hay conexión con el servidor de IA (red o CORS). Ábrelo desde tu liga de Vercel.");
+    } finally { clearTimeout(reassureTimer); clearTimeout(abortTimer); }
     const bodyText=await res.text();
     if(!res.ok)throw new Error(`DIAGNÓSTICO: el servidor respondió ${res.status}. ${bodyText.slice(0,300)}`);
     let data; try{data=JSON.parse(bodyText);}catch(e){throw new Error("DIAGNÓSTICO: respuesta ilegible del servidor. "+bodyText.slice(0,300));}
@@ -1226,7 +1507,7 @@ async function send(){
     if(!raw)throw new Error("La respuesta llegó vacía. Intenta de nuevo.");
     history.push({role:"assistant",content:raw});
 
-    const ALLTAGS="ENTENDI|AGENTES|PASOS|ENTREGABLE|PIEZA|IMAGEN|APROBACION|HUBSPOT|SIGUIENTE";
+    const ALLTAGS="ENTENDI|AGENTES|PASOS|ENTREGABLE|PIEZA|IMAGEN|APROBACION|CRITICA|HUBSPOT|SIGUIENTE";
     const grab=(tag,next)=>{const m=raw.match(new RegExp(`\\[${tag}\\]([\\s\\S]*?)(?=\\[(?:${next||ALLTAGS})\\]|$)`,"i"));return m?m[1].trim():"";};
     const entendi   =grab("ENTENDI");
     const agentesRaw=grab("AGENTES");
@@ -1235,11 +1516,13 @@ async function send(){
     const piezaRaw  =grab("PIEZA");
     const imagenRaw =grab("IMAGEN");
     const aprobRaw  =grab("APROBACION");
+    const criticaRaw=grab("CRITICA");
     const hubspotRaw=grab("HUBSPOT");
     const siguiente =grab("SIGUIENTE");
 
     const codes=[...new Set((agentesRaw.match(/\b[A-F][1-5]\b/g)||[]))];
     const appr=aprobRaw.split("\n").map(l=>l.replace(/^[-*]\s*/,"").trim()).filter(l=>l&&!/^nada por ahora\.?$/i.test(l));
+    const critica=(criticaRaw&&!/^nada por ahora\.?$/i.test(criticaRaw))?criticaRaw:"";
     let hubspotPayload=null;
     if(hubspotRaw){
       try{
@@ -1285,7 +1568,7 @@ async function send(){
     let html=`<div class="coord">
       <div class="coord-h">${AV}<div><div class="t">Angie está coordinando tu proyecto</div><div class="u">Coordinadora · integró a ${codes.length||"los"} especialista${codes.length===1?"":"s"}</div></div></div>
       ${entendi?`<div class="said">${esc(entendi)}</div>`:""}
-      ${codes.length?`<div class="chips">${codes.map(c=>`<span class="chip-ag" title="${esc(byCode[c]?.name||"")}">${c}</span>`).join("")}</div>`:""}
+      ${codes.length?`<div class="chips">${codes.map(c=>`<span class="chip-ag" title="${esc(byCode[c]?.name||"")}">${uxMode()==="principiante"?esc(byCode[c]?.name||c):c}</span>`).join("")}</div>`:""}
       ${siguiente?`<div class="nxt"><b>Próxima acción:</b> ${esc(siguiente)}</div>`:""}
     </div>`;
 
@@ -1310,21 +1593,35 @@ async function send(){
       <div class="hint"></div><div class="extra"></div></div>`;}
     if(imagenRaw){html+=`<div class="media shot"><div class="lab">La imagen</div><div class="shotbox"><div class="think">${AV}<span class="dots"><span></span><span></span><span></span></span> Generando la imagen…</div></div></div>`;}
     if(appr.length){html+=`<div class="appr"><div class="lab">Necesita tu aprobación</div><ul>${appr.map(a=>`<li>${esc(a)}</li>`).join("")}</ul></div>`;}
+    if(critica){html+=`<div class="critica">
+      <div class="lab">💡 Angie sugiere algo distinto</div>
+      <div class="ctext">${esc(critica)}</div>
+      <div class="cacts">
+        <button class="dbtn go" data-c="apply">Sí, aplícalo</button>
+        <button class="dbtn" data-c="keep">Está bien así</button>
+      </div>
+    </div>`;}
 
     html+=`<div class="dacts">
       <button class="dbtn go" data-d="approve">Aprobar entregable</button>
       <button class="dbtn" data-d="adjust">Solicitar ajustes</button>
       <button class="dbtn" data-d="export">Exportar</button>
       <button class="dbtn" data-d="pieces">Crear piezas</button>
+      <button class="dbtn canva-btn" data-d="canva" title="Abre un diseño nuevo en tu cuenta de Canva con el título listo — tú pegas el contenido">Crear en Canva</button>
       ${hubspotPayload?`<button class="dbtn" id="hsBtn">Registrar en HubSpot</button>`:""}
     </div>`;
 
     card.innerHTML=html;
     turn.querySelector(".think").replaceWith(card);
+    // Modo avanzado: abre solo el panel de orquestación (relevante en tablet/celular,
+    // donde vive detrás de un botón — en escritorio ya está siempre visible).
+    if(uxMode()==="avanzado")document.body.classList.add("orch-open");
 
     // Bandeja de aprobaciones: cada aprobación pedida por el coordinador queda registrada,
-    // no solo mostrada en el turno — así sobrevive aunque cambies de proyecto.
-    if(appr.length){ store.addApprovals(appr); refreshAprCount(); }
+    // no solo mostrada en el turno — así sobrevive aunque cambies de proyecto. Se etiqueta
+    // con el proyecto activo para poder clasificarlas cuando hay varios proyectos a la vez.
+    const projLabel=projName.textContent.trim()||"Proyecto sin título";
+    if(appr.length){ store.addApprovals(appr,{projectId:currentProjectId,projectLabel:projLabel}); refreshAprCount(); }
 
     // Registro de la ejecución (para trazabilidad e historial — ver bandeja/])
     const runId="run-"+Date.now();
@@ -1332,6 +1629,7 @@ async function send(){
       id:runId, at:new Date().toISOString(), request:text||"(documentos adjuntos)",
       agentCodes:codes, entendi, entregable, approvals:appr,
       hubspot: hubspotPayload?{status:"pending"}:null,
+      projectId:currentProjectId, projectLabel:projLabel,
     });
 
     // wiring de módulos
@@ -1353,6 +1651,14 @@ async function send(){
       else if(d==="export"){const txt=entendi+"\n\n"+entregable;const a=document.createElement("a");a.href="data:text/markdown;charset=utf-8,"+encodeURIComponent(txt);a.download="entregable-"+Date.now()+".md";a.click();}
       else if(d==="pieces"){q.value="Convierte este entregable en piezas visuales para redes.";q.focus();}
     });
+    // wiring de la crítica constructiva
+    if(critica){
+      const critEl=card.querySelector(".critica");
+      critEl.querySelectorAll(".cacts button").forEach(b=>b.onclick=()=>{
+        if(b.dataset.c==="apply"){ q.value="Sí, aplica esto: "+critica; q.focus(); }
+        critEl.querySelector(".cacts").innerHTML=b.dataset.c==="apply"?"Listo, dale enviar para que Angie lo aplique.":"Entendido, sigue como está.";
+      });
+    }
     // wiring del registro en HubSpot — va DESPUÉS del wiring genérico de .dacts .dbtn
     // (hsBtn también trae la clase .dbtn para heredar el estilo; si fuera antes, el
     // forEach genérico de arriba le pisaría el onclick).
@@ -1363,6 +1669,11 @@ async function send(){
         if(result) store.updateRun(runId,{hubspot:{status:"registered",contactId:result.contact?.id,companyId:result.company?.id,dealId:result.deal?.id}});
       };
     }
+    // wiring de "Crear en Canva" — abre un diseño nuevo (título listo, contenido lo pega
+    // Angela) en la cuenta de Canva conectada. Va después del wiring genérico de .dacts
+    // .dbtn por la misma razón que hsBtn: si fuera antes, ese forEach le pisaría el onclick.
+    const canvaBtn=card.querySelector(".canva-btn");
+    if(canvaBtn) canvaBtn.onclick=()=>createInCanva(entendi,canvaBtn);
 
     feed.scrollTop=feed.scrollHeight;
   }catch(err){
@@ -1371,7 +1682,7 @@ async function send(){
     resetAgents();renderPhases({brief:"active"});orchIdle();setStatusText("Angie está lista");
   }
   }finally{
-    busy=false; go.disabled=false; feed.scrollTop=feed.scrollHeight; q.focus();
+    busy=false; go.disabled=false; newProjBtn.disabled=false; feed.scrollTop=feed.scrollHeight; q.focus();
   }
 }
 
@@ -1402,7 +1713,7 @@ async function genStudio(extra){
     const r=await fetch("/api/imagen",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:topic+(extra?(". "+extra):""),estilo:stStyle,formato:stFmt})});
     const d=await r.json(); if(d.error)throw new Error(d.error);
     res.innerHTML=`<img src="${d.dataUrl}" alt="Imagen generada">
-      <div class="meta"><span>Estilo: <b>${d.preset||stStyle}</b></span><a class="linkout" href="${d.dataUrl}" download="forward-ai-${Date.now()}.png" style="margin-top:0">Descargar imagen</a></div>
+      <div class="meta"><span>Estilo: <b>${d.preset||stStyle}</b></span>${d.canal?`<span>Canal: <b>${esc(d.canal)}</b></span>`:""}<a class="linkout" href="${d.dataUrl}" download="forward-ai-${Date.now()}.png" style="margin-top:0">Descargar imagen</a></div>
       <div class="variants" id="stVars"></div>`;
     const VARS=[["Más cinematográfica","cine",""],["Más editorial","editorial",""],["Más minimalista","minimal",""],["Más contraste",null,"con mayor contraste y drama, iluminación más marcada"],["Otra ruta",null,"otra interpretación visual completamente distinta"]];
     const vc=document.getElementById("stVars");
@@ -1418,8 +1729,53 @@ document.getElementById("stTopic").addEventListener("keydown",e=>{if(e.key==="En
    usada como contexto real de los agentes (no texto libre suelto).
    ══════════════════════════════════════════════════════════════ */
 let wizardData = store.loadWizardData() || emptyWizardData();
-let wizStep = 0; // 0..WIZARD_STEPS.length-1, y WIZARD_STEPS.length = paso de resumen
-const TOTAL_WIZ_STEPS = WIZARD_STEPS.length + 1;
+let wizStep = 0; // 0..visibleSteps().length-1, y visibleSteps().length = paso de resumen
+
+/* ── Onboarding menos abrumador (feedback real de David: la primera vez se siente pesado) ──
+   El wizard completo son 8 pasos + resumen. Para quien nunca ha usado IA de marketing,
+   3 de esos pasos (restricciones, columna vertebral, tono/documentos) son 100% opcionales
+   y las más abstractas — nada ahí es requerido para activar a Angie. En "modo exprés" se
+   saltan por default y quedan disponibles después desde "Mi negocio" si quiere afinar más.
+   No cambia nada para quien ya tiene experiencia — mismo wizard completo de siempre. */
+const EXPRESS_SKIP_IDS = ["restricciones","columna","marca"];
+function isExpressMode(){ return wizardData.experience==="nueva" && wizardData.wizFullMode!==true; }
+function visibleSteps(){ return isExpressMode() ? WIZARD_STEPS.filter(s=>!EXPRESS_SKIP_IDS.includes(s.id)) : WIZARD_STEPS; }
+function totalWizSteps(){ return visibleSteps().length+1; }
+
+/* ── Modo de UX por nivel de experiencia ──
+   El paso 1 del wizard ya preguntaba "¿qué tanto has usado IA para marketing?", pero solo
+   afectaba el TONO de las respuestas de Angie, nunca la interfaz. Ahora sí cambia algo real:
+   - principiante (nueva): menos jerga técnica (sin códigos de agente ni metadatos), copy
+     con más guía, y un hint en la barra lateral explicando que no hay que elegir agentes.
+   - avanzado (experta): mismo detalle completo de siempre, más el panel de orquestación
+     abierto automáticamente (en tablet/celular, donde normalmente hay que abrirlo a mano).
+   - normal (algo, o sin definir): el comportamiento de siempre, sin cambios. */
+function uxMode(){
+  const exp=wizardData&&wizardData.experience;
+  if(exp==="nueva")return "principiante";
+  if(exp==="experta")return "avanzado";
+  return "normal";
+}
+const HERO_COPY={
+  principiante:"Soy Angie, coordino a tus 24 especialistas de marketing. No necesitas saber de marketing ni conocer nombres de agentes: cuéntame qué quieres lograr, como se lo explicarías a una persona. Si tienes documentos —manual de marca, un caso, un brief— adjúntalos y trabajo sobre ellos.",
+  normal:"Soy Angie, coordino a tus 24 especialistas de marketing. No me pidas agentes ni tácticas: háblame de tu objetivo, en tus palabras. Adjunta tus documentos —manual de marca, un caso, un brief— y trabajo sobre ellos, no sobre suposiciones.",
+  avanzado:"Coordino 24 agentes especializados por área. Dame el encargo directo —objetivo, comprador, restricciones— o pega tu brief completo. Vas a ver qué agentes se activan y su razonamiento en el panel de orquestación.",
+};
+const PLACEHOLDER_COPY={
+  principiante:"Ej. Quiero que más gobiernos conozcan a Forward AI… o dicta con el micrófono 🎙",
+  normal:"Describe tu proyecto… o dicta con el micrófono 🎙",
+  avanzado:"Encargo directo, o pega tu brief… o dicta con el micrófono 🎙",
+};
+function applyUxMode(){
+  const mode=uxMode();
+  document.body.dataset.uxmode=mode;
+  const heroP=document.querySelector(".hero p");
+  if(heroP)heroP.textContent=HERO_COPY[mode];
+  if(typeof q!=="undefined"&&q)q.placeholder=PLACEHOLDER_COPY[mode];
+  const hint=document.getElementById("sideHint");
+  if(hint)hint.style.display=mode==="principiante"?"":"none";
+}
+applyUxMode();
 
 const wizardModal=document.getElementById("wizardModal");
 const wizBody=document.getElementById("wizBody"), wizDots=document.getElementById("wizDots"),
@@ -1435,7 +1791,8 @@ wizSkip.onclick=closeWizard;
 
 function renderDots(){
   wizDots.innerHTML="";
-  for(let i=0;i<TOTAL_WIZ_STEPS;i++){
+  const total=totalWizSteps();
+  for(let i=0;i<total;i++){
     const d=document.createElement("div");
     d.className="wiz-dot"+(i<wizStep?" done":i===wizStep?" now":"");
     wizDots.appendChild(d);
@@ -1447,7 +1804,7 @@ function fieldHTML(f,data){
   const req=f.required?'<span class="wiz-req">*</span>':"";
   if(f.type==="text")return `<div class="field"><label>${f.label}${req}</label><input type="text" data-f="${f.id}" value="${esc(val||"")}"></div>`;
   if(f.type==="date")return `<div class="field"><label>${f.label}${req}</label><input type="date" data-f="${f.id}" value="${esc(val||"")}"></div>`;
-  if(f.type==="textarea")return `<div class="field"><label>${f.label}${req}</label><textarea data-f="${f.id}" rows="3">${esc(val||"")}</textarea></div>`;
+  if(f.type==="textarea")return `<div class="field"><label>${f.label}${req}</label>${f.hint?`<div class="field-hint">${esc(f.hint)}</div>`:""}<textarea data-f="${f.id}" rows="3" placeholder="${esc(f.placeholder||"")}">${esc(val||"")}</textarea></div>`;
   if(f.type==="select"){
     const opts=f.options.map(([v,l])=>`<option value="${v}" ${val===v?"selected":""}>${l}</option>`).join("");
     return `<div class="field"><label>${f.label}${req}</label><select data-f="${f.id}"><option value="">Selecciona…</option>${opts}</select></div>`;
@@ -1467,13 +1824,23 @@ function fieldHTML(f,data){
 
 function renderWizStep(){
   renderDots();
-  if(wizStep<WIZARD_STEPS.length){
-    const step=WIZARD_STEPS[wizStep];
+  const steps=visibleSteps();
+  if(wizStep<steps.length){
+    const step=steps[wizStep];
     wizTitle.textContent=step.title;
-    wizSub.textContent=`Paso ${wizStep+1} de ${TOTAL_WIZ_STEPS} · ${step.subtitle}`;
+    wizSub.textContent=`Paso ${wizStep+1} de ${totalWizSteps()} · ${step.subtitle}`;
     wizBody.innerHTML=step.fields.map(f=>fieldHTML(f,wizardData)).join("");
+    if(step.id==="bienvenida"){
+      if(wizardData.experience==="nueva"){
+        const note=wizardData.wizFullMode===true
+          ? `<div class="wiz-express">Vas a ver todas las preguntas. <button type="button" id="wizFullToggle">Mejor solo lo esencial</button></div>`
+          : `<div class="wiz-express">✓ Como es tu primera vez, te voy a preguntar solo lo esencial (${totalWizSteps()} pasos en vez de ${WIZARD_STEPS.length+1}). <button type="button" id="wizFullToggle">Prefiero ver todas las preguntas</button></div>`;
+        wizBody.insertAdjacentHTML("beforeend",note);
+        document.getElementById("wizFullToggle").onclick=()=>{ wizardData.wizFullMode=!(wizardData.wizFullMode===true); store.saveWizardData(wizardData); renderWizStep(); };
+      }
+    }
     wizBody.querySelectorAll("[data-f]").forEach(el=>{
-      el.addEventListener("input",()=>{wizardData[el.dataset.f]=el.value; store.saveWizardData(wizardData);});
+      el.addEventListener("input",()=>{wizardData[el.dataset.f]=el.value; store.saveWizardData(wizardData); if(el.dataset.f==="experience"){applyUxMode();renderWizStep();}});
     });
     wizBody.querySelectorAll("[data-chips]").forEach(box=>{
       const fid=box.dataset.chips;
@@ -1488,14 +1855,27 @@ function renderWizStep(){
         const slot=inp.dataset.doc; const files=[...e.target.files];
         files.forEach(f=>{
           if(f.size>9*1048576){alert(`"${f.name}" pesa más de 9 MB.`);return;}
+          if(estimateDocumentsBytes(wizardData)+f.size>DOCUMENTS_SAFE_LIMIT_BYTES){
+            alert(`"${f.name}" no se adjuntó: entre todos los documentos ya suman casi el límite que tu navegador permite guardar (${Math.round(DOCUMENTS_SAFE_LIMIT_BYTES/1024/1024)} MB en total). Quita alguno o usa una versión más ligera de este archivo.`);
+            return;
+          }
           const ext=f.name.split(".").pop().toLowerCase();
           const isTxt=["txt","md","csv"].includes(ext);
           const reader=new FileReader();
           reader.onload=()=>{
             const item={name:f.name,kind:isTxt?"txt":ext==="pdf"?"pdf":"img"};
             if(isTxt)item.text=reader.result; else {item.b64=reader.result.split(",")[1];item.mime=f.type||"application/octet-stream";}
+            const prevDocs=(wizardData.documents[slot]||[]).slice();
             (wizardData.documents[slot]=wizardData.documents[slot]||[]).push(item);
-            store.saveWizardData(wizardData);
+            try{
+              store.saveWizardData(wizardData);
+            }catch(err){
+              // Si no cupo en localStorage, no dejamos el archivo "adjunto a medias" en
+              // memoria — se revierte para que la lista de documentos siga siendo honesta
+              // con lo que de verdad quedó guardado.
+              wizardData.documents[slot]=prevDocs;
+              alert(err.message);
+            }
             renderWizStep();
           };
           if(isTxt)reader.readAsText(f); else reader.readAsDataURL(f);
@@ -1508,7 +1888,7 @@ function renderWizStep(){
   } else {
     // paso de resumen
     wizTitle.textContent="Resumen y vista previa";
-    wizSub.textContent=`Paso ${TOTAL_WIZ_STEPS} de ${TOTAL_WIZ_STEPS} · Revisa, corrige lo que quieras, y confirma`;
+    wizSub.textContent=`Paso ${totalWizSteps()} de ${totalWizSteps()} · Revisa, corrige lo que quieras, y confirma`;
     const v=validateAll(wizardData);
     wizBody.innerHTML = (v.ok?"":`<div class="wiz-miss">Antes de activar, te falta: ${v.missing.join(", ")}.</div>`) +
       `<div class="wiz-summary">${buildContextText(wizardData).split("\n").slice(1).map(l=>`<div>${esc(l)}</div>`).join("")}</div>
@@ -1525,29 +1905,42 @@ async function generateWizPreview(){
   const btn=document.getElementById("wizPreviewBtn"), box=document.getElementById("wizPreviewBox");
   btn.disabled=true; btn.textContent="Angie está pensando…";
   box.style.display="block"; box.textContent="Interpretando tu negocio…";
+  const ctrl=new AbortController();
+  const abortTimer=setTimeout(()=>ctrl.abort(),100000);
   try{
     const sys=SYSTEM+"\n\n"+buildContextText(wizardData);
     const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
       system:sys,
       messages:[{role:"user",content:"Con el contexto de negocio de arriba, dame SOLO un adelanto breve (máximo 6 líneas): una columna vertebral tentativa en una frase, y qué códigos de agente (formato A1, B2, etc.) activarías para el primer encargo y por qué. No generes el entregable completo todavía, no uses las etiquetas [ENTENDI]/[AGENTES]/etc., solo texto corrido."}]
-    })});
+    }),signal:ctrl.signal});
     const d=await r.json();
     if(d.error)throw new Error(d.error);
     box.textContent=(d.text||"").trim()||"Angie no devolvió nada. Intenta de nuevo.";
-  }catch(e){ box.textContent="No se pudo generar la vista previa: "+e.message; }
+  }catch(e){
+    const msg=(e&&e.name==="AbortError")?"Angie tardó más de lo normal (más de 100 segundos). Intenta de nuevo.":(e&&e.message)||"Falla desconocida.";
+    box.textContent="No se pudo generar la vista previa: "+msg;
+  } finally { clearTimeout(abortTimer); }
   btn.disabled=false; btn.textContent="✨ Regenerar vista previa";
 }
 
 wizBack.onclick=()=>{ if(wizStep>0){wizStep--; renderWizStep();} };
 wizNext.onclick=()=>{
-  if(wizStep<WIZARD_STEPS.length){
-    const r=validateStep(WIZARD_STEPS[wizStep],wizardData);
+  const steps=visibleSteps();
+  if(wizStep<steps.length){
+    const r=validateStep(steps[wizStep],wizardData);
     if(!r.ok){ alert("Antes de seguir, completa: "+r.missing.join(", ")); return; }
     wizStep++; renderWizStep();
   } else {
     const v=validateAll(wizardData);
     if(!v.ok){ alert("Todavía falta: "+v.missing.join(", ")+". Puedes regresar a completarlo, o saltar por ahora."); return; }
-    confirmWizard();
+    // Nunca dejar que un error aquí se pierda en silencio — es el botón que activa a Angie;
+    // si algo truena (por ejemplo, documentos adjuntos que no cupieron en el navegador),
+    // la persona necesita un mensaje, no un botón que "no hace nada".
+    try{
+      confirmWizard();
+    }catch(err){
+      alert(err.message||"No se pudo activar a Angie. Intenta de nuevo, y si sigue fallando, quita alguno de los documentos adjuntos.");
+    }
   }
 };
 
@@ -1568,24 +1961,45 @@ function confirmWizard(){
   closeWizard();
   setStatusText("Angie ya conoce tu negocio — lista para tu primer encargo");
   updateCrmPill();
+  applyUxMode();
 }
 
 /* ══════════════════════════════════════════════════════════════
    BANDEJA DE APROBACIONES
    ══════════════════════════════════════════════════════════════ */
 const aprModal=document.getElementById("aprModal"), aprList=document.getElementById("aprList"), aprCount=document.getElementById("aprCount");
+const aprFilter=document.getElementById("aprFilter");
 document.getElementById("aprBtn").onclick=()=>{renderApprovals(); aprModal.classList.add("open");};
 document.getElementById("aprClose").onclick=()=>aprModal.classList.remove("open");
 aprModal.addEventListener("click",e=>{if(e.target===aprModal)aprModal.classList.remove("open");});
+aprFilter.addEventListener("change",()=>renderApprovals(aprFilter.value));
 
 function refreshAprCount(){
   const pending=store.loadApprovals().filter(a=>a.status==="pending").length;
   aprCount.style.display=pending?"flex":"none";
   aprCount.textContent=pending;
 }
-function renderApprovals(){
-  const items=store.loadApprovals();
-  if(!items.length){ aprList.innerHTML=`<div class="apr-empty">No hay nada pendiente de aprobación todavía.</div>`; return; }
+// Clasifica las aprobaciones por proyecto (varios proyectos pueden tener aprobaciones pendientes
+// al mismo tiempo): arma el selector de proyecto y filtra la lista según lo elegido. Por default
+// abre en el proyecto activo si tiene algo pendiente, si no, muestra todos.
+function renderApprovals(selectedId){
+  const all=store.loadApprovals();
+  const projMap=new Map();
+  all.forEach(a=>{
+    const pid=a.projectId||"sin-proyecto";
+    const label=a.projectLabel||"Sin proyecto (de antes de esta función)";
+    if(!projMap.has(pid))projMap.set(pid,{label,pending:0,total:0});
+    const p=projMap.get(pid); p.total++; if(a.status==="pending")p.pending++;
+  });
+  let sel=selectedId;
+  if(sel===undefined) sel=projMap.has(currentProjectId)?currentProjectId:"all";
+
+  const totalPending=all.filter(a=>a.status==="pending").length;
+  aprFilter.innerHTML=`<option value="all" ${sel==="all"?"selected":""}>Todos los proyectos (${totalPending} pendiente${totalPending===1?"":"s"})</option>`+
+    [...projMap.entries()].map(([pid,p])=>`<option value="${esc(pid)}" ${pid===sel?"selected":""}>${esc(p.label)} (${p.pending} pendiente${p.pending===1?"":"s"})</option>`).join("");
+
+  const items=sel==="all"?all:all.filter(a=>(a.projectId||"sin-proyecto")===sel);
+  if(!items.length){ aprList.innerHTML=`<div class="apr-empty">No hay nada pendiente de aprobación aquí.</div>`; return; }
   aprList.innerHTML=items.map(a=>`
     <div class="apr-item ${a.status!=="pending"?"decided":""}" data-id="${a.id}">
       <div class="tx">${esc(a.text)}</div>
@@ -1595,7 +2009,7 @@ function renderApprovals(){
   aprList.querySelectorAll(".apr-item button").forEach(b=>b.onclick=()=>{
     const id=b.closest(".apr-item").dataset.id;
     store.setApprovalStatus(id,b.dataset.a);
-    renderApprovals(); refreshAprCount();
+    renderApprovals(aprFilter.value); refreshAprCount();
   });
 }
 refreshAprCount();
@@ -1637,26 +2051,237 @@ function renderProjects(){
 }
 
 /* ══════════════════════════════════════════════════════════════
-   ESTADO DE LA INTEGRACIÓN CON HUBSPOT
+   MEDICIÓN Y RESULTADOS — cierra el ciclo: por cada proyecto ya
+   trabajado, capturar si funcionó o no, y las métricas reales que
+   la usuaria traiga (nunca las inventa Angie). Reusa store.updateRun,
+   no agrega una tabla nueva de datos.
+   ══════════════════════════════════════════════════════════════ */
+const measureModal=document.getElementById("measureModal"), measureList=document.getElementById("measureList"), measureSummary=document.getElementById("measureSummary");
+document.getElementById("measureBtn").onclick=()=>{renderMeasure(); measureModal.classList.add("open");};
+document.getElementById("measureClose").onclick=()=>measureModal.classList.remove("open");
+measureModal.addEventListener("click",e=>{if(e.target===measureModal)measureModal.classList.remove("open");});
+
+function renderMeasure(){
+  const runs=store.loadRuns();
+  if(!runs.length){
+    measureSummary.innerHTML="";
+    measureList.innerHTML=`<div class="proj-empty">Todavía no hay proyectos para medir. En cuanto le mandes un encargo real a Angie, va a aparecer aquí.</div>`;
+    return;
+  }
+  const worked=runs.filter(r=>r.measurement&&r.measurement.feedback==="funciono").length;
+  const notWorked=runs.filter(r=>r.measurement&&r.measurement.feedback==="no_funciono").length;
+  const unrated=runs.length-worked-notWorked;
+  measureSummary.innerHTML=`<div class="meas-stats">
+    <div class="mstat"><b>${runs.length}</b><span>Proyectos</span></div>
+    <div class="mstat ok"><b>${worked}</b><span>Funcionaron</span></div>
+    <div class="mstat bad"><b>${notWorked}</b><span>No funcionaron</span></div>
+    <div class="mstat"><b>${unrated}</b><span>Sin evaluar</span></div>
+  </div>`;
+  measureList.innerHTML=runs.map(r=>{
+    const fb=(r.measurement&&r.measurement.feedback)||"";
+    const metrics=(r.measurement&&r.measurement.metrics)||[];
+    return `<div class="meas-item" data-id="${esc(r.id)}">
+      <div class="pt">${esc((r.request||"").slice(0,140))}</div>
+      <div class="pmeta"><span>${new Date(r.at).toLocaleString("es-MX")}</span>${r.projectLabel?`<span>${esc(r.projectLabel)}</span>`:""}</div>
+      <div class="meas-fb">
+        <button class="fbpill ${fb==="funciono"?"on ok":""}" data-fb="funciono">Funcionó</button>
+        <button class="fbpill ${fb==="no_funciono"?"on bad":""}" data-fb="no_funciono">No funcionó</button>
+        <button class="fbpill ${!fb?"on":""}" data-fb="">Sin evaluar</button>
+      </div>
+      <div class="meas-metrics">
+        ${metrics.map((m,i)=>`<div class="mrow"><span class="ml">${esc(m.label)}</span><span class="mv">${esc(m.value)}</span><button class="mx" data-i="${i}" aria-label="Quitar métrica">×</button></div>`).join("")}
+        <div class="madd-row">
+          <input class="mtxt" data-k="label" placeholder="Métrica (ej. Impresiones)">
+          <input class="mtxt" data-k="value" placeholder="Valor">
+          <button class="madd" type="button">Agregar</button>
+        </div>
+      </div>
+      <div class="meas-track">
+        <div class="mt-lab">Clics reales</div>
+        ${(r.measurement&&r.measurement.trackUrl)?`
+          <div class="mt-row">
+            <input class="mtxt track-link" readonly value="${esc(location.origin+"/api/track?id="+encodeURIComponent(r.id)+"&to="+encodeURIComponent(r.measurement.trackUrl))}">
+            <button class="track-copy" type="button">Copiar link</button>
+          </div>
+          <div class="mt-count" data-track="${esc(r.id)}">Clics: <b>…</b></div>
+        `:`
+          <div class="mt-row">
+            <input class="mtxt track-dest" placeholder="Pega el link real donde vas a compartir esto (LinkedIn, email…)">
+            <button class="track-gen" type="button">Generar link con rastreo</button>
+          </div>
+        `}
+      </div>
+    </div>`;
+  }).join("");
+
+  measureList.querySelectorAll(".meas-item").forEach(item=>{
+    const id=item.dataset.id;
+    item.querySelectorAll(".fbpill").forEach(b=>b.onclick=()=>{
+      const run=store.loadRuns().find(r=>r.id===id);
+      const measurement={...((run&&run.measurement)||{metrics:[]}),feedback:b.dataset.fb||null};
+      store.updateRun(id,{measurement});
+      renderMeasure();
+    });
+    item.querySelectorAll(".mx").forEach(b=>b.onclick=()=>{
+      const run=store.loadRuns().find(r=>r.id===id);
+      const metrics=(((run&&run.measurement)||{}).metrics||[]).slice();
+      metrics.splice(Number(b.dataset.i),1);
+      store.updateRun(id,{measurement:{...((run&&run.measurement)||{}),metrics}});
+      renderMeasure();
+    });
+    const addBtn=item.querySelector(".madd");
+    if(addBtn)addBtn.onclick=()=>{
+      const labelI=item.querySelector('[data-k="label"]'), valueI=item.querySelector('[data-k="value"]');
+      const label=labelI.value.trim(), value=valueI.value.trim();
+      if(!label||!value)return;
+      const run=store.loadRuns().find(r=>r.id===id);
+      const metrics=(((run&&run.measurement)||{}).metrics||[]).slice();
+      metrics.push({label,value});
+      store.updateRun(id,{measurement:{...((run&&run.measurement)||{}),metrics}});
+      renderMeasure();
+    };
+    // Link con rastreo real de clics — Angela pega el destino real (su post de LinkedIn,
+    // su landing, lo que sea) y Angie genera un link intermedio (/api/track) que cuenta
+    // cada clic antes de mandar a la persona al destino real.
+    const genBtn=item.querySelector(".track-gen");
+    if(genBtn)genBtn.onclick=()=>{
+      const destI=item.querySelector(".track-dest");
+      let dest=(destI.value||"").trim();
+      if(!dest)return;
+      if(!/^https?:\/\//i.test(dest)) dest="https://"+dest;
+      const run=store.loadRuns().find(r=>r.id===id);
+      store.updateRun(id,{measurement:{...((run&&run.measurement)||{}),trackUrl:dest}});
+      renderMeasure();
+    };
+    const copyBtn=item.querySelector(".track-copy");
+    if(copyBtn)copyBtn.onclick=()=>{
+      const input=item.querySelector(".track-link");
+      navigator.clipboard.writeText(input.value).then(()=>toast(copyBtn,"Copiado ✓"));
+    };
+  });
+
+  // Conteo real de clics — nunca inventado: si Upstash no está configurado, se dice
+  // explícitamente en vez de mostrar un número falso.
+  const trackedIds=runs.filter(r=>r.measurement&&r.measurement.trackUrl).map(r=>r.id);
+  if(trackedIds.length){
+    fetch("/api/track-stats?ids="+encodeURIComponent(trackedIds.join(",")))
+      .then(r=>r.json())
+      .then(d=>{
+        trackedIds.forEach(id=>{
+          const el=measureList.querySelector(`.mt-count[data-track="${CSS.escape(id)}"]`);
+          if(!el)return;
+          if(!d.configured){ el.innerHTML='Clics: <span class="mt-noconf">conecta un contador de clics (Upstash) para ver esto — ver .env.example</span>'; return; }
+          const n=(d.counts&&d.counts[id])||0;
+          el.innerHTML=`Clics: <b>${n}</b>`;
+        });
+      })
+      .catch(()=>{
+        trackedIds.forEach(id=>{
+          const el=measureList.querySelector(`.mt-count[data-track="${CSS.escape(id)}"]`);
+          if(el)el.innerHTML='Clics: <span class="mt-noconf">no se pudo leer el conteo ahorita</span>';
+        });
+      });
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ESTADO DE LA INTEGRACIÓN CON HUBSPOT + PANEL "CONECTAR CRM"
+   Dos formas de estar conectado: el token que puso quien desplegó la app en Vercel
+   (HUBSPOT_ACCESS_TOKEN), o el que la propia usuaria pega aquí — vive SOLO en su
+   localStorage y viaja únicamente en el header x-hubspot-token de cada llamada, nunca se
+   guarda en el servidor. Si hay llave propia, gana sobre la de Vercel.
    ══════════════════════════════════════════════════════════════ */
 const crmPill=document.getElementById("crmPill"), crmPillTxt=document.getElementById("crmPillTxt");
-let crmConfigured=false;
+const crmModal=document.getElementById("crmModal"), crmBody=document.getElementById("crmBody");
+let crmConfigured=false, crmSource=null;
+
+// CRMs que la app puede llegar a soportar. Solo "hubspot" tiene adaptador real hoy — el
+// resto se lista para que se vea el camino, pero NUNCA se simula una conexión que no existe:
+// si se seleccionan, se dice honestamente "todavía no está construido".
+const CRM_CATALOG=[
+  {id:"hubspot",name:"HubSpot",ready:true},
+  {id:"salesforce",name:"Salesforce",ready:false},
+  {id:"pipedrive",name:"Pipedrive",ready:false},
+  {id:"zoho",name:"Zoho CRM",ready:false},
+];
+let crmPanelSelected="hubspot";
+
+function crmToken(){ return (store.loadCrmKeys().hubspot||{}).apiKey || null; }
+function hubspotHeaders(isJson){
+  const h=isJson?{"Content-Type":"application/json"}:{};
+  const t=crmToken();
+  if(t) h["x-hubspot-token"]=t;
+  return h;
+}
+
 async function updateCrmPill(){
   try{
-    const r=await fetch("/api/hubspot"); const d=await r.json();
-    crmConfigured=!!d.configured;
-    crmPill.className="crm-pill "+(crmConfigured?"on":"off");
-    crmPillTxt.textContent=crmConfigured?"CRM: HubSpot conectado":"CRM no configurado";
-  }catch(e){ crmPill.className="crm-pill off"; crmPillTxt.textContent="CRM: sin verificar"; }
+    const r=await fetch("/api/hubspot",{headers:hubspotHeaders(false)}); const d=await r.json();
+    crmConfigured=!!d.configured; crmSource=d.source||null;
+    crmPill.className="crm-pill clickable "+(crmConfigured?"on":"off");
+    crmPillTxt.textContent=!crmConfigured?"CRM: conectar"
+      :crmSource==="cliente"?"CRM: HubSpot (tu llave)"
+      :"CRM: HubSpot conectado";
+  }catch(e){ crmPill.className="crm-pill clickable off"; crmPillTxt.textContent="CRM: sin verificar"; }
 }
 updateCrmPill();
+
+function renderCrmPanel(){
+  const keys=store.loadCrmKeys();
+  const hasClientKey=!!(keys.hubspot&&keys.hubspot.apiKey);
+  crmBody.innerHTML=`
+    <div class="crm-list">${CRM_CATALOG.map(c=>`
+      <button type="button" class="crm-opt${c.id===crmPanelSelected?" on":""}${c.ready?"":" soon"}" data-crm="${c.id}">
+        ${c.name}${c.ready?"":'<span class="soon-tag">Próximamente</span>'}
+      </button>`).join("")}</div>
+    <div id="crmDetail"></div>`;
+  crmBody.querySelectorAll(".crm-opt").forEach(b=>b.onclick=()=>{ crmPanelSelected=b.dataset.crm; renderCrmPanel(); });
+
+  const detail=document.getElementById("crmDetail");
+  const crm=CRM_CATALOG.find(c=>c.id===crmPanelSelected);
+  if(!crm.ready){
+    detail.innerHTML=`<div class="crm-soon">${crm.name} todavía no tiene un adaptador construido en Angie — solo HubSpot funciona hoy. Si lo necesitas pronto, dile a quien administra la app.</div>`;
+    return;
+  }
+  const statusLine=!crmConfigured?"No hay ninguna conexión activa."
+    :crmSource==="cliente"?"Conectado con la llave que pegaste tú, desde este navegador."
+    :"Conectado con la llave puesta en Vercel (compartida por quien administra la app).";
+  detail.innerHTML=`
+    <div class="crm-status">${esc(statusLine)}</div>
+    <div class="field">
+      <label>Tu API key de HubSpot (app privada)</label>
+      <input type="password" id="crmKeyInput" placeholder="pat-..." value="${hasClientKey?esc(keys.hubspot.apiKey):""}" autocomplete="off">
+    </div>
+    <div class="crm-acts">
+      <button type="button" class="dbtn go" id="crmSaveBtn">Guardar</button>
+      ${hasClientKey?'<button type="button" class="dbtn" id="crmClearBtn">Quitar mi llave</button>':""}
+    </div>
+    <div class="crm-hint">Se guarda solo en este navegador — nunca la mandamos a ningún lado excepto a HubSpot mismo, cuando uses el CRM. Para generarla: HubSpot → Configuración → Integraciones → Apps privadas.</div>`;
+
+  document.getElementById("crmSaveBtn").onclick=async()=>{
+    const val=document.getElementById("crmKeyInput").value.trim();
+    if(!val){ alert("Pega tu API key primero."); return; }
+    store.saveCrmKey("hubspot",val);
+    await updateCrmPill();
+    renderCrmPanel();
+  };
+  const clearBtn=document.getElementById("crmClearBtn");
+  if(clearBtn)clearBtn.onclick=async()=>{
+    store.clearCrmKey("hubspot");
+    await updateCrmPill();
+    renderCrmPanel();
+  };
+}
+crmPill.onclick=()=>{ crmPanelSelected="hubspot"; renderCrmPanel(); crmModal.classList.add("open"); };
+document.getElementById("crmClose").onclick=()=>crmModal.classList.remove("open");
+crmModal.addEventListener("click",e=>{if(e.target===crmModal)crmModal.classList.remove("open");});
 
 /** Registra en HubSpot lo que el entregable de un turno recomienda, si el turno trae [HUBSPOT]. */
 async function registerInHubspot(payload,btn){
   const original=btn.textContent;
   btn.disabled=true; btn.textContent="Registrando en HubSpot…";
   try{
-    const r=await fetch("/api/hubspot",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"registerOpportunity",payload})});
+    const r=await fetch("/api/hubspot",{method:"POST",headers:hubspotHeaders(true),body:JSON.stringify({action:"registerOpportunity",payload})});
     const d=await r.json();
     if(d.code==="CRM_NOT_CONFIGURED"){ btn.textContent="CRM no configurado"; alert(d.error); return; }
     if(d.error){ btn.textContent="Error"; alert(d.error); return; }
@@ -1667,8 +2292,173 @@ async function registerInHubspot(payload,btn){
   finally{ setTimeout(()=>{ if(!btn.classList.contains("ok")){btn.disabled=false; btn.textContent=original;} },1800); }
 }
 
-/* Auto-abre el wizard la primera vez que alguien entra sin configuración guardada. */
-if(!store.loadWizardData()) setTimeout(openWizard, 500);
+/* ────────────────────────────────────────────────────────────────
+   Conexión con Canva (OAuth 2.0 + PKCE). No hay base de datos, así que no hay token
+   permanente guardado: el access token vive en una cookie httpOnly del servidor por 4
+   horas (lo que dura el token real de Canva). Aquí solo guardamos, en localStorage, la
+   HORA en que expira — es una pista para la UI ("¿ya conecté?"), nunca el token en sí.
+   La conexión se hace en una ventana emergente para no perder el turno de chat activo.
+   ──────────────────────────────────────────────────────────────── */
+const canvaPill=document.getElementById("canvaPill"), canvaPillTxt=document.getElementById("canvaPillTxt");
+let canvaConfigured=false;
+let canvaConnectedUntil=Number(localStorage.getItem("canvaConnectedUntil")||0);
+
+async function updateCanvaPill(){
+  try{
+    const r=await fetch("/api/canva-design"); const d=await r.json();
+    canvaConfigured=!!d.configured;
+    const connected=canvaConfigured && (d.connected || canvaConnectedUntil>Date.now());
+    canvaPill.className="crm-pill clickable "+(connected?"on":"off");
+    canvaPillTxt.textContent=!canvaConfigured?"Canva no configurado":(connected?"Canva conectado":"Canva: conectar");
+  }catch(e){ canvaPill.className="crm-pill clickable off"; canvaPillTxt.textContent="Canva: sin verificar"; }
+}
+updateCanvaPill();
+
+function openCanvaConnectPopup(){
+  return new Promise((resolve)=>{
+    const w=window.open("/api/canva-connect","canva_oauth","width=520,height=700");
+    if(!w){ resolve({ok:false,error:"El navegador bloqueó la ventana emergente. Permite pop-ups para este sitio e intenta de nuevo."}); return; }
+    function onMsg(e){
+      if(e.origin!==location.origin || !e.data || e.data.source!=="angie-canva") return;
+      window.removeEventListener("message",onMsg);
+      clearInterval(closedTimer);
+      if(e.data.type==="ok"){
+        canvaConnectedUntil=Date.now()+(4*3600-60)*1000;
+        localStorage.setItem("canvaConnectedUntil",String(canvaConnectedUntil));
+        updateCanvaPill();
+        resolve({ok:true});
+      } else {
+        resolve({ok:false,error:e.data.message||"No se pudo conectar con Canva."});
+      }
+    }
+    window.addEventListener("message",onMsg);
+    const closedTimer=setInterval(()=>{
+      if(w.closed){ clearInterval(closedTimer); window.removeEventListener("message",onMsg); resolve({ok:false,error:"Se cerró la ventana de conexión antes de terminar."}); }
+    },600);
+  });
+}
+
+canvaPill.onclick=async()=>{
+  if(!canvaConfigured){ alert("Falta configurar Canva. Ve a canva.com/developers/integrations, crea una integración pública y pega CANVA_CLIENT_ID, CANVA_CLIENT_SECRET y CANVA_REDIRECT_URI en Vercel (ver .env.example)."); return; }
+  if(canvaConnectedUntil>Date.now()){ alert("Ya está conectada. La conexión dura 4 horas; si expira, vuelve a dar clic aquí."); return; }
+  const r=await openCanvaConnectPopup();
+  if(!r.ok) alert(r.error);
+};
+
+/** Crea un diseño en blanco en la cuenta de Canva conectada, con el título del entregable
+ *  listo, y abre la URL de edición en una pestaña nueva. Canva no permite (con esta
+ *  llamada) precargar el contenido del entregable dentro del diseño — eso requeriría
+ *  plantillas de marca con Autofill, que Angela todavía no tiene configuradas en Canva. */
+async function createInCanva(entendi,btn){
+  const original=btn.textContent;
+  btn.disabled=true;
+  try{
+    if(!(canvaConnectedUntil>Date.now())){
+      btn.textContent="Conectando con Canva…";
+      const r=await openCanvaConnectPopup();
+      if(!r.ok){ btn.textContent="Error"; alert(r.error); return; }
+    }
+    btn.textContent="Creando el diseño…";
+    const title=(entendi||"Entregable Forward AI").split("\n")[0].slice(0,120);
+    const doCreate=()=>fetch("/api/canva-design",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({title,designType:"presentation"})}).then(r=>r.json());
+    let d=await doCreate();
+    if(d.code==="CANVA_NOT_CONNECTED"){
+      // el token expiró justo entre el check y la creación — reconecta una vez y reintenta
+      const r2=await openCanvaConnectPopup();
+      if(!r2.ok){ btn.textContent="Error"; alert(r2.error); return; }
+      d=await doCreate();
+    }
+    if(d.code==="CANVA_NOT_CONFIGURED"){ btn.textContent="Canva no configurado"; alert(d.error); return; }
+    if(d.error){ btn.textContent="Error"; alert(d.error); return; }
+    btn.textContent="Diseño creado ✓"; btn.classList.add("ok");
+    window.open(d.design.urls.edit_url,"_blank");
+  }catch(e){ btn.textContent="Error de red"; alert(e.message); }
+  finally{ setTimeout(()=>{ if(!btn.classList.contains("ok")){btn.disabled=false; btn.textContent=original;} },1800); }
+}
+
+/* La ventana emergente de conexión regresa aquí con ?canva=ok o ?canva=error&msg=... —
+   si venimos de un popup (window.opener existe), avisamos a la pestaña principal y nos
+   cerramos solos. Si alguien llegó por un link directo, limpiamos la URL y mostramos el
+   resultado en la pestaña actual. */
+(function handleCanvaPopupReturn(){
+  const params=new URLSearchParams(location.search);
+  const canva=params.get("canva");
+  if(!canva) return;
+  if(window.opener){
+    window.opener.postMessage({source:"angie-canva", type: canva==="ok"?"ok":"error", message: params.get("msg")||""}, location.origin);
+    window.close();
+  } else {
+    history.replaceState({}, "", location.pathname);
+    if(canva==="ok"){
+      canvaConnectedUntil=Date.now()+(4*3600-60)*1000;
+      localStorage.setItem("canvaConnectedUntil",String(canvaConnectedUntil));
+      updateCanvaPill();
+    } else if(canva==="error"){
+      alert("No se pudo conectar con Canva: "+(params.get("msg")||""));
+    }
+  }
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   PANEL DE ADMINISTRACIÓN — solo admin (oculto por CSS para invitada).
+   Números reales agregados desde el store namespaced de admin: nunca mezcla datos de
+   invitada (viven en otro namespace) y nunca inventa nada — si algo no está conectado,
+   lo dice tal cual.
+   ══════════════════════════════════════════════════════════════ */
+const adminModal=document.getElementById("adminModal"), adminBody=document.getElementById("adminBody");
+const adminBtn=document.getElementById("adminBtn");
+if(adminBtn){
+  adminBtn.onclick=()=>{ renderAdminPanel(); adminModal.classList.add("open"); };
+  document.getElementById("adminClose").onclick=()=>adminModal.classList.remove("open");
+  adminModal.addEventListener("click",e=>{if(e.target===adminModal)adminModal.classList.remove("open");});
+}
+
+async function renderAdminPanel(){
+  const runs=store.loadRuns();
+  const approvals=store.loadApprovals();
+  const worked=runs.filter(r=>r.measurement&&r.measurement.feedback==="funciono").length;
+  const notWorked=runs.filter(r=>r.measurement&&r.measurement.feedback==="no_funciono").length;
+  const unrated=runs.length-worked-notWorked;
+  const pendingAppr=approvals.filter(a=>a.status==="pending").length;
+  const decidedAppr=approvals.length-pendingAppr;
+  const hubspotRegs=runs.filter(r=>r.hubspot&&r.hubspot.status==="registered").length;
+
+  adminBody.innerHTML=`
+    <div class="meas-stats">
+      <div class="mstat"><b>${runs.length}</b><span>Proyectos</span></div>
+      <div class="mstat ok"><b>${worked}</b><span>Funcionaron</span></div>
+      <div class="mstat bad"><b>${notWorked}</b><span>No funcionaron</span></div>
+      <div class="mstat"><b>${unrated}</b><span>Sin evaluar</span></div>
+    </div>
+    <div class="meas-stats" style="margin-top:10px">
+      <div class="mstat"><b>${pendingAppr}</b><span>Aprob. pendientes</span></div>
+      <div class="mstat"><b>${decidedAppr}</b><span>Aprob. decididas</span></div>
+      <div class="mstat"><b>${hubspotRegs}</b><span>Registros en HubSpot</span></div>
+      <div class="mstat" id="adminClickStat"><b>…</b><span>Clics reales totales</span></div>
+    </div>
+    <div class="crm-hint" style="margin-top:14px;font-size:12.5px">
+      <b>CRM:</b> ${crmConfigured?(crmSource==="cliente"?"conectado con tu llave":"conectado por Vercel"):"no conectado"}<br>
+      <b>Canva:</b> ${canvaConfigured?"configurado":"no configurado"}${canvaConfigured&&canvaConnectedUntil>Date.now()?" — conexión activa ahora":""}
+    </div>`;
+
+  // Clics reales: suma los conteos de todos los proyectos que tengan link de rastreo,
+  // vía /api/track-stats — si Upstash no está configurado, se dice honestamente.
+  const trackedIds=runs.filter(r=>r.measurement&&r.measurement.trackUrl).map(r=>r.id);
+  const clickEl=document.getElementById("adminClickStat");
+  if(!trackedIds.length){ clickEl.querySelector("b").textContent="0"; return; }
+  try{
+    const r=await fetch("/api/track-stats?ids="+encodeURIComponent(trackedIds.join(",")));
+    const d=await r.json();
+    if(!d.configured){ clickEl.innerHTML=`<b>—</b><span>Clics reales (conecta Upstash)</span>`; return; }
+    const total=trackedIds.reduce((sum,id)=>sum+((d.counts&&d.counts[id])||0),0);
+    clickEl.querySelector("b").textContent=String(total);
+  }catch(e){ clickEl.querySelector("b").textContent="—"; }
+}
+
+/* Auto-abre el wizard la primera vez que alguien entra sin configuración guardada — solo
+   para admin. "Mi negocio" es configuración real del negocio; invitada no lo necesita para
+   probar la app (puede chatear directo, sin ese paso). */
+if(currentRole==="admin" && !store.loadWizardData()) setTimeout(openWizard, 500);
 </script>
 </body>
 </html>
