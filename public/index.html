@@ -322,6 +322,7 @@
   .studio-b{padding:18px 20px 22px}
   .field{margin-bottom:15px}
   .field>label{display:block;font-family:var(--disp);font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+  .field-hint{font-size:12px;color:var(--dim);line-height:1.4;margin:-4px 0 8px}
   .field textarea{width:100%;background:var(--bg3);border:1px solid var(--bord2);color:var(--ink);border-radius:11px;padding:12px 13px;font-family:var(--body);font-size:14px;line-height:1.5;resize:vertical;min-height:56px}
   .field textarea:focus{border-color:var(--purple);outline:none}
   .opts{display:flex;flex-wrap:wrap;gap:7px}
@@ -731,7 +732,7 @@
 </div>
 
 <script type="module">
-import { WIZARD_STEPS, emptyWizardData, validateStep, validateAll, buildContextText, collectWizardFileContents, DOCUMENT_SLOTS } from "./wizard-core.js";
+import { WIZARD_STEPS, emptyWizardData, validateStep, validateAll, buildContextText, collectWizardFileContents, DOCUMENT_SLOTS, estimateDocumentsBytes, DOCUMENTS_SAFE_LIMIT_BYTES } from "./wizard-core.js";
 import { createStore } from "./store.js";
 
 /* ══════════════════════════════════════════════════════════════
@@ -1777,7 +1778,7 @@ function fieldHTML(f,data){
   const req=f.required?'<span class="wiz-req">*</span>':"";
   if(f.type==="text")return `<div class="field"><label>${f.label}${req}</label><input type="text" data-f="${f.id}" value="${esc(val||"")}"></div>`;
   if(f.type==="date")return `<div class="field"><label>${f.label}${req}</label><input type="date" data-f="${f.id}" value="${esc(val||"")}"></div>`;
-  if(f.type==="textarea")return `<div class="field"><label>${f.label}${req}</label><textarea data-f="${f.id}" rows="3">${esc(val||"")}</textarea></div>`;
+  if(f.type==="textarea")return `<div class="field"><label>${f.label}${req}</label>${f.hint?`<div class="field-hint">${esc(f.hint)}</div>`:""}<textarea data-f="${f.id}" rows="3" placeholder="${esc(f.placeholder||"")}">${esc(val||"")}</textarea></div>`;
   if(f.type==="select"){
     const opts=f.options.map(([v,l])=>`<option value="${v}" ${val===v?"selected":""}>${l}</option>`).join("");
     return `<div class="field"><label>${f.label}${req}</label><select data-f="${f.id}"><option value="">Selecciona…</option>${opts}</select></div>`;
@@ -1828,14 +1829,27 @@ function renderWizStep(){
         const slot=inp.dataset.doc; const files=[...e.target.files];
         files.forEach(f=>{
           if(f.size>9*1048576){alert(`"${f.name}" pesa más de 9 MB.`);return;}
+          if(estimateDocumentsBytes(wizardData)+f.size>DOCUMENTS_SAFE_LIMIT_BYTES){
+            alert(`"${f.name}" no se adjuntó: entre todos los documentos ya suman casi el límite que tu navegador permite guardar (${Math.round(DOCUMENTS_SAFE_LIMIT_BYTES/1024/1024)} MB en total). Quita alguno o usa una versión más ligera de este archivo.`);
+            return;
+          }
           const ext=f.name.split(".").pop().toLowerCase();
           const isTxt=["txt","md","csv"].includes(ext);
           const reader=new FileReader();
           reader.onload=()=>{
             const item={name:f.name,kind:isTxt?"txt":ext==="pdf"?"pdf":"img"};
             if(isTxt)item.text=reader.result; else {item.b64=reader.result.split(",")[1];item.mime=f.type||"application/octet-stream";}
+            const prevDocs=(wizardData.documents[slot]||[]).slice();
             (wizardData.documents[slot]=wizardData.documents[slot]||[]).push(item);
-            store.saveWizardData(wizardData);
+            try{
+              store.saveWizardData(wizardData);
+            }catch(err){
+              // Si no cupo en localStorage, no dejamos el archivo "adjunto a medias" en
+              // memoria — se revierte para que la lista de documentos siga siendo honesta
+              // con lo que de verdad quedó guardado.
+              wizardData.documents[slot]=prevDocs;
+              alert(err.message);
+            }
             renderWizStep();
           };
           if(isTxt)reader.readAsText(f); else reader.readAsDataURL(f);
@@ -1888,7 +1902,14 @@ wizNext.onclick=()=>{
   } else {
     const v=validateAll(wizardData);
     if(!v.ok){ alert("Todavía falta: "+v.missing.join(", ")+". Puedes regresar a completarlo, o saltar por ahora."); return; }
-    confirmWizard();
+    // Nunca dejar que un error aquí se pierda en silencio — es el botón que activa a Angie;
+    // si algo truena (por ejemplo, documentos adjuntos que no cupieron en el navegador),
+    // la persona necesita un mensaje, no un botón que "no hace nada".
+    try{
+      confirmWizard();
+    }catch(err){
+      alert(err.message||"No se pudo activar a Angie. Intenta de nuevo, y si sigue fallando, quita alguno de los documentos adjuntos.");
+    }
   }
 };
 

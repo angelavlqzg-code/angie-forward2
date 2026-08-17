@@ -110,3 +110,36 @@ test("namespace: vacío (\"\") sigue usando las llaves de siempre, sin prefijo (
   store.saveWizardData({ companyName: "Forward AI" });
   assert.deepEqual(JSON.parse(backend.getItem("forwardai_wizard_v1")), { companyName: "Forward AI" });
 });
+
+// Bug real reportado por Ricardo: al confirmar el wizard con documentos pesados adjuntos,
+// el botón "no hacía nada". Causa real: localStorage.setItem lanza QuotaExceededError y
+// nadie la atrapaba, así que la excepción se perdía en silencio. Estas pruebas confirman
+// que ahora se relanza con un mensaje claro que el front sí puede mostrarle a la usuaria.
+function makeFullStorage() {
+  return {
+    getItem: () => null,
+    removeItem: () => {},
+    setItem: () => {
+      const err = new Error("Quota exceeded");
+      err.name = "QuotaExceededError";
+      throw err;
+    },
+  };
+}
+
+test("storage lleno (QuotaExceededError): saveWizardData relanza un error con mensaje claro para la usuaria", () => {
+  const store = createStore(makeFullStorage());
+  assert.throws(
+    () => store.saveWizardData({ documents: { brandManual: [{ name: "manual.pdf" }] } }),
+    (err) => {
+      assert.match(err.message, /espacio de almacenamiento/i);
+      assert.equal(err.isStorageError, true);
+      return true;
+    }
+  );
+});
+
+test("storage lleno: addRun y demás escrituras también relanzan (no se pierden en silencio)", () => {
+  const store = createStore(makeFullStorage());
+  assert.throws(() => store.addRun({ id: "1" }), /espacio de almacenamiento/i);
+});

@@ -31,7 +31,25 @@ function readJSON(storage, key, fallback) {
 
 function writeJSON(storage, key, value) {
   if (!storage) return;
-  storage.setItem(key, JSON.stringify(value));
+  try {
+    storage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    // El caso real que rompía esto en silencio: alguien adjunta documentos pesados en el
+    // wizard (PDFs en base64 inflan mucho de tamaño) y localStorage — que tiene un límite
+    // de ~5-10 MB por navegador — se llena. `setItem` entonces lanza QuotaExceededError,
+    // y si nadie lo atrapa, el botón que lo disparó "no hace nada" sin explicación (así lo
+    // reportó Ricardo). Aquí se relanza con un mensaje que sí se le puede mostrar a quien
+    // esté usando la app, en vez de dejar que la excepción se pierda en la consola.
+    const quota = e && (e.name === "QuotaExceededError" || e.code === 22 || e.code === 1014);
+    const friendly = new Error(
+      quota
+        ? "No se pudo guardar: se llenó el espacio de almacenamiento del navegador. Es probable que los documentos adjuntos sean muy pesados — quita alguno (o comprímelo) e intenta de nuevo."
+        : "No se pudo guardar la información en este navegador: " + (e && e.message ? e.message : e)
+    );
+    friendly.cause = e;
+    friendly.isStorageError = true;
+    throw friendly;
+  }
 }
 
 /**

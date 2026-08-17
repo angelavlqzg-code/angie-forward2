@@ -10,15 +10,21 @@ export const EXPERIENCE_OPTIONS = [
   ["experta", "Ya soy experta en esto"],
 ];
 
+// Rangos más finos a partir de 10 personas (feedback de Ricardo): antes "grande" mezclaba
+// desde 9 hasta miles de personas en una sola opción, perdiendo la diferencia real que hay
+// entre una pyme y una empresa grande a la hora de generar datos de quiénes son los clientes.
 export const TEAM_SIZE_OPTIONS = [
   ["solo", "Solo yo"],
-  ["chico", "Equipo chico (2-8 personas)"],
-  ["grande", "Equipo grande (9+ personas)"],
+  ["chico", "Equipo chico (2-9 personas)"],
+  ["mediano", "Equipo mediano (10-25 personas)"],
+  ["grande", "Equipo grande (25-50 personas)"],
+  ["muy_grande", "Equipo muy grande (+50 personas)"],
 ];
 
 export const VERTICAL_OPTIONS = [
   ["gobierno", "Gobierno"], ["rh", "RH"], ["ventas", "Ventas"],
-  ["fiscal", "Fiscal"], ["retail", "Retail"], ["otro", "Otro"],
+  ["fiscal", "Fiscal"], ["retail", "Retail"], ["compras", "Compras"],
+  ["usuario", "Usuario"], ["usuario_final", "Usuario final"], ["otro", "Otro"],
 ];
 
 export const RELATIONSHIP_OPTIONS = [
@@ -67,7 +73,9 @@ export const WIZARD_STEPS = [
   {
     id: "objetivo", title: "Tu objetivo", subtitle: "En tus palabras — no hace falta jerga de marketing.",
     fields: [
-      { id: "objective", label: "¿Qué quieres lograr?", type: "textarea", required: true },
+      { id: "objective", label: "¿Qué quieres lograr?", type: "textarea", required: true,
+        hint: "No hace falta que sea preciso — hasta \"vender más\" o \"que nos conozcan más clientes\" está bien. Angie te ayuda a afinarlo.",
+        placeholder: "Ej. Vender más, conseguir más leads calificados, que nos conozcan en un nuevo mercado…" },
       { id: "numericGoal", label: "¿Tienes una meta numérica? (opcional)", type: "text" },
       { id: "targetDate", label: "¿Para cuándo?", type: "date" },
     ],
@@ -92,11 +100,21 @@ export const WIZARD_STEPS = [
   {
     id: "columna", title: "Columna vertebral del mensaje", subtitle: "El cambio, la tensión, la posición, la prueba, la promesa. Déjalo en blanco si aún no lo tienes — Angie puede proponerlo.",
     fields: [
-      { id: "change", label: "El cambio", type: "textarea" },
-      { id: "tension", label: "La tensión", type: "textarea" },
-      { id: "position", label: "La posición", type: "textarea" },
-      { id: "proof", label: "La prueba", type: "textarea" },
-      { id: "promise", label: "La promesa", type: "textarea" },
+      { id: "change", label: "El cambio", type: "textarea",
+        hint: "¿Qué cambió en tu mercado o industria que hace que esto sea relevante ahora?",
+        placeholder: "Ej. Las marcas internacionales ya no necesitan buscar fuera de México una agencia con estándares de clase mundial." },
+      { id: "tension", label: "La tensión", type: "textarea",
+        hint: "¿Qué fricción o problema deja esto sin resolver para tu cliente?",
+        placeholder: "Ej. Han quemado presupuesto con agencias que prometen cobertura integral y entregan ejecución fragmentada." },
+      { id: "position", label: "La posición", type: "textarea",
+        hint: "¿Qué lugar ocupas tú frente a esa tensión — por qué tú y no otro?",
+        placeholder: "Ej. Somos la agencia mexicana con capacidad probada de operar al nivel de exigencia de una marca global." },
+      { id: "proof", label: "La prueba", type: "textarea",
+        hint: "¿Qué evidencia real respalda esa posición? (casos, números autorizados, certificaciones)",
+        placeholder: "Ej. 3 marcas Fortune 500 operando con nosotros desde 2023, sin incidentes de marca." },
+      { id: "promise", label: "La promesa", type: "textarea",
+        hint: "¿Qué le prometes al cliente si te elige — en una frase, sin jerga?",
+        placeholder: "Ej. Resultados medibles, sin intermediarios, sin excusas." },
     ],
   },
   {
@@ -209,4 +227,21 @@ export function collectWizardFileContents(data) {
   const out = [];
   Object.values(data.documents || {}).forEach((arr) => (arr || []).forEach((d) => out.push(d)));
   return out;
+}
+
+// localStorage tiene un límite real de ~5-10 MB por navegador (varía por navegador), y ahí
+// vive TODO lo de Angie, no solo los documentos del wizard (proyectos, aprobaciones, etc.).
+// Este límite es deliberadamente conservador para avisar ANTES de que `setItem` truene con
+// QuotaExceededError — mejor un aviso claro al adjuntar que un botón que "no hace nada" al
+// confirmar (ver bug reportado por Ricardo).
+export const DOCUMENTS_SAFE_LIMIT_BYTES = 4 * 1024 * 1024; // 4 MB
+
+/** Tamaño aproximado en bytes de todos los documentos ya adjuntados en el wizard. */
+export function estimateDocumentsBytes(data) {
+  let total = 0;
+  Object.values((data && data.documents) || {}).forEach((arr) => (arr || []).forEach((d) => {
+    if (d.b64) total += Math.ceil(d.b64.length * 0.75); // base64 -> bytes reales
+    else if (d.text) total += d.text.length;
+  }));
+  return total;
 }
