@@ -409,10 +409,14 @@
   .role-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--mut);border:1px solid var(--bord2);border-radius:20px;padding:5px 11px;background:var(--bg2)}
   .role-badge.invitada{color:var(--amber);border-color:rgba(184,121,15,.35)}
   .role-badge button{background:none;border:none;color:var(--purple-lt);font-weight:600;font-size:11px;padding:0;margin-left:4px;text-decoration:underline}
-  /* Invitada (tester): sin Canva ni "Mi negocio" — son integraciones/config real de la
-     administradora. CRM, aprobaciones y medición sí quedan (datos ya aislados por namespace,
-     y CRM porque invitada conecta SU PROPIA llave — ver api/hubspot.js). */
-  body[data-role="invitada"] #wizBtn,
+  /* Invitada (tester): sin Canva ni Panel de administración — son integraciones/config real
+     de la administradora, sin namespace propio. "Mi negocio" (el wizard) SÍ se le muestra: sus
+     respuestas se guardan bajo su propio prefijo "guest_" (ver createStore), así que llenarlo
+     no toca ni mezcla nada con el negocio real de la administradora — es su propio wizard de
+     prueba. Antes estaba oculto también para invitada y por eso no tenía ninguna forma de
+     arrancar un proyecto guiado (solo texto libre); pedido explícito de Angela: dejarlo visible.
+     CRM, aprobaciones y medición también quedan (datos ya aislados por namespace, y CRM porque
+     invitada conecta SU PROPIA llave — ver api/hubspot.js). */
   body[data-role="invitada"] #adminBtn,
   body[data-role="invitada"] #canvaPill,
   body[data-role="invitada"] .canva-btn,
@@ -2456,8 +2460,9 @@ async function renderAdminPanel(){
 }
 
 /* Auto-abre el wizard la primera vez que alguien entra sin configuración guardada — solo
-   para admin. "Mi negocio" es configuración real del negocio; invitada no lo necesita para
-   probar la app (puede chatear directo, sin ese paso). */
+   para admin, para no ser intrusivos con quien solo está probando la app. Invitada SÍ puede
+   abrirlo cuando quiera con el botón "Mi negocio" (ya visible para su rol, ver CSS arriba);
+   solo no se le fuerza a verlo apenas entra. */
 if(currentRole==="admin" && !store.loadWizardData()) setTimeout(openWizard, 500);
 </script>
 </body>
