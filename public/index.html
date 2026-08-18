@@ -370,6 +370,7 @@
   .wiz-doc-row .dl b{color:var(--ink);display:block;font-size:13px}
   .wiz-doc-row .dfiles{font-size:11.5px;color:var(--teal-lt)}
   .wiz-doc-row input[type=file]{max-width:150px;font-size:11px;color:var(--mut)}
+  .wiz-doc-note{font-size:11.5px;color:var(--mut);line-height:1.5;margin:-4px 0 10px}
   .wiz-nav{display:flex;gap:10px;padding:14px 20px 20px;border-top:1px solid var(--bord)}
   .wiz-nav button{height:44px;border-radius:11px;font-family:var(--disp);font-weight:700;font-size:13.5px;flex:1;transition:.16s}
   .wiz-nav .back{background:var(--bg3);border:1px solid var(--bord2);color:var(--mut)}
@@ -409,10 +410,14 @@
   .role-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--mut);border:1px solid var(--bord2);border-radius:20px;padding:5px 11px;background:var(--bg2)}
   .role-badge.invitada{color:var(--amber);border-color:rgba(184,121,15,.35)}
   .role-badge button{background:none;border:none;color:var(--purple-lt);font-weight:600;font-size:11px;padding:0;margin-left:4px;text-decoration:underline}
-  /* Invitada (tester): sin Canva ni "Mi negocio" — son integraciones/config real de la
-     administradora. CRM, aprobaciones y medición sí quedan (datos ya aislados por namespace,
-     y CRM porque invitada conecta SU PROPIA llave — ver api/hubspot.js). */
-  body[data-role="invitada"] #wizBtn,
+  /* Invitada (tester): sin Canva ni Panel de administración — son integraciones/config real
+     de la administradora, sin namespace propio. "Mi negocio" (el wizard) SÍ se le muestra: sus
+     respuestas se guardan bajo su propio prefijo "guest_" (ver createStore), así que llenarlo
+     no toca ni mezcla nada con el negocio real de la administradora — es su propio wizard de
+     prueba. Antes estaba oculto también para invitada y por eso no tenía ninguna forma de
+     arrancar un proyecto guiado (solo texto libre); pedido explícito de Angela: dejarlo visible.
+     CRM, aprobaciones y medición también quedan (datos ya aislados por namespace, y CRM porque
+     invitada conecta SU PROPIA llave — ver api/hubspot.js). */
   body[data-role="invitada"] #adminBtn,
   body[data-role="invitada"] #canvaPill,
   body[data-role="invitada"] .canva-btn,
@@ -790,7 +795,12 @@ const currentRole=await resolveRole();
 authGate.style.display="none";
 document.body.dataset.role=currentRole; // CSS oculta lo admin-only cuando es "invitada" (ver regla body[data-role="invitada"])
 
-const store=createStore(localStorage, currentRole==="invitada"?"guest_":"");
+// "admin2" (pedida por Angela para dar acceso propio a Ricardo Oviedo, MISMO nivel de
+// permisos que admin —incluye Canva y HubSpot reales de Forward, decisión explícita de
+// Angela—) guarda su wizard/proyectos bajo su PROPIO prefijo, para "empezar de cero" sin
+// heredar ni mezclar la memoria de negocio ya cargada en la cuenta admin principal.
+const NAMESPACE_BY_ROLE={invitada:"guest_",admin2:"ricardo_"};
+const store=createStore(localStorage, NAMESPACE_BY_ROLE[currentRole]||"");
 
 /* Indicador de rol en el header + cerrar sesión (si el acceso con contraseña está activo). */
 (async()=>{
@@ -799,7 +809,8 @@ const store=createStore(localStorage, currentRole==="invitada"?"guest_":"");
   if(!st.configured) return; // modo abierto (sin contraseñas puestas todavía): no se muestra nada
   badge.style.display="inline-flex";
   badge.className="role-badge"+(currentRole==="invitada"?" invitada":"");
-  badge.innerHTML=(currentRole==="invitada"?"👋 Invitada":"🔑 Admin")+` <button type="button" id="logoutBtn">Salir</button>`;
+  const ROLE_LABEL={invitada:"👋 Invitada",admin2:"🔑 Ricardo",admin:"🔑 Admin"};
+  badge.innerHTML=(ROLE_LABEL[currentRole]||"🔑 Admin")+` <button type="button" id="logoutBtn">Salir</button>`;
   document.getElementById("logoutBtn").onclick=async()=>{
     await fetch("/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"logout"})});
     location.reload();
@@ -1467,10 +1478,21 @@ async function send(){
   const turn=document.createElement("div"); turn.className="turn";
   turn.innerHTML=`<div class="ask"></div>
     ${docs.length?`<div class="askdocs">${docs.map(()=>`<span class="adoc"></span>`).join("")}</div>`:""}
-    <div class="think">${AV}<span class="dots"><span></span><span></span><span></span></span> Angie está leyendo y orquestando al equipo…</div>`;
+    <div class="think">${AV}<span class="dots"><span></span><span></span><span></span></span> <span id="thinkMsg">Angie está leyendo y orquestando al equipo…</span></div>`;
   turn.querySelector(".ask").textContent=text||"(documentos adjuntos)";
   if(docs.length)turn.querySelectorAll(".adoc").forEach((el,i)=>el.textContent=docs[i].name);
   wrap.appendChild(turn); feed.scrollTop=feed.scrollHeight;
+
+  // Peticiones reales a la IA (con documentos, contexto largo, etc.) a veces tardan más de
+  // lo que cualquier prueba automatizada simula. Sin este aviso y sin límite, la persona ve
+  // el mismo mensaje fijo por minutos y no sabe si Angie sigue trabajando o si algo se rompió
+  // — es exactamente el patrón "se ve roto pero no lo está" que ya causó dos reportes. Ahora:
+  // a los 20s el mensaje cambia para avisar que puede tardar, y a los 100s se cancela solita
+  // con una explicación clara (en vez de quedarse pegada para siempre sin decir nada).
+  const thinkEl=turn.querySelector("#thinkMsg");
+  const reassureTimer=setTimeout(()=>{ if(thinkEl)thinkEl.textContent="Sigue trabajando — las peticiones complejas pueden tardar hasta un par de minutos…"; },20000);
+  const ctrl=new AbortController();
+  const abortTimer=setTimeout(()=>ctrl.abort(),100000);
 
   const content=[];
   docs.forEach(d=>{
@@ -1483,8 +1505,11 @@ async function send(){
 
   try{
     let res;
-    try{res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:SYSTEM,messages:history})});}
-    catch(net){throw new Error("DIAGNÓSTICO: no hay conexión con el servidor de IA (red o CORS). Ábrelo desde tu liga de Vercel.");}
+    try{res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:SYSTEM,messages:history}),signal:ctrl.signal});}
+    catch(net){
+      if(net&&net.name==="AbortError")throw new Error("Angie tardó más de lo normal (más de 100 segundos) y se canceló la petición para no dejarte esperando sin explicación. Puede ser una petición muy compleja, muchos documentos adjuntos, o el servidor con mucha carga en ese momento — intenta de nuevo, o parte tu encargo en partes más chicas.");
+      throw new Error("DIAGNÓSTICO: no hay conexión con el servidor de IA (red o CORS). Ábrelo desde tu liga de Vercel.");
+    } finally { clearTimeout(reassureTimer); clearTimeout(abortTimer); }
     const bodyText=await res.text();
     if(!res.ok)throw new Error(`DIAGNÓSTICO: el servidor respondió ${res.status}. ${bodyText.slice(0,300)}`);
     let data; try{data=JSON.parse(bodyText);}catch(e){throw new Error("DIAGNÓSTICO: respuesta ilegible del servidor. "+bodyText.slice(0,300));}
@@ -1800,7 +1825,8 @@ function fieldHTML(f,data){
     return `<div class="field"><label>${f.label}${req}</label><div class="opts" data-chips="${f.id}">${f.options.map(o=>`<button type="button" class="opt${chosen.includes(o)?" on":""}" data-v="${esc(o)}">${o}</button>`).join("")}</div></div>`;
   }
   if(f.type==="documents"){
-    return `<div class="field"><label>${f.label}</label>`+DOCUMENT_SLOTS.map(([slot,label])=>{
+    const note=`<div class="wiz-doc-note">Entre todos los documentos subidos caben ${(DOCUMENTS_SAFE_LIMIT_BYTES/1024/1024).toFixed(1)} MB en total (límite real del navegador y del servidor). Si tu archivo pesa más, comprímelo o sube solo las páginas relevantes.</div>`;
+    return `<div class="field"><label>${f.label}</label>`+note+DOCUMENT_SLOTS.map(([slot,label])=>{
       const files=(data.documents[slot]||[]).map(d=>d.name).join(", ");
       return `<div class="wiz-doc-row"><div class="dl"><b>${label}</b>${files?`<span class="dfiles">${esc(files)}</span>`:'<span>Sin archivos</span>'}</div><input type="file" data-doc="${slot}" multiple accept=".pdf,.png,.jpg,.jpeg,.txt,.md,.csv"></div>`;
     }).join("")+`</div>`;
@@ -1840,7 +1866,10 @@ function renderWizStep(){
       inp.addEventListener("change",e=>{
         const slot=inp.dataset.doc; const files=[...e.target.files];
         files.forEach(f=>{
-          if(f.size>9*1048576){alert(`"${f.name}" pesa más de 9 MB.`);return;}
+          // Antes había también un tope fijo de "9 MB por archivo" aquí, aparte del cálculo
+          // acumulado de abajo — dos números distintos en el mismo flujo, confuso (de ahí
+          // salió la pregunta de si el límite real era 9 MB). El único límite real es el
+          // acumulado contra DOCUMENTS_SAFE_LIMIT_BYTES, que ya explica todo lo necesario.
           if(estimateDocumentsBytes(wizardData)+f.size>DOCUMENTS_SAFE_LIMIT_BYTES){
             alert(`"${f.name}" no se adjuntó: entre todos los documentos ya suman casi el límite que tu navegador permite guardar (${Math.round(DOCUMENTS_SAFE_LIMIT_BYTES/1024/1024)} MB en total). Quita alguno o usa una versión más ligera de este archivo.`);
             return;
@@ -1891,16 +1920,21 @@ async function generateWizPreview(){
   const btn=document.getElementById("wizPreviewBtn"), box=document.getElementById("wizPreviewBox");
   btn.disabled=true; btn.textContent="Angie está pensando…";
   box.style.display="block"; box.textContent="Interpretando tu negocio…";
+  const ctrl=new AbortController();
+  const abortTimer=setTimeout(()=>ctrl.abort(),100000);
   try{
     const sys=SYSTEM+"\n\n"+buildContextText(wizardData);
     const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
       system:sys,
       messages:[{role:"user",content:"Con el contexto de negocio de arriba, dame SOLO un adelanto breve (máximo 6 líneas): una columna vertebral tentativa en una frase, y qué códigos de agente (formato A1, B2, etc.) activarías para el primer encargo y por qué. No generes el entregable completo todavía, no uses las etiquetas [ENTENDI]/[AGENTES]/etc., solo texto corrido."}]
-    })});
+    }),signal:ctrl.signal});
     const d=await r.json();
     if(d.error)throw new Error(d.error);
     box.textContent=(d.text||"").trim()||"Angie no devolvió nada. Intenta de nuevo.";
-  }catch(e){ box.textContent="No se pudo generar la vista previa: "+e.message; }
+  }catch(e){
+    const msg=(e&&e.name==="AbortError")?"Angie tardó más de lo normal (más de 100 segundos). Intenta de nuevo.":(e&&e.message)||"Falla desconocida.";
+    box.textContent="No se pudo generar la vista previa: "+msg;
+  } finally { clearTimeout(abortTimer); }
   btn.disabled=false; btn.textContent="✨ Regenerar vista previa";
 }
 
@@ -2436,10 +2470,12 @@ async function renderAdminPanel(){
   }catch(e){ clickEl.querySelector("b").textContent="—"; }
 }
 
-/* Auto-abre el wizard la primera vez que alguien entra sin configuración guardada — solo
-   para admin. "Mi negocio" es configuración real del negocio; invitada no lo necesita para
-   probar la app (puede chatear directo, sin ese paso). */
-if(currentRole==="admin" && !store.loadWizardData()) setTimeout(openWizard, 500);
+/* Auto-abre el wizard la primera vez que alguien entra sin configuración guardada — para
+   admin y admin2 (Ricardo también arranca desde cero, ver NAMESPACE_BY_ROLE arriba), para no
+   ser intrusivos con quien solo está probando la app. Invitada SÍ puede abrirlo cuando quiera
+   con el botón "Mi negocio" (ya visible para su rol, ver CSS arriba); solo no se le fuerza a
+   verlo apenas entra. */
+if((currentRole==="admin"||currentRole==="admin2") && !store.loadWizardData()) setTimeout(openWizard, 500);
 </script>
 </body>
 </html>
