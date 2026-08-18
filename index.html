@@ -370,6 +370,7 @@
   .wiz-doc-row .dl b{color:var(--ink);display:block;font-size:13px}
   .wiz-doc-row .dfiles{font-size:11.5px;color:var(--teal-lt)}
   .wiz-doc-row input[type=file]{max-width:150px;font-size:11px;color:var(--mut)}
+  .wiz-doc-note{font-size:11.5px;color:var(--mut);line-height:1.5;margin:-4px 0 10px}
   .wiz-nav{display:flex;gap:10px;padding:14px 20px 20px;border-top:1px solid var(--bord)}
   .wiz-nav button{height:44px;border-radius:11px;font-family:var(--disp);font-weight:700;font-size:13.5px;flex:1;transition:.16s}
   .wiz-nav .back{background:var(--bg3);border:1px solid var(--bord2);color:var(--mut)}
@@ -1818,7 +1819,8 @@ function fieldHTML(f,data){
     return `<div class="field"><label>${f.label}${req}</label><div class="opts" data-chips="${f.id}">${f.options.map(o=>`<button type="button" class="opt${chosen.includes(o)?" on":""}" data-v="${esc(o)}">${o}</button>`).join("")}</div></div>`;
   }
   if(f.type==="documents"){
-    return `<div class="field"><label>${f.label}</label>`+DOCUMENT_SLOTS.map(([slot,label])=>{
+    const note=`<div class="wiz-doc-note">Entre todos los documentos subidos caben ${(DOCUMENTS_SAFE_LIMIT_BYTES/1024/1024).toFixed(1)} MB en total (límite real del navegador y del servidor). Si tu archivo pesa más, comprímelo o sube solo las páginas relevantes.</div>`;
+    return `<div class="field"><label>${f.label}</label>`+note+DOCUMENT_SLOTS.map(([slot,label])=>{
       const files=(data.documents[slot]||[]).map(d=>d.name).join(", ");
       return `<div class="wiz-doc-row"><div class="dl"><b>${label}</b>${files?`<span class="dfiles">${esc(files)}</span>`:'<span>Sin archivos</span>'}</div><input type="file" data-doc="${slot}" multiple accept=".pdf,.png,.jpg,.jpeg,.txt,.md,.csv"></div>`;
     }).join("")+`</div>`;
@@ -1858,7 +1860,10 @@ function renderWizStep(){
       inp.addEventListener("change",e=>{
         const slot=inp.dataset.doc; const files=[...e.target.files];
         files.forEach(f=>{
-          if(f.size>9*1048576){alert(`"${f.name}" pesa más de 9 MB.`);return;}
+          // Antes había también un tope fijo de "9 MB por archivo" aquí, aparte del cálculo
+          // acumulado de abajo — dos números distintos en el mismo flujo, confuso (de ahí
+          // salió la pregunta de si el límite real era 9 MB). El único límite real es el
+          // acumulado contra DOCUMENTS_SAFE_LIMIT_BYTES, que ya explica todo lo necesario.
           if(estimateDocumentsBytes(wizardData)+f.size>DOCUMENTS_SAFE_LIMIT_BYTES){
             alert(`"${f.name}" no se adjuntó: entre todos los documentos ya suman casi el límite que tu navegador permite guardar (${Math.round(DOCUMENTS_SAFE_LIMIT_BYTES/1024/1024)} MB en total). Quita alguno o usa una versión más ligera de este archivo.`);
             return;
